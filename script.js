@@ -247,7 +247,10 @@ function simularEGUardar() {
 }
 
 //Botão voltar
-function voltarParaScreen2() {
-  document.getElementById("screen-simulacoes").classList.add("hidden");
+function voltarMenu() {
+  // Esconde a secção de simulação
+  document.getElementById("sec5Screen").classList.add("hidden");
+  // Mostra a secção do menu principal
   document.getElementById("screen2").classList.remove("hidden");
 }
+
