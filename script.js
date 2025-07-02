@@ -15,6 +15,11 @@ function limparCampos() {
   inputs.forEach((input) => (input.value = ""));
   const spans = document.querySelectorAll("#screen2 span");
   spans.forEach((span) => (span.textContent = "-"));
+  document.getElementById("nomeAcao").value = "";
+  document.getElementById("tp1").value = "";
+  document.getElementById("tp2").value = "";
+  document.getElementById("investimento").value = "";
+
 }
 
 // Secção 1 - Lucro e lucro total com dividendos
