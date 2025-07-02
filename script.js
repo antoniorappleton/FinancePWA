@@ -9,19 +9,6 @@ function goToScreen1() {
   document.getElementById("screen1").classList.remove("hidden");
 }
 
-// Limpar todos os campos e resultados
-function limparCampos() {
-  const inputs = document.querySelectorAll("#screen2 input[type=number]");
-  inputs.forEach((input) => (input.value = ""));
-  const spans = document.querySelectorAll("#screen2 span");
-  spans.forEach((span) => (span.textContent = "-"));
-  document.getElementById("nomeAcao").value = "";
-  document.getElementById("tp1").value = "";
-  document.getElementById("tp2").value = "";
-  document.getElementById("investimento").value = "";
-
-}
-
 // Secção 1 - Lucro e lucro total com dividendos
 function calcularLucro1() {
   let tp1 = parseFloat(document.getElementById("tp1_1").value);
@@ -251,11 +238,30 @@ function simularEGUardar() {
   guardarSimulacao(nome, tp1, tp2, investimento);
 }
 
-//Botão voltar
 function voltarMenu() {
-  // Esconde a secção de simulação
-  document.getElementById("sec5Screen").classList.add("hidden");
-  // Mostra a secção do menu principal
+  // Esconde todas as secções
+  const secoes = document.querySelectorAll(".screen");
+  secoes.forEach(secao => secao.classList.add("hidden"));
+
+  // Mostra apenas o menu principal
   document.getElementById("screen2").classList.remove("hidden");
 }
 
+function limparCampos() {
+  // Encontra a secção visível (sem a classe "hidden")
+  const secaoVisivel = document.querySelector(".screen:not(.hidden)");
+
+  if (secaoVisivel) {
+    // Limpa todos os inputs do tipo number e text dentro da secção visível
+    const inputs = secaoVisivel.querySelectorAll("input[type=number], input[type=text]");
+    inputs.forEach(input => input.value = "");
+
+    // Limpa todos os spans com resultados dentro da secção visível
+    const spans = secaoVisivel.querySelectorAll("span");
+    spans.forEach(span => {
+      if (span.id) {
+        span.textContent = "-";
+      }
+    });
+  }
+}
