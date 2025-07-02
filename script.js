@@ -246,7 +246,6 @@ function simularEGUardar() {
   guardarSimulacao(nome, tp1, tp2, investimento);
 }
 
-
 //Botão voltar
 function voltarParaScreen2() {
   document.getElementById("screen-simulacoes").classList.add("hidden");
