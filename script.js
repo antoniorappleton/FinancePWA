@@ -49,6 +49,21 @@ function calcularInvestimento2() {
   }
 }
 
+// Atualiza % crescimento dinamicamente com base em TP1 e TP2 Crescimento
+
+function atualizarTP2_2() {
+  const tp1 = parseFloat(document.getElementById("tp1_2").value);
+  const tp2 = parseFloat(document.getElementById("tp2_2").value);
+
+  if (!isNaN(tp1) && !isNaN(tp2) && tp1 !== 0) {
+    const percent = ((tp2 - tp1) / tp1) * 100;
+    document.getElementById("percent_2").textContent = percent.toFixed(2) + "%";
+  } else {
+    document.getElementById("percent_2").textContent = "-";
+  }
+}
+  
+
 // Secção 3 - Lucro e lucro total com dividendos (percentagem crescimento)
 function calcularLucro3() {
   let tp1 = parseFloat(document.getElementById("tp1_3").value);

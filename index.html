@@ -8,7 +8,7 @@
     <title>Calculadora Financeira</title>
     <link rel="stylesheet" href="style.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="manifest" href="/manifest.json">
+    <link rel="manifest" href="manifest.json">
   </head>
   <body>
     <!-- SCREEN 1 -->
@@ -91,7 +91,8 @@
         </h5>
       </div>
       <label>Preço Inicial (TP1): <input type="number" id="tp1_2" step="0.01" /></label>
-      <label>Preço Final (TP2): <input type="number" id="tp2_2" step="0.01" /></label>
+      <!--teste <label>Preço Final (TP2): <input type="number" id="tp2_2" step="0.01" /></label> -->
+      <label>Preço Final (TP2): <input type="number" id="tp2_2" step="0.01" oninput="atualizarTP2_2()" />  % Crescimento: <span id="percent_2">-</span></label>
       <label>Lucro Desejado: <input type="number" id="lucro_2" step="0.01" /></label>
       <p>Investimento necessário: <span id="invest2">-</span></p>
       <button onclick="calcularInvestimento2()">Calcular</button>
