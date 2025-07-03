@@ -158,7 +158,7 @@
       <div class="section-header">
         <h4> Screen Simulação Lucros.</h4>
       </div>
-      <div class="info-text" id="info4">
+      <div class="info-text" id="info5">
         <h5>
           Simulação de Lucros entre duas ou mais potenciais Acões, com gráficos ilustrativos
         </h5>
@@ -188,16 +188,20 @@
   </table>
 </div>
 
-  <h2>Gráfico de Lucros</h2>
+<!-- Botão Limpar-->
+<div class="grafico-wrapper">
   <canvas id="graficoLucro" width="400" height="200"></canvas>
+  <button onclick="limparGrafico()">Limpar Gráfico🗑️</button>
+</div>
+<!-- Fim do botão Limpar-->
 
-    </div>
-    <div class="buttons">
+</div>
+  <div class="buttons">
       <button onclick="limparCampos()">Apagar Tudo</button>
       <button onclick="voltarMenu()">Voltar ao Menu</button>
-    </div>
-    
   </div>
+    
+</div>
 
 <script src="script.js"></script>  
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

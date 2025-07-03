@@ -265,3 +265,14 @@ function limparCampos() {
     });
   }
 }
+
+// 🚨 NOVO: Limpar Gráfico
+function limparGrafico() {
+  simulacoes.length = 0; // Apaga todas as simulações
+  atualizarTabela(); // Atualiza a tabela (fica vazia)
+
+  if (grafico) {
+    grafico.destroy(); // Destrói o gráfico existente
+    grafico = null;
+  }
+}
