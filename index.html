@@ -3,9 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="assets/icons/icon-192.png" />
+    <meta name="theme-color" content="#007BFF" />
     <title>Calculadora Financeira</title>
     <link rel="stylesheet" href="style.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="manifest" href="manifest.json" />
   </head>
   <body>
     <!-- SCREEN 1 -->
@@ -16,191 +19,271 @@
     </div>
 
     <!-- SCREEN 2 -->
- <div id="screen2" class="screen hidden">
-  <div
+    <div id="screen2" class="screen hidden">
+      <div
         class="explanation"
         style="
-          margin-bottom: 20px;
+          margin-bottom: 4px;
           padding: 10px;
           border: 1px solid #ffffff;
           border-radius: 5px;
           background: #34495e;
         "
-      >
-        <h3>TP1 (Target Price 1):</h3>
-        <h6>Preço atual ou inicial da ação. É o ponto de partida para os cálculos de valorização e investimento.</h6>
-        <h3>TP2 (Target Price 2):</h3>
-        <h6>Preço futuro da ação. É o ponto de chegada para os cálculos de valorização e investimento.</h6>
-        <h3>Dividendos:</h3>
-        <h6>valor que a Empresa paga por cada Stock que é detida, que será somado ao lucro total.</h6>
-  </div>
-    <h2>Escolhe uma opção:</h2>
-    <div class="buttons-grid">
-      <button onclick="abrirSecao(1)">📈 Lucro Esperado</button>
-      <button onclick="abrirSecao(2)">📊 Quanto tens de Investir</button>
-      <button onclick="abrirSecao(3)">📈 Lucro % de crescimento</button>
-      <button onclick="abrirSecao(4)">📊 Tens de Investir a % de Crescimento</button>
-      <button onclick="abrirSecao(5)">📊 Simulador</button>
-    </div>
-    <div class="buttons">
-      <button onclick="goToScreen1()">Voltar</button>
-    </div>
-  </div>
-  
-  <!-- SECÇÃO 1 -->
-  <div id="sec1Screen" class="screen hidden">
-        <div class="section">
-      <div class="section-header">
-        <h4>1. Calcular Lucro com TP1, TP2, Investimento e Dividendos.</h4>
-        <button class="info-toggle" onclick="toggleInfo('info1')">ℹ️ +info</button>
-      </div>
-      <div class="info-text" id="info1">
-        <h5>
-          Introduz o preço inicial da ação (TP1), o preço esperado no futuro (TP2),
-          o valor que vais investir e os dividendos esperados. O resultado será o lucro total esperado.
-        </h5>
-      </div>
-      <label>Preço Inicial (TP1): <input type="number" id="tp1_1" step="0.01" /></label>
-      <label>Preço Final (TP2): <input type="number" id="tp2_1" step="0.01" /></label>
-      <label>Valor Investido: <input type="number" id="invest_1" step="0.01" /></label>
-      <label>Dividendo por ação: <input type="number" id="dividendo_1" step="0.01" /></label>
-      <p>Lucro valorização: <span id="lucro_valorizacao1">-</span></p>
-      <p>Lucro total (incluindo dividendos): <span id="lucro_total1">-</span></p>
-      <button onclick="calcularLucro1()">Calcular</button>
-    </div>
-    <div class="buttons">
-      <button onclick="limparCampos()">Apagar Tudo</button>
-      <button onclick="voltarMenu()">Voltar ao Menu</button>
-    </div>
-  </div>
-  
-  <!-- SECÇÃO 2 -->
-  <div id="sec2Screen" class="screen hidden">
-        <div class="section">
-      <div class="section-header">
-        <h4>2. Calcular Valor a Investir com TP1, TP2, Lucro Desejado.</h4>
-        <button class="info-toggle" onclick="toggleInfo('info2')">ℹ️ +info</button>
-      </div>
-      <div class="info-text" id="info2">
-        <h5>
-          Introduz o preço inicial (TP1), o preço futuro esperado (TP2) e o lucro desejado.
-          O resultado será o valor que precisas investir para atingir esse lucro.
-        </h5>
-      </div>
-      <label>Preço Inicial (TP1): <input type="number" id="tp1_2" step="0.01" /></label>
-      <label>Preço Final (TP2): <input type="number" id="tp2_2" step="0.01" /></label>
-      <label>Lucro Desejado: <input type="number" id="lucro_2" step="0.01" /></label>
-      <p>Investimento necessário: <span id="invest2">-</span></p>
-      <button onclick="calcularInvestimento2()">Calcular</button>
-    </div>
-    <div class="buttons">
-      <button onclick="limparCampos()">Apagar Tudo</button>
-      <button onclick="voltarMenu()">Voltar ao Menu</button>
-    </div>
-  </div>
-  
-  <!-- SECÇÃO 3 -->
-  <div id="sec3Screen" class="screen hidden">
-    <div class="section">
-      <div class="section-header">
-        <h4>3. Calcular Lucro com TP1, % Crescimento, Investimento e Dividendos.</h4>
-        <button class="info-toggle" onclick="toggleInfo('info3')">ℹ️ +info</button>
-      </div>
-      <div class="info-text" id="info3">
-        <h5>
-          Introduz o preço inicial (TP1), a percentagem de crescimento esperada,
-          o valor que vais investir e os dividendos esperados. O resultado será o lucro total esperado.
-        </h5>
-      </div>
-      <label>Preço Inicial (TP1): <input type="number" id="tp1_3" step="0.01" /></label>
-      <label>% Crescimento: <input type="number" id="percent_3" step="0.01" /></label>
-      <label>Valor Investido: <input type="number" id="invest_3" step="0.01" /></label>
-      <label>Dividendo por ação: <input type="number" id="dividendo_3" step="0.01" /></label>
-      <p>Lucro valorização: <span id="lucro_valorizacao3">-</span></p>
-      <p>Lucro total (incluindo dividendos): <span id="lucro_total3">-</span></p>
-      <button onclick="calcularLucro3()">Calcular</button>
-    </div>
-    <div class="buttons">
-      <button onclick="limparCampos()">Apagar Tudo</button>
-      <button onclick="voltarMenu()">Voltar ao Menu</button>
-    </div>
-  </div>
-  
-  <!-- SECÇÃO 4 -->
-  <div id="sec4Screen" class="screen hidden">
-    <div class="section">
-      <div class="section-header">
-        <h4>4. Calcular Valor a Investir com TP1, % Crescimento, Lucro Desejado.</h4>
-        <button class="info-toggle" onclick="toggleInfo('info4')">ℹ️ +info</button>
-      </div>
-      <div class="info-text" id="info4">
-        <h5>
-          Introduz o preço inicial (TP1), a percentagem de crescimento esperada e o lucro desejado.
-          O resultado será o valor que precisas investir.
-        </h5>
-      </div>
-      <label>Preço Inicial (TP1): <input type="number" id="tp1_4" step="0.01" oninput="atualizarTP2_4()" /></label>
-      <label>% Crescimento: <input type="number" id="percent_4" step="0.01" oninput="atualizarTP2_4()" /> TP2: <span id="tp2_4">-</span></label>
-      <label>Lucro Desejado: <input type="number" id="lucro_4" step="0.01" /></label>
-      <p>Investimento necessário: <span id="invest4">-</span></p>
-      <button onclick="calcularInvestimento4()">Calcular</button>
-    </div>
-    <div class="buttons">
-      <button onclick="limparCampos()">Apagar Tudo</button>
-      <button onclick="voltarMenu()">Voltar ao Menu</button>
-    </div>
-    
-  </div>
+        >
+        <h3 style="margin: 10px 0 2px 0">TP1 (Target Price 1):</h3>
+        <h6 style="margin: 0 0 8px 0; font-weight: normal">Preço atual ou inicial da ação. É o ponto de partida para os cálculos de valorização e investimento.</h6>
 
-  <!-- SECÇÃO Simulação -->
-   <div id="sec5Screen" class="screen hidden">
-    <div class="section">
-      <div class="section-header">
-        <h4> Screen Simulação Lucros.</h4>
-      </div>
-      <div class="info-text" id="info4">
-        <h5>
-          Simulação de Lucros entre duas ou mais potenciais Acões, com gráficos ilustrativos
-        </h5>
-      </div>
-      <div class="formulario">
-        <input type="text" id="nomeAcao" placeholder="Nome da Ação">
-        <input type="number" id="tp1" placeholder="TP1">
-        <input type="number" id="tp2" placeholder="TP2">
-        <input type="number" id="investimento" placeholder="Valor Investido (€)">
-        <button onclick="simularEGUardar()">Simular e Guardar</button>
-      </div>
-      <h2>Tabela de Simulações</h2>
+        <h3 style="margin: 10px 0 2px 0">TP2 (Target Price 2):</h3>
+        <h6 style="margin: 0 0 8px 0; font-weight: normal">Preço futuro da ação. É o ponto de chegada para os cálculos de valorização e investimento.</h6>
 
-      <div class="tabela-wrapper">
-  <table id="tabelaSimulacoes">
-    <thead>
-      <tr>
-        <th>Ação</th>
-        <th>TP1</th>
-        <th>TP2</th>
-        <th>Investido</th>
-        <th>Lucro</th>
-        <th>% Crescimento</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-</div>
+        <h3 style="margin: 10px 0 2px 0">Dividendos:</h3>
+        <h6 style="margin: 0 0 8px 0; font-weight: normal">Valor que a Empresa paga por cada Stock que é detida, que será somado ao lucro total.</h6>
+      </div>
 
-  <h2>Gráfico de Lucros</h2>
-  <canvas id="graficoLucro" width="400" height="200"></canvas>
-
+      <h2>Escolhe uma opção:</h2>
+      <div class="buttons-grid">
+        <button onclick="abrirSecao(1)">📈 Lucro Esperado</button>
+        <button onclick="abrirSecao(2)">📊 Quanto tens de Investir</button>
+        <button onclick="abrirSecao(3)">📈 Lucro % de crescimento</button>
+        <button onclick="abrirSecao(4)">
+          📊 Tens de Investir a % de Crescimento
+        </button>
+        <button onclick="abrirSecao(5)">📊 Simulador</button>
+      </div>
+      <div class="buttons">
+        <button onclick="goToScreen1()">Voltar</button>
+      </div>
     </div>
-    <div class="buttons">
-      <button onclick="limparCampos()">Apagar Tudo</button>
-      <button onclick="voltarMenu()">Voltar ao Menu</button>
+
+    <!-- SECÇÃO 1 -->
+    <div id="sec1Screen" class="screen hidden">
+      <div class="section">
+        <div class="section-header">
+          <h4>1. Calcular Lucro com TP1, TP2, Investimento e Dividendos.</h4>
+          <button class="info-toggle" onclick="toggleInfo('info1')">
+            ℹ️ +info
+          </button>
+        </div>
+        <div class="info-text" id="info1">
+          <h5>
+            Introduz o preço inicial da ação (TP1), o preço esperado no futuro
+            (TP2), o valor que vais investir e os dividendos esperados. O
+            resultado será o lucro total esperado.
+          </h5>
+        </div>
+        <label
+          >Preço Inicial (TP1): <input type="number" id="tp1_1" step="0.01"
+        /></label>
+        <label
+          >Preço Final (TP2): <input type="number" id="tp2_1" step="0.01"
+        /></label>
+        <label
+          >Valor Investido: <input type="number" id="invest_1" step="0.01"
+        /></label>
+        <label
+          >Dividendo por ação:
+          <input type="number" id="dividendo_1" step="0.01"
+        /></label>
+        <p>Lucro valorização: <span id="lucro_valorizacao1">-</span></p>
+        <p>
+          Lucro total (incluindo dividendos): <span id="lucro_total1">-</span>
+        </p>
+        <button onclick="calcularLucro1()">Calcular</button>
+      </div>
+      <div class="buttons">
+        <button onclick="limparCampos()">Apagar Tudo</button>
+        <button onclick="voltarMenu()">Voltar ao Menu</button>
+      </div>
     </div>
-    
-  </div>
 
-<script src="script.js"></script>  
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- SECÇÃO 2 -->
+    <div id="sec2Screen" class="screen hidden">
+      <div class="section">
+        <div class="section-header">
+          <h4>2. Calcular Valor a Investir com TP1, TP2, Lucro Desejado.</h4>
+          <button class="info-toggle" onclick="toggleInfo('info2')">
+            ℹ️ +info
+          </button>
+        </div>
+        <div class="info-text" id="info2">
+          <h5>
+            Introduz o preço inicial (TP1), o preço futuro esperado (TP2) e o
+            lucro desejado. O resultado será o valor que precisas investir para
+            atingir esse lucro.
+          </h5>
+        </div>
+        <label
+          >Preço Inicial (TP1): <input type="number" id="tp1_2" step="0.01"
+        /></label>
+        <!--teste <label>Preço Final (TP2): <input type="number" id="tp2_2" step="0.01" /></label> -->
+        <label
+          >Preço Final (TP2):
+          <input
+            type="number"
+            id="tp2_2"
+            step="0.01"
+            oninput="atualizarTP2_2()"
+          />
+          % Crescimento: <span id="percent_2">-</span></label
+        >
+        <label
+          >Lucro Desejado: <input type="number" id="lucro_2" step="0.01"
+        /></label>
+        <p>Investimento necessário: <span id="invest2">-</span></p>
+        <button onclick="calcularInvestimento2()">Calcular</button>
+      </div>
+      <div class="buttons">
+        <button onclick="limparCampos()">Apagar Tudo</button>
+        <button onclick="voltarMenu()">Voltar ao Menu</button>
+      </div>
+    </div>
 
+    <!-- SECÇÃO 3 -->
+    <div id="sec3Screen" class="screen hidden">
+      <div class="section">
+        <div class="section-header">
+          <h4>
+            3. Calcular Lucro com TP1, % Crescimento, Investimento e Dividendos.
+          </h4>
+          <button class="info-toggle" onclick="toggleInfo('info3')">
+            ℹ️ +info
+          </button>
+        </div>
+        <div class="info-text" id="info3">
+          <h5>
+            Introduz o preço inicial (TP1), a percentagem de crescimento
+            esperada, o valor que vais investir e os dividendos esperados. O
+            resultado será o lucro total esperado.
+          </h5>
+        </div>
+        <label
+          >Preço Inicial (TP1): <input type="number" id="tp1_3" step="0.01"
+        /></label>
+        <label
+          >% Crescimento: <input type="number" id="percent_3" step="0.01"
+        /></label>
+        <label
+          >Valor Investido: <input type="number" id="invest_3" step="0.01"
+        /></label>
+        <label
+          >Dividendo por ação:
+          <input type="number" id="dividendo_3" step="0.01"
+        /></label>
+        <p>Lucro valorização: <span id="lucro_valorizacao3">-</span></p>
+        <p>
+          Lucro total (incluindo dividendos): <span id="lucro_total3">-</span>
+        </p>
+        <button onclick="calcularLucro3()">Calcular</button>
+      </div>
+      <div class="buttons">
+        <button onclick="limparCampos()">Apagar Tudo</button>
+        <button onclick="voltarMenu()">Voltar ao Menu</button>
+      </div>
+    </div>
+
+    <!-- SECÇÃO 4 -->
+    <div id="sec4Screen" class="screen hidden">
+      <div class="section">
+        <div class="section-header">
+          <h4>
+            4. Calcular Valor a Investir com TP1, % Crescimento, Lucro Desejado.
+          </h4>
+          <button class="info-toggle" onclick="toggleInfo('info4')">
+            ℹ️ +info
+          </button>
+        </div>
+        <div class="info-text" id="info4">
+          <h5>
+            Introduz o preço inicial (TP1), a percentagem de crescimento
+            esperada e o lucro desejado. O resultado será o valor que precisas
+            investir.
+          </h5>
+        </div>
+        <label
+          >Preço Inicial (TP1):
+          <input
+            type="number"
+            id="tp1_4"
+            step="0.01"
+            oninput="atualizarTP2_4()"
+        /></label>
+        <label
+          >% Crescimento:
+          <input
+            type="number"
+            id="percent_4"
+            step="0.01"
+            oninput="atualizarTP2_4()"
+          />
+          TP2: <span id="tp2_4">-</span></label
+        >
+        <label
+          >Lucro Desejado: <input type="number" id="lucro_4" step="0.01"
+        /></label>
+        <p>Investimento necessário: <span id="invest4">-</span></p>
+        <button onclick="calcularInvestimento4()">Calcular</button>
+      </div>
+      <div class="buttons">
+        <button onclick="limparCampos()">Apagar Tudo</button>
+        <button onclick="voltarMenu()">Voltar ao Menu</button>
+      </div>
+    </div>
+
+    <!-- SECÇÃO Simulação -->
+    <div id="sec5Screen" class="screen hidden">
+      <div class="section">
+        <div class="section-header">
+          <h4>Screen Simulação Lucros.</h4>
+        </div>
+        <div class="info-text" id="info5">
+          <h5>
+            Simulação de Lucros entre duas ou mais potenciais Acões, com
+            gráficos ilustrativos
+          </h5>
+        </div>
+        <div class="formulario">
+          <input type="text" id="nomeAcao" placeholder="Nome da Ação" />
+          <input type="number" id="tp1" placeholder="TP1" />
+          <input type="number" id="tp2" placeholder="TP2" />
+          <input
+            type="number"
+            id="investimento"
+            placeholder="Valor Investido (€)"
+          />
+          <button onclick="simularEGUardar()">Simular e Guardar</button>
+        </div>
+        <h2>Tabela de Simulações</h2>
+
+        <div class="tabela-wrapper">
+          <table id="tabelaSimulacoes">
+            <thead>
+              <tr>
+                <th>Ação</th>
+                <th>TP1</th>
+                <th>TP2</th>
+                <th>Investido</th>
+                <th>Lucro</th>
+                <th>% Crescimento</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <!-- Botão Limpar-->
+        <div class="grafico-wrapper">
+          <canvas id="graficoLucro" width="400" height="200"></canvas>
+          <button onclick="limparGrafico()">Limpar Gráfico🗑️</button>
+        </div>
+        <!-- Fim do botão Limpar-->
+      </div>
+      <div class="buttons">
+        <button onclick="limparCampos()">Apagar Tudo</button>
+        <button onclick="voltarMenu()">Voltar ao Menu</button>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </body>
 </html>

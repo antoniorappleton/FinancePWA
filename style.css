@@ -52,9 +52,13 @@
   display: none;
   }
   
-  h1, h2, h3 {
+  h1, h2 {
     color: #ecf0f1;
-    margin-bottom: 15px;
+    margin-bottom: 4px;
+  }
+  h3, h6 {
+    color: #ecf0f1;
+    margin-bottom: 0px;
   }
   
   label {
@@ -204,4 +208,27 @@
 
 #tabelaSimulacoes tbody tr:hover {
   background-color: #d6eaf8;
+}
+
+/*Botão Limpar Gráfico*/
+.grafico-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 400px;  /* Ajusta conforme o teu layout */
+  margin: 0 auto;
+}
+
+#limparGraficoBtn {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #ffffff; /* Branco para sobressair */
+}
+
+#limparGraficoBtn:hover {
+  color: #ff5555;  /* Fica vermelho ao passar o rato */
 }
