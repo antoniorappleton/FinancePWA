@@ -232,3 +232,108 @@
 #limparGraficoBtn:hover {
   color: #ff5555;  /* Fica vermelho ao passar o rato */
 }
+/* Estilo geral do popup */
+#popupEmail {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ffffff;
+  border: 2px solid #007BFF;
+  border-radius: 10px;
+  padding: 20px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+/*ENVIAR EMAIL*/
+
+/* Estilo geral do popup */
+#popupEmail {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ffffff;
+  border: 2px solid #007BFF;
+  border-radius: 10px;
+  padding: 20px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+/* Título do popup */
+#popupEmail h3 {
+  margin-top: 0;
+  font-size: 1.4em;
+  color: #007BFF;
+  text-align: center;
+}
+
+/* Campo de email */
+#popupEmail input[type="email"] {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1em;
+}
+
+/* Botões */
+#popupEmail button {
+  padding: 10px 15px;
+  margin: 5px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+#popupEmail button:first-of-type {
+  background-color: #007BFF;
+  color: white;
+}
+
+#popupEmail button:last-of-type {
+  background-color: #ccc;
+  color: #333;
+}
+
+/* Conteúdo das simulações */
+#dadosSimulacao {
+  background-color: #94c9ce;
+  color: #383636;
+  padding: 10px;
+  border-radius: 5px;
+  max-height: 200px;
+  overflow-y: auto;
+  font-size: 0.95em;
+  line-height: 1.5em;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+}
+
+#dadosSimulacao p {
+  margin: 6px 0;
+}
+
+#dadosSimulacao p strong {
+  color: #007BFF;
+}
+
+#dadosSimulacao hr {
+  border: none;
+  border-top: 1px solid #ccc;
+  margin: 10px 0;
+}
+
+/* Ocultar popup */
+.hidden {
+  display: none;
+}

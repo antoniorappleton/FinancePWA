@@ -291,3 +291,61 @@ function limparGrafico() {
     grafico = null;
   }
 }
+
+//Enviar Email
+function abrirPopupEmail() {
+  const popup = document.getElementById("popupEmail");
+  popup.classList.remove("hidden");
+
+  const dadosDiv = document.getElementById("dadosSimulacao");
+
+  if (simulacoes.length > 0) {
+    let html = "<h4>Simulações Guardadas:</h4>";
+    simulacoes.forEach((sim, index) => {
+      html += `
+        <p><strong>Simulação ${index + 1}</strong></p>
+        <p>Ação: ${sim.nomeAcao}</p>
+        <p>Preço Inicial: €${sim.tp1}</p>
+        <p>Preço Final: €${sim.tp2}</p>
+        <p>Investimento: €${sim.valorInvestido}</p>
+        <p>Lucro: €${sim.lucro}</p>
+        <p>Crescimento: ${sim.crescimentoPercentual}%</p>
+        <hr>
+      `;
+    });
+    dadosDiv.innerHTML = html;
+  } else {
+    dadosDiv.innerHTML = "<p>Sem simulações disponíveis.</p>";
+  }
+}
+
+function fecharPopupEmail() {
+  document.getElementById("popupEmail").classList.add("hidden");
+}
+
+function enviarEmail() {
+  const emailDestino = document.getElementById("emailDestino").value;
+
+  if (!emailDestino || simulacoes.length === 0) {
+    alert("Preenche o email e faz pelo menos uma simulação.");
+    return;
+  }
+
+  const assunto = encodeURIComponent("Resumo de Simulações Financeiras");
+
+  let corpoTexto = "Resumo das Simulações:\n\n";
+
+  simulacoes.forEach((sim, index) => {
+    corpoTexto += `Simulação ${index + 1}:\n`;
+    corpoTexto += `Ação: ${sim.nomeAcao}\n`;
+    corpoTexto += `Preço Inicial: €${sim.tp1}\n`;
+    corpoTexto += `Preço Final: €${sim.tp2}\n`;
+    corpoTexto += `Investimento: €${sim.valorInvestido}\n`;
+    corpoTexto += `Lucro: €${sim.lucro}\n`;
+    corpoTexto += `Crescimento: ${sim.crescimentoPercentual}%\n\n`;
+  });
+
+  const corpo = encodeURIComponent(corpoTexto);
+  const mailtoLink = `mailto:${emailDestino}?subject=${assunto}&body=${corpo}`;
+  window.location.href = mailtoLink;
+}

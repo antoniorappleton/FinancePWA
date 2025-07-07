@@ -9,6 +9,11 @@
     <link rel="stylesheet" href="style.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="manifest" href="manifest.json" />
+    https://www.gstatic.com/firebasejs/9.6.1/firebase-app.jshttps://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js
+    <script src="firebase-config.js" defer></script>
+    <script src="script.js" defer></script>
+
+
   </head>
   <body>
     <!-- SCREEN 1 -->
@@ -29,15 +34,24 @@
           border-radius: 5px;
           background: #34495e;
         "
-        >
+      >
         <h3 style="margin: 10px 0 2px 0">TP1 (Target Price 1):</h3>
-        <h6 style="margin: 0 0 8px 0; font-weight: normal">Preço atual ou inicial da ação. É o ponto de partida para os cálculos de valorização e investimento.</h6>
+        <h6 style="margin: 0 0 8px 0; font-weight: normal">
+          Preço atual ou inicial da ação. É o ponto de partida para os cálculos
+          de valorização e investimento.
+        </h6>
 
         <h3 style="margin: 10px 0 2px 0">TP2 (Target Price 2):</h3>
-        <h6 style="margin: 0 0 8px 0; font-weight: normal">Preço futuro da ação. É o ponto de chegada para os cálculos de valorização e investimento.</h6>
+        <h6 style="margin: 0 0 8px 0; font-weight: normal">
+          Preço futuro da ação. É o ponto de chegada para os cálculos de
+          valorização e investimento.
+        </h6>
 
         <h3 style="margin: 10px 0 2px 0">Dividendos:</h3>
-        <h6 style="margin: 0 0 8px 0; font-weight: normal">Valor que a Empresa paga por cada Stock que é detida, que será somado ao lucro total.</h6>
+        <h6 style="margin: 0 0 8px 0; font-weight: normal">
+          Valor que a Empresa paga por cada Stock que é detida, que será somado
+          ao lucro total.
+        </h6>
       </div>
 
       <h2>Escolhe uma opção:</h2>
@@ -280,6 +294,22 @@
       <div class="buttons">
         <button onclick="limparCampos()">Apagar Tudo</button>
         <button onclick="voltarMenu()">Voltar ao Menu</button>
+
+        <!-- Botão para abrir o popup -->
+        <button onclick="abrirPopupEmail()">Enviar Simulação por Email</button>
+
+        <!-- Popup -->
+        <div id="popupEmail" class="hidden">
+          <h3>Enviar Simulação</h3>
+          <div id="dadosSimulacao"></div>
+          <input
+            type="email"
+            id="emailDestino"
+            placeholder="Email de destino"
+          />
+          <button onclick="enviarEmail()">Enviar</button>
+          <button onclick="fecharPopupEmail()">Cancelar</button>
+        </div>
       </div>
     </div>
 
