@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="style.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="manifest" href="manifest.json" />
-    
   </head>
   <body>
     <!-- SCREEN 1 -->
@@ -297,14 +296,22 @@
         <!-- Popup -->
         <div id="popupEmail" class="hidden">
           <h3>Enviar Simulação</h3>
+
           <div id="dadosSimulacao"></div>
-          <input
-            type="email"
-            id="emailDestino"
-            placeholder="Email de destino"
-          />
-          <button onclick="enviarEmail()">Enviar</button>
-          <button onclick="fecharPopupEmail()">Cancelar</button>
+
+          <div class="email-form">
+            <input
+              type="email"
+              id="emailDestino"
+              placeholder="Email de destino"
+              required
+            />
+          </div>
+
+          <div class="botoes-popup">
+            <button onclick="enviarEmail()">Enviar</button>
+            <button onclick="fecharPopupEmail()">Cancelar</button>
+          </div>
         </div>
       </div>
     </div>

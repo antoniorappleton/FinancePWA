@@ -81,7 +81,7 @@
     background-color: #3498db;
     border: none;
     color: white;
-    padding: 10px 18px;
+    padding: 10px 20px;
     margin: 8px 6px 0 0;
     border-radius: 6px;
     cursor: pointer;
@@ -305,6 +305,7 @@
   color: #333;
 }
 
+
 /* Conteúdo das simulações */
 #dadosSimulacao {
   background-color: #94c9ce;
@@ -336,4 +337,26 @@
 /* Ocultar popup */
 .hidden {
   display: none;
+}
+
+/* Caixa de entrada de email */
+#popupEmail .email-form {
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+#popupEmail input[type="email"] {
+  width: 95%;
+  max-width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1em;
+}
+
+/* Alinhamento central dos botões */
+#popupEmail .botoes-popup {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
 }
