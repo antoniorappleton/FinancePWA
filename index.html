@@ -254,7 +254,7 @@
     <div id="sec5Screen" class="screen hidden">
       <div class="section">
         <div class="section-header">
-          <h4>5. Screen Simulação Lucros.</h4>
+          <h4>Screen Simulação Lucros.</h4>
         </div>
         <div class="info-text" id="info5">
           <h5>
@@ -328,105 +328,102 @@
       </div>
     </div>
 
-    <!-- SECÇÃO 6: Registo de Ações com Dividendos -->
+    <!-- SECÇÃO 6: Registo e Filtro de Ações -->
     <div id="sec6Screen" class="screen hidden">
       <div class="section">
-        <h3>6. Registo de Ações p/ Dividendos e por mês</h3>
-
-        <label
-          >Nome da Ação:
-          <input type="text" id="nomeAcaoReg" />
-        </label>
-        <label
-          >Ticker:
-          <input type="text" id="tickerAcaoReg" />
-        </label>
-        <label
-          >Setor:
-          <select id="Setor">
-            <option value="">Seleciona o Setor</option>
-            <option value="ETF">ETF's</option>
-            <option value="Saúde">Saúde</option>
-            <option value="ConsumoCiclico">Consumo Cíclico</option>
-            <option value="Tecnologia">Tecnologia</option>
-            <option value="Financas">Finanças</option>
-            <option value="Materiais">Materiais</option>
-            <option value="Energia">Energia</option>
-            <option value="Defesa">Defesa</option>
-            <option value="Industria">Industria</option>
-            <option value="ConsumoDefensivo">Consumo Defensivo</option>
-          </select>
-        </label>
-        <label
-          >Mercado:
-          <select id="Mercado">
-            <option value="">Seleciona o Mercado</option>
-            <option value="PT">Portugal</option>
-            <option value="EU">Europa</option>
-            <option value="USA">Estados Unidos América</option>
-            <option value="USAsp500">Estados Unidos América (SP500)</option>
-          </select>
-        </label>
-        <label
-          >Valor do Dividendo (€):
-          <input type="number" id="valorDividendoReg" step="0.01" />
-        </label>
-        <label
-          >periodicidade:
-          <select id="periodicidade">
-            <option value="">Seleciona o Período</option>
-            <option value="Anual">Anual</option>
-            <option value="Semestral">Semestral</option>
-            <option value="Trimestral">Trimestral</option>
-          </select>
-        </label>
-        <label
-          >Mês dos Dividendos:
-          <select id="mesDividendoReg">
-            <option value="">Seleciona o mês</option>
-            <option value="Janeiro">Janeiro</option>
-            <option value="Fevereiro">Fevereiro</option>
-            <option value="Março">Março</option>
-            <option value="Abril">Abril</option>
-            <option value="Maio">Maio</option>
-            <option value="Junho">Junho</option>
-            <option value="Julho">Julho</option>
-            <option value="Agosto">Agosto</option>
-            <option value="Setembro">Setembro</option>
-            <option value="Outubro">Outubro</option>
-            <option value="Novembro">Novembro</option>
-            <option value="Dezembro">Dezembro</option>
-          </select>
-        </label>
-
-        <button onclick="guardarAcaoFirebase()">Guardar na Firebase</button>
+        <h3>📋 Registar Ação com Dividendos</h3>
+        <div class="form-grid">
+          <label
+            >Nome da Ação:
+            <input type="text" id="nomeAcaoReg" />
+          </label>
+          <label
+            >Ticker:
+            <input type="text" id="tickerAcaoReg" />
+          </label>
+          <label
+            >Setor:
+            <input type="text" id="Setor" />
+          </label>
+          <label
+            >Mercado:
+            <input type="text" id="Mercado" />
+          </label>
+          <label
+            >Valor do Dividendo (€):
+            <input type="number" id="valorDividendoReg" step="0.01" />
+          </label>
+          <label
+            >Mês dos Dividendos:
+            <select id="mesDividendoReg">
+              <option value="">Seleciona o mês</option>
+              <option value="Janeiro">Janeiro</option>
+              <option value="Fevereiro">Fevereiro</option>
+              <option value="Março">Março</option>
+              <option value="Abril">Abril</option>
+              <option value="Maio">Maio</option>
+              <option value="Junho">Junho</option>
+              <option value="Julho">Julho</option>
+              <option value="Agosto">Agosto</option>
+              <option value="Setembro">Setembro</option>
+              <option value="Outubro">Outubro</option>
+              <option value="Novembro">Novembro</option>
+              <option value="Dezembro">Dezembro</option>
+            </select>
+          </label>
+        </div>
+        <button onclick="guardarAcaoFirebase()">💾 Guardar na Firebase</button>
       </div>
 
       <div class="section">
-        <h3>Filtrar Ações por Mês de Dividendos</h3>
-        <button
-          id="btnMostrarFiltros"
-          onclick="document.getElementById('filtrosMesContainer').classList.toggle('hidden')"
-        >
-          Mostrar/Ocultar Filtros
-        </button>
-
-        <div id="filtrosMesContainer" class="hidden">
-          <button onclick="filtrarPorMes('Janeiro')">Janeiro</button>
-          <button onclick="filtrarPorMes('Fevereiro')">Fevereiro</button>
-          <button onclick="filtrarPorMes('Março')">Março</button>
-          <button onclick="filtrarPorMes('Abril')">Abril</button>
-          <button onclick="filtrarPorMes('Maio')">Maio</button>
-          <button onclick="filtrarPorMes('Junho')">Junho</button>
-          <button onclick="filtrarPorMes('Julho')">Julho</button>
-          <button onclick="filtrarPorMes('Agosto')">Agosto</button>
-          <button onclick="filtrarPorMes('Setembro')">Setembro</button>
-          <button onclick="filtrarPorMes('Outubro')">Outubro</button>
-          <button onclick="filtrarPorMes('Novembro')">Novembro</button>
-          <button onclick="filtrarPorMes('Dezembro')">Dezembro</button>
+        <h3>🔍 Filtrar Ações</h3>
+        <div class="filtros-container">
+          <label
+            >Setor:
+            <select id="filtroSetor" placeholder="ex: Energia">
+              <option value="ETF">ETF's</option>
+              <option value="Saúde">Saúde</option>
+              <option value="ConsumoCiclico">Consumo Cíclico</option>
+              <option value="Tecnologia">Tecnologia</option>
+              <option value="Financas">Finanças</option>
+              <option value="Materiais">Materiais</option>
+              <option value="Energia">Energia</option>
+              <option value="Defesa">Defesa</option>
+              <option value="Industria">Industria</option>
+              <option value="ConsumoDefensivo">Consumo Defensivo</option>
+            </select>
+          </label>
+          <label
+            >Mercado:
+            <select id="filtroMercado" placeholder="ex: Euronext">
+              <option value="">Seleciona o Mercado</option>
+              <option value="PT">Portugal</option>
+              <option value="EU">Europa</option>
+              <option value="USA">Estados Unidos América</option>
+              <option value="USAsp500">Estados Unidos América (SP500)</option>
+            </select>
+          </label>
+          <label
+            >Mês:
+            <select id="filtroMes">
+              <option value="">Todos</option>
+              <option value="Janeiro">Janeiro</option>
+              <option value="Fevereiro">Fevereiro</option>
+              <option value="Março">Março</option>
+              <option value="Abril">Abril</option>
+              <option value="Maio">Maio</option>
+              <option value="Junho">Junho</option>
+              <option value="Julho">Julho</option>
+              <option value="Agosto">Agosto</option>
+              <option value="Setembro">Setembro</option>
+              <option value="Outubro">Outubro</option>
+              <option value="Novembro">Novembro</option>
+              <option value="Dezembro">Dezembro</option>
+            </select>
+          </label>
         </div>
-
-        <div id="resultadoFiltroMes"></div>
+        <button onclick="filtrarAcoes()">🔎 Aplicar Filtros</button>
+        <div id="resultadoFiltroMes" class="resultado-acoes"></div>
       </div>
 
       <div class="buttons">

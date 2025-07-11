@@ -370,79 +370,35 @@ function enviarEmail() {
   window.location.href = mailtoLink;
 }
 
-//Função para Guardar na Firebase
-function guardarAcaoFirebase() {
-  const nome = document.getElementById("nomeAcaoReg").value.trim();
-  const ticker = document.getElementById("tickerAcaoReg").value.trim();
-  const setor = document.getElementById("Setor").value;
-  const mercado = document.getElementById("Mercado").value;
-  const dividendo = parseFloat(
-    document.getElementById("valorDividendoReg").value
-  );
-  const mes = document.getElementById("mesDividendoReg").value;
+function filtrarAcoes() {
+  const setor = document.getElementById("filtroSetor").value.trim().toLowerCase();
+  const mercado = document.getElementById("filtroMercado").value.trim().toLowerCase();
+  const mes = document.getElementById("filtroMes").value;
 
-  if (!nome || !ticker || !setor || !mercado || isNaN(dividendo) || !mes) {
-    alert("Preenche todos os campos corretamente.");
-    return;
-  }
-
-  db.collection("acoesDividendos")
-    .add({
-      nome,
-      ticker,
-      setor,
-      mercado,
-      dividendo,
-      mes,
-      timestamp: new Date(),
-    })
-    .then(() => {
-      alert("✅ Ação guardada com sucesso!");
-      limparCamposSec6();
-    })
-    .catch((error) => {
-      console.error("Erro ao guardar:", error);
-      alert("❌ Erro ao guardar. Tenta novamente.");
-    });
-}
-// Função para Limpar os Campos depois de Guardar
-function limparCamposSec6() {
-  document.getElementById("nomeAcaoReg").value = "";
-  document.getElementById("tickerAcaoReg").value = "";
-  document.getElementById("Setor").value = "";
-  document.getElementById("Mercado").value = "";
-  document.getElementById("valorDividendoReg").value = "";
-  document.getElementById("mesDividendoReg").value = "";
-}
-
-// Função filtrar por mês
-function filtrarPorMes(mes) {
   const resultadoDiv = document.getElementById("resultadoFiltroMes");
   resultadoDiv.innerHTML = "A carregar...";
 
-  db.collection("acoesDividendos")
-    .where("mes", "==", mes) // 🟢 CAMPO CORRETO
-    .get()
-    .then((querySnapshot) => {
-      if (querySnapshot.empty) {
-        resultadoDiv.innerHTML = `<p style="color:white;">Nenhuma ação encontrada para ${mes}.</p>`;
-        return;
-      }
+  db.collection("acoesDividendos").get().then((querySnapshot) => {
+    let html = "<ul>";
+    let count = 0;
 
-      let html = "<ul>";
-      querySnapshot.forEach((doc) => {
-        const dados = doc.data();
-        html += `<li style="color:white;">
-          <strong>${dados.nome}</strong> (${dados.ticker})<br>
-          Setor: ${dados.setor} | Mercado: ${dados.mercado} | Dividendo: €${dados.dividendo}| Periodicidade: ${dados.periodicidade} | Mês: ${dados.mes}
-        </li>`;
-      });
-      html += "</ul>";
-      resultadoDiv.innerHTML = html;
-    })
-    .catch((error) => {
-      console.error("Erro ao filtrar:", error);
-      resultadoDiv.innerHTML =
-        "<p style='color:red;'>Erro ao carregar dados.</p>";
+    querySnapshot.forEach((doc) => {
+      const dados = doc.data();
+      const matchSetor = !setor || dados.setor.toLowerCase().includes(setor);
+      const matchMercado = !mercado || dados.mercado.toLowerCase().includes(mercado);
+      const matchMes = !mes || dados.mes === mes;
+
+      if (matchSetor && matchMercado && matchMes) {
+        html += `<li><strong>${dados.nome}</strong> (${dados.ticker})<br>
+        Setor: ${dados.setor} | Mercado: ${dados.mercado} | Dividendo: €${dados.dividendo} | Mês: ${dados.mes}</li>`;
+        count++;
+      }
     });
+
+    html += "</ul>";
+    resultadoDiv.innerHTML = count > 0 ? html : "<p>Nenhuma ação encontrada com os filtros aplicados.</p>";
+  }).catch((error) => {
+    console.error("Erro ao filtrar:", error);
+    resultadoDiv.innerHTML = "<p style='color:red;'>Erro ao carregar dados.</p>";
+  });
 }

@@ -449,7 +449,58 @@
   line-height: 1.5em;
 }
 
-/* Animação suave */
+/* Animação suave *//* Secção 6 - Registo e Filtro */
+#sec6Screen .form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+#sec6Screen .filtros-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+#sec6Screen label {
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+  color: #ecf0f1;
+}
+
+#sec6Screen input,
+#sec6Screen select {
+  padding: 8px;
+  border-radius: 6px;
+  border: none;
+  font-size: 1em;
+  margin-top: 4px;
+  box-sizing: border-box;
+}
+
+#resultadoFiltroMes.resultado-acoes {
+  margin-top: 15px;
+  background-color: #1c2833;
+  color: #ecf0f1;
+  padding: 12px;
+  border-radius: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+  font-size: 0.95em;
+  line-height: 1.5em;
+}
+
+#resultadoFiltroMes ul {
+  padding-left: 20px;
+}
+
+#resultadoFiltroMes li {
+  margin-bottom: 10px;
+  border-bottom: 1px solid #444;
+  padding-bottom: 6px;
+}
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
