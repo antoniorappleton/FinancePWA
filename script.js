@@ -379,10 +379,9 @@ function guardarAcaoFirebase() {
   const dividendo = parseFloat(
     document.getElementById("valorDividendoReg").value
   );
-  const periodicidade = document.getElementById("periodicidade").value;
   const mes = document.getElementById("mesDividendoReg").value;
 
-  if (!nome || !ticker || !setor || !setor || !periodicidade || !mercado || isNaN(dividendo) || !mes) {
+  if (!nome || !ticker || !setor || !mercado || isNaN(dividendo) || !mes) {
     alert("Preenche todos os campos corretamente.");
     return;
   }
@@ -394,7 +393,6 @@ function guardarAcaoFirebase() {
       setor,
       mercado,
       dividendo,
-      periodicidade,
       mes,
       timestamp: new Date(),
     })
@@ -414,7 +412,6 @@ function limparCamposSec6() {
   document.getElementById("Setor").value = "";
   document.getElementById("Mercado").value = "";
   document.getElementById("valorDividendoReg").value = "";
-  document.getElementById("Periodicidade").value = "";
   document.getElementById("mesDividendoReg").value = "";
 }
 

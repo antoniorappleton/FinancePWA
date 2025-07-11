@@ -360,3 +360,97 @@
   justify-content: center;
   gap: 10px;
 }
+
+/* Secção 6 - Registo de Ações */
+#sec6Screen .section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+#sec6Screen label {
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+  color: #ecf0f1;
+}
+
+#sec6Screen input,
+#sec6Screen select,
+#sec6Screen textarea {
+  padding: 8px;
+  border-radius: 6px;
+  border: none;
+  font-size: 1em;
+  margin-top: 4px;
+  box-sizing: border-box;
+}
+
+#sec6Screen textarea {
+  resize: vertical;
+}
+
+/* Botão para mostrar filtros */
+#btnMostrarFiltros {
+  background-color: #16a085;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+}
+
+#btnMostrarFiltros:hover {
+  background-color: #138d75;
+}
+
+/* Container dos botões de mês */
+#filtrosMesContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 15px;
+  justify-content: center;
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+#filtrosMesContainer.hidden {
+  display: none;
+}
+
+#filtrosMesContainer button {
+  flex: 1 1 30%;
+  padding: 10px;
+  background-color: #2c3e50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.3s ease;
+}
+
+#filtrosMesContainer button:hover {
+  background-color: #1a252f;
+}
+
+/* Resultado do filtro */
+#resultadoFiltroMes {
+  margin-top: 20px;
+  background-color: #1c2833;
+  color: #ecf0f1;
+  padding: 12px;
+  border-radius: 8px;
+  max-height: 250px;
+  overflow-y: auto;
+  font-size: 0.95em;
+  line-height: 1.5em;
+}
+
+/* Animação suave */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

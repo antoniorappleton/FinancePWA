@@ -331,9 +331,8 @@
     <!-- SECÇÃO 6: Registo de Ações com Dividendos -->
     <div id="sec6Screen" class="screen hidden">
       <div class="section">
-        <div class="section-header">
-          <h4>6. Registar Informação sobre Ações com Dividendos</h4>
-        </div>
+        <h3>Registar Ação com Dividendos</h3>
+
         <label
           >Nome da Ação:
           <input type="text" id="nomeAcaoReg" />
@@ -348,14 +347,14 @@
             <option value="">Seleciona o Setor</option>
             <option value="ETF">ETF's</option>
             <option value="Saúde">Saúde</option>
-            <option value="Consumo Ciclico">Consumo Cíclico</option>
+            <option value="ConsumoCiclico">Consumo Cíclico</option>
             <option value="Tecnologia">Tecnologia</option>
             <option value="Financas">Finanças</option>
             <option value="Materiais">Materiais</option>
             <option value="Energia">Energia</option>
             <option value="Defesa">Defesa</option>
             <option value="Industria">Industria</option>
-            <option value="Consumo Defensivo">Consumo Defensivo</option>
+            <option value="ConsumoDefensivo">Consumo Defensivo</option>
           </select>
         </label>
         <label
@@ -373,7 +372,7 @@
           <input type="number" id="valorDividendoReg" step="0.01" />
         </label>
         <label
-          >Periodicidade:
+          >periodicidade:
           <select id="periodicidade">
             <option value="">Seleciona o Período</option>
             <option value="Anual">Anual</option>
@@ -399,12 +398,20 @@
             <option value="Dezembro">Dezembro</option>
           </select>
         </label>
-        <button onclick="guardarAcaoFirebase()">Guardar Registo</button>
+
+        <button onclick="guardarAcaoFirebase()">Guardar na Firebase</button>
       </div>
 
       <div class="section">
-        <h4>Filtrar Ações por Mês de Dividendos</h4>
-        <div class="buttons-grid">
+        <h3>Filtrar Ações por Mês de Dividendos</h3>
+        <button
+          id="btnMostrarFiltros"
+          onclick="document.getElementById('filtrosMesContainer').classList.toggle('hidden')"
+        >
+          Mostrar/Ocultar Filtros
+        </button>
+
+        <div id="filtrosMesContainer" class="hidden">
           <button onclick="filtrarPorMes('Janeiro')">Janeiro</button>
           <button onclick="filtrarPorMes('Fevereiro')">Fevereiro</button>
           <button onclick="filtrarPorMes('Março')">Março</button>
@@ -418,7 +425,8 @@
           <button onclick="filtrarPorMes('Novembro')">Novembro</button>
           <button onclick="filtrarPorMes('Dezembro')">Dezembro</button>
         </div>
-        <div id="resultadoFiltroMes" style="margin-top: 10px"></div>
+
+        <div id="resultadoFiltroMes"></div>
       </div>
 
       <div class="buttons">
