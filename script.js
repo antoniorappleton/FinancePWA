@@ -1,3 +1,17 @@
+// Firebase Configurações (substituir pelos teus dados reais)
+const firebaseConfig = {
+  apiKey: "AIzaSyDbSYjVwsOOnBjZe_X8y7gS-W4DhYqHEnE",
+  authDomain: "appfinance-812b2.firebaseapp.com",
+  projectId: "appfinance-812b2",
+  storageBucket: "appfinance-812b2.firebasestorage.app",
+  messagingSenderId: "383837988480",
+  appId: "1:383837988480:web:dd114574838c6a9dbb2865",
+};
+
+// Inicializar Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
 // Navegação entre screens
 function goToScreen2() {
   document.getElementById("screen1").classList.add("hidden");
@@ -62,7 +76,6 @@ function atualizarTP2_2() {
     document.getElementById("percent_2").textContent = "-";
   }
 }
-  
 
 // Secção 3 - Lucro e lucro total com dividendos (percentagem crescimento)
 function calcularLucro3() {
@@ -184,7 +197,7 @@ function guardarSimulacao(nomeAcao, tp1, tp2, valorInvestido) {
     tp2,
     valorInvestido,
     lucro: parseFloat(lucro.toFixed(2)),
-    crescimentoPercentual: parseFloat(crescimento.toFixed(2))
+    crescimentoPercentual: parseFloat(crescimento.toFixed(2)),
   };
 
   simulacoes.push(novaSimulacao);
@@ -196,7 +209,7 @@ function atualizarTabela() {
   const corpoTabela = document.querySelector("#tabelaSimulacoes tbody");
   corpoTabela.innerHTML = "";
 
-  simulacoes.forEach(sim => {
+  simulacoes.forEach((sim) => {
     const linha = document.createElement("tr");
     linha.innerHTML = `
       <td>${sim.nomeAcao}</td>
@@ -213,8 +226,8 @@ function atualizarTabela() {
 let grafico;
 
 function atualizarGrafico() {
-  const labels = simulacoes.map(s => s.nomeAcao);
-  const dadosLucro = simulacoes.map(s => s.lucro);
+  const labels = simulacoes.map((s) => s.nomeAcao);
+  const dadosLucro = simulacoes.map((s) => s.lucro);
 
   if (grafico) grafico.destroy();
 
@@ -223,19 +236,21 @@ function atualizarGrafico() {
     type: "bar",
     data: {
       labels: labels,
-      datasets: [{
-        label: "Lucro (€)",
-        data: dadosLucro,
-        backgroundColor: "rgba(54, 162, 235, 0.5)",
-        borderColor: "rgba(54, 162, 235, 1)",
-        borderWidth: 1
-      }]
+      datasets: [
+        {
+          label: "Lucro (€)",
+          data: dadosLucro,
+          backgroundColor: "rgba(54, 162, 235, 0.5)",
+          borderColor: "rgba(54, 162, 235, 1)",
+          borderWidth: 1,
+        },
+      ],
     },
     options: {
       scales: {
-        y: { beginAtZero: true }
-      }
-    }
+        y: { beginAtZero: true },
+      },
+    },
   });
 }
 
@@ -243,7 +258,9 @@ function simularEGUardar() {
   const nome = document.getElementById("nomeAcao").value;
   const tp1 = parseFloat(document.getElementById("tp1").value);
   const tp2 = parseFloat(document.getElementById("tp2").value);
-  const investimento = parseFloat(document.getElementById("investimento").value);
+  const investimento = parseFloat(
+    document.getElementById("investimento").value
+  );
 
   if (!nome || isNaN(tp1) || isNaN(tp2) || isNaN(investimento)) {
     alert("Preenche todos os campos!");
@@ -256,7 +273,7 @@ function simularEGUardar() {
 function voltarMenu() {
   // Esconde todas as secções
   const secoes = document.querySelectorAll(".screen");
-  secoes.forEach(secao => secao.classList.add("hidden"));
+  secoes.forEach((secao) => secao.classList.add("hidden"));
 
   // Mostra apenas o menu principal
   document.getElementById("screen2").classList.remove("hidden");
@@ -268,12 +285,14 @@ function limparCampos() {
 
   if (secaoVisivel) {
     // Limpa todos os inputs do tipo number e text dentro da secção visível
-    const inputs = secaoVisivel.querySelectorAll("input[type=number], input[type=text]");
-    inputs.forEach(input => input.value = "");
+    const inputs = secaoVisivel.querySelectorAll(
+      "input[type=number], input[type=text]"
+    );
+    inputs.forEach((input) => (input.value = ""));
 
     // Limpa todos os spans com resultados dentro da secção visível
     const spans = secaoVisivel.querySelectorAll("span");
-    spans.forEach(span => {
+    spans.forEach((span) => {
       if (span.id) {
         span.textContent = "-";
       }
@@ -323,6 +342,7 @@ function fecharPopupEmail() {
   document.getElementById("popupEmail").classList.add("hidden");
 }
 
+//Enviar Email
 function enviarEmail() {
   const emailDestino = document.getElementById("emailDestino").value;
 
@@ -348,4 +368,81 @@ function enviarEmail() {
   const corpo = encodeURIComponent(corpoTexto);
   const mailtoLink = `mailto:${emailDestino}?subject=${assunto}&body=${corpo}`;
   window.location.href = mailtoLink;
+}
+
+//Função para Guardar na Firebase
+function guardarAcaoFirebase() {
+  const nome = document.getElementById("nomeAcaoReg").value.trim();
+  const ticker = document.getElementById("tickerAcaoReg").value.trim();
+  const setor = document.getElementById("Setor").value;
+  const mercado = document.getElementById("Mercado").value;
+  const dividendo = parseFloat(
+    document.getElementById("valorDividendoReg").value
+  );
+  const mes = document.getElementById("mesDividendoReg").value;
+
+  if (!nome || !ticker || !setor || !mercado || isNaN(dividendo) || !mes) {
+    alert("Preenche todos os campos corretamente.");
+    return;
+  }
+
+  db.collection("acoesDividendos")
+    .add({
+      nome,
+      ticker,
+      setor,
+      mercado,
+      dividendo,
+      mes,
+      timestamp: new Date(),
+    })
+    .then(() => {
+      alert("✅ Ação guardada com sucesso!");
+      limparCamposSec6();
+    })
+    .catch((error) => {
+      console.error("Erro ao guardar:", error);
+      alert("❌ Erro ao guardar. Tenta novamente.");
+    });
+}
+// Função para Limpar os Campos depois de Guardar
+function limparCamposSec6() {
+  document.getElementById("nomeAcaoReg").value = "";
+  document.getElementById("tickerAcaoReg").value = "";
+  document.getElementById("Setor").value = "";
+  document.getElementById("Mercado").value = "";
+  document.getElementById("valorDividendoReg").value = "";
+  document.getElementById("mesDividendoReg").value = "";
+}
+
+// Função filtrar por mês
+function filtrarPorMes(mes) {
+  const resultadoDiv = document.getElementById("resultadoFiltroMes");
+  resultadoDiv.innerHTML = "A carregar...";
+
+  db.collection("acoesDividendos")
+    .where("mes", "==", mes) // 🟢 CAMPO CORRETO
+    .get()
+    .then((querySnapshot) => {
+      if (querySnapshot.empty) {
+        resultadoDiv.innerHTML = `<p style="color:white;">Nenhuma ação encontrada para ${mes}.</p>`;
+        return;
+      }
+
+      let html = "<ul>";
+      querySnapshot.forEach((doc) => {
+        const dados = doc.data();
+        html += `<li style="color:white;">
+          <strong>${dados.nome}</strong> (${dados.ticker})<br>
+          Setor: ${dados.setor} | Mercado: ${dados.mercado} | Dividendo: €${dados.dividendo} | Mês: ${dados.mes}
+        </li>`;
+      });
+      html += "</ul>";
+      resultadoDiv.innerHTML = html;
+    })
+    .catch((error) => {
+      console.error("Erro ao filtrar:", error);
+      resultadoDiv.innerHTML =
+        "<p style='color:red;'>Erro ao carregar dados.</p>";
+    });
 }
