@@ -20,9 +20,6 @@
     <!--Firebase-->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-
-
-
   </head>
   <body>
     <!-- SCREEN 1 -->
@@ -351,14 +348,14 @@
             <option value="">Seleciona o Setor</option>
             <option value="ETF">ETF's</option>
             <option value="Saúde">Saúde</option>
-            <option value="ConsumoCiclico">Consumo Cíclico</option>
+            <option value="Consumo Ciclico">Consumo Cíclico</option>
             <option value="Tecnologia">Tecnologia</option>
             <option value="Financas">Finanças</option>
             <option value="Materiais">Materiais</option>
             <option value="Energia">Energia</option>
             <option value="Defesa">Defesa</option>
             <option value="Industria">Industria</option>
-            <option value="ConsumoDefensivo">Consumo Defensivo</option>
+            <option value="Consumo Defensivo">Consumo Defensivo</option>
           </select>
         </label>
         <label
@@ -374,6 +371,15 @@
         <label
           >Valor do Dividendo (€):
           <input type="number" id="valorDividendoReg" step="0.01" />
+        </label>
+        <label
+          >Periodicidade:
+          <select id="periodicidade">
+            <option value="">Seleciona o Período</option>
+            <option value="Anual">Anual</option>
+            <option value="Semestral">Semestral</option>
+            <option value="Trimestral">Trimestral</option>
+          </select>
         </label>
         <label
           >Mês dos Dividendos:
