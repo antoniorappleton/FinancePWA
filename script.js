@@ -370,148 +370,7 @@ function enviarEmail() {
   window.location.href = mailtoLink;
 }
 
-function filtrarAcoes() {
-  const setorInput = document.getElementById("filtroSetor").value;
-  const mercadoInput = document.getElementById("filtroMercado").value;
-  const mesInput = document.getElementById("filtroMes").value;
-
-  const resultadoDiv = document.getElementById("resultadoFiltroMes");
-  resultadoDiv.innerHTML = "A carregar...";
-
-  let query = db.collection("acoesDividendos");
-
-  if (setorInput) query = query.where("setor", "==", setorInput);
-  if (mercadoInput) query = query.where("mercado", "==", mercadoInput);
-  if (mesInput) query = query.where("mes", "==", mesInput);
-
-  query
-    .get()
-    .then((snapshot) => {
-      if (snapshot.empty) {
-        resultadoDiv.innerHTML =
-          "<p>Nenhuma ação encontrada com os filtros aplicados.</p>";
-        return;
-      }
-
-      let html = "<ul>";
-      snapshot.forEach((doc) => {
-        const dados = doc.data();
-        html += `<li>
-          <strong>${dados.nome}</strong> (${dados.ticker})<br>
-          Setor: ${dados.setor} | Mercado: ${dados.mercado} | Dividendo: €${dados.dividendo} | Mês: ${dados.mes}<br>
-          <button onclick="editarAcao('${doc.id}', ${JSON.stringify(dados).replace(
-            /"/g,
-            "&quot;"
-          )})">✏️ Editar</button>
-        </li>`;
-      });
-      html += "</ul>";
-      resultadoDiv.innerHTML = html;
-    })
-    .catch((error) => {
-      // Se falhar por falta de índice, cai para filtragem local
-      console.warn("⚠️ Erro no Firestore. A usar fallback local:", error);
-
-      db.collection("acoesDividendos")
-        .get()
-        .then((querySnapshot) => {
-          let html = "<ul>";
-          let count = 0;
-
-          querySnapshot.forEach((doc) => {
-            const dados = doc.data();
-
-            const matchSetor =
-              !setorInput ||
-              dados.setor?.toLowerCase() === setorInput.toLowerCase();
-            const matchMercado =
-              !mercadoInput ||
-              dados.mercado?.toLowerCase() === mercadoInput.toLowerCase();
-            const matchMes = !mesInput || dados.mes === mesInput;
-
-            if (matchSetor && matchMercado && matchMes) {
-              html += `<li>
-                <strong>${dados.nome}</strong> (${dados.ticker})<br>
-                Setor: ${dados.setor} | Mercado: ${dados.mercado} | Dividendo: €${dados.dividendo} | Mês: ${dados.mes}<br>
-                <button onclick="editarAcao('${doc.id}', ${JSON.stringify(
-                  dados
-                ).replace(/"/g, "&quot;")})">✏️ Editar</button>
-              </li>`;
-              count++;
-            }
-          });
-
-          html += "</ul>";
-          resultadoDiv.innerHTML =
-            count > 0
-              ? html
-              : "<p>Nenhuma ação encontrada com os filtros aplicados.</p>";
-        })
-        .catch((err) => {
-          console.error("Erro total:", err);
-          resultadoDiv.innerHTML =
-            "<p style='color:red;'>Erro ao carregar dados.</p>";
-        });
-    });
-}
-
-// Variável global para armazenar o ID do documento em edição
-let idAcaoEmEdicao = null;
-
-// Função para preencher o formulário com os dados da ação selecionada
-function editarAcao(docId, dados) {
-  idAcaoEmEdicao = docId;
-  document.getElementById("nomeAcaoReg").value = dados.nome;
-  document.getElementById("tickerAcaoReg").value = dados.ticker;
-  document.getElementById("Setor").value = dados.setor;
-  document.getElementById("Mercado").value = dados.mercado;
-  document.getElementById("valorDividendoReg").value = dados.dividendo;
-  document.getElementById("mesDividendoReg").value = dados.mes;
-  alert("Modo de edição ativado. Altere os dados e clique em 'Atualizar'.");
-}
-
-// Função para atualizar a ação no Firestore
-function atualizarAcaoFirebase() {
-  if (!idAcaoEmEdicao) {
-    alert("Nenhuma ação selecionada para edição.");
-    return;
-  }
-
-  const nome = document.getElementById("nomeAcaoReg").value.trim();
-  const ticker = document.getElementById("tickerAcaoReg").value.trim();
-  const setor = document.getElementById("Setor").value;
-  const mercado = document.getElementById("Mercado").value;
-  const dividendo = parseFloat(
-    document.getElementById("valorDividendoReg").value
-  );
-  const mes = document.getElementById("mesDividendoReg").value;
-
-  if (!nome || !ticker || !setor || !mercado || isNaN(dividendo) || !mes) {
-    alert("Preenche todos os campos corretamente.");
-    return;
-  }
-
-  db.collection("acoesDividendos")
-    .doc(idAcaoEmEdicao)
-    .update({
-      nome,
-      ticker,
-      setor,
-      mercado,
-      dividendo,
-      mes,
-      timestamp: new Date(),
-    })
-    .then(() => {
-      alert("✅ Ação atualizada com sucesso!");
-      limparCamposSec6();
-      idAcaoEmEdicao = null;
-    })
-    .catch((error) => {
-      console.error("Erro ao atualizar:", error);
-      alert("❌ Erro ao atualizar. Tenta novamente.");
-    });
-}
+//Botão secção dos filtros
 function toggleFiltrosMes() {
   const filtrosDiv = document.getElementById("filtrosMesContainer");
   const botao = document.getElementById("btnMostrarFiltros");
@@ -525,41 +384,182 @@ function toggleFiltrosMes() {
   }
 }
 
+
+//Filtrar Base Dados Firebase por 
+function filtrarAcoes() {
+  const setor = document.getElementById("filtroSetor").value;
+  const mercado = document.getElementById("filtroMercado").value;
+  const mes = document.getElementById("filtroMes").value;
+  const periodicidade = document.getElementById("filtroPeriodicidade").value; // ✅ nome corrigido
+
+  const resultadoDiv = document.getElementById("resultadoFiltroMes");
+  resultadoDiv.innerHTML = "A carregar...";
+
+  db.collection("acoesDividendos")
+    .get()
+    .then((querySnapshot) => {
+      let html = "<ul>";
+      let count = 0;
+
+      querySnapshot.forEach((doc) => {
+        const dados = doc.data();
+
+        const matchSetor = !setor || dados.setor === setor;
+        const matchMercado = !mercado || dados.mercado === mercado;
+        const matchMes = !mes || dados.mes === mes;
+        const matchPeriodicidade = !periodicidade || dados.periodicidade === periodicidade;
+
+        if (matchSetor && matchMercado && matchMes && matchPeriodicidade) {
+            html += `<li>
+                <strong>${dados.nome}</strong> (${dados.ticker})<br>
+                Setor: ${dados.setor} | Mercado: ${dados.mercado} | Dividendo: €${dados.dividendo} | 
+                Mês: ${dados.mes} | Periodicidade: ${dados.periodicidade}<br>
+                <button onclick="editarAcao('${doc.id}', ${JSON.stringify(dados).replace(/"/g, "&quot;")})">✏️ Editar</button>
+                <button onclick="eliminarAcao('${doc.id}')">🗑️ Eliminar</button>
+                </li>`;
+                count++;
+        }
+
+      });
+
+      html += "</ul>";
+      resultadoDiv.innerHTML =
+        count > 0
+          ? html
+          : "<p>Nenhuma ação encontrada com os filtros aplicados.</p>";
+    })
+    .catch((error) => {
+      console.error("Erro ao filtrar:", error);
+      resultadoDiv.innerHTML =
+        "<p style='color:red;'>Erro ao carregar dados.</p>";
+    });
+}
+
+//Atualizar a Firebase
+function atualizarAcaoFirebase() {
+  if (!idAcaoEmEdicao) {
+    alert("Nenhuma ação selecionada para edição.");
+    return;
+  }
+
+  const nome = document.getElementById("nomeAcaoReg").value.trim();
+  const ticker = document.getElementById("tickerAcaoReg").value.trim();
+  const setor = document.getElementById("Setor").value;
+  const mercado = document.getElementById("Mercado").value;
+  const periodicidade = document.getElementById("Periodicidade").value;
+  const dividendo = parseFloat(document.getElementById("valorDividendoReg").value);
+  const mes = document.getElementById("mesDividendoReg").value;
+
+  if (!nome || !ticker || !setor || !mercado || isNaN(dividendo) || !mes || !periodicidade) {
+    alert("Preenche todos os campos corretamente.");
+    return;
+  }
+
+  db.collection("acoesDividendos")
+    .doc(idAcaoEmEdicao)
+    .update({
+      nome,
+      ticker,
+      setor,
+      mercado,
+      dividendo,
+      periodicidade,
+      mes,
+      timestamp: new Date(),
+    })
+    .then(() => {
+      alert("✅ Ação atualizada com sucesso!");
+      limparCamposSec6();
+      idAcaoEmEdicao = null;
+    })
+    .catch((error) => {
+      console.error("Erro ao atualizar:", error);
+      alert("❌ Erro ao atualizar. Tenta novamente.");
+    });
+}
+
+//Editar a Firebase
+function editarAcao(id, dados) {
+  idAcaoEmEdicao = id;
+  document.getElementById("nomeAcaoReg").value = dados.nome || "";
+  document.getElementById("tickerAcaoReg").value = dados.ticker || "";
+  document.getElementById("Setor").value = dados.setor || "";
+  document.getElementById("Mercado").value = dados.mercado || "";
+  document.getElementById("valorDividendoReg").value = dados.dividendo || "";
+  document.getElementById("mesDividendoReg").value = dados.mes || "";
+  document.getElementById("periodicidade").value = dados.periodicidade || "";
+}
+
 //Guardar na Firebase
-function guardarAcaoFirebase() {
+let idAcaoEmEdicao = null;
+
+function guardarOuAtualizarAcaoFirebase() {
   const nome = document.getElementById("nomeAcaoReg").value.trim();
   const ticker = document.getElementById("tickerAcaoReg").value.trim();
   const setor = document.getElementById("Setor").value.trim();
   const mercado = document.getElementById("Mercado").value.trim();
   const dividendo = parseFloat(document.getElementById("valorDividendoReg").value);
   const mes = document.getElementById("mesDividendoReg").value;
+  const periodicidade = document.getElementById("periodicidade").value;
 
-  if (!nome || !ticker || !setor || !mercado || isNaN(dividendo) || !mes) {
+  if (!nome || !ticker || !setor || !mercado || isNaN(dividendo) || !mes || !periodicidade) {
     alert("⚠️ Preenche todos os campos corretamente.");
     return;
   }
 
-  db.collection("acoesDividendos")
-    .add({
-      nome,
-      ticker,
-      setor,
-      mercado,
-      dividendo,
-      mes,
-      timestamp: new Date()
-    })
-    .then(() => {
-      alert("✅ Ação guardada com sucesso na Firebase!");
-      document.getElementById("nomeAcaoReg").value = "";
-      document.getElementById("tickerAcaoReg").value = "";
-      document.getElementById("Setor").value = "";
-      document.getElementById("Mercado").value = "";
-      document.getElementById("valorDividendoReg").value = "";
-      document.getElementById("mesDividendoReg").value = "";
-    })
-    .catch((error) => {
-      console.error("Erro ao guardar ação:", error);
-      alert("❌ Ocorreu um erro ao guardar. Verifica a ligação com a Firebase.");
-    });
+  const dadosAcao = {
+    nome,
+    ticker,
+    setor,
+    mercado,
+    dividendo,
+    mes,
+    periodicidade,
+    timestamp: new Date()
+  };
+
+  if (idAcaoEmEdicao) {
+    // Atualizar ação existente
+    db.collection("acoesDividendos")
+      .doc(idAcaoEmEdicao)
+      .update(dadosAcao)
+      .then(() => {
+        alert("✅ Ação atualizada com sucesso!");
+        limparCamposSec6();
+        idAcaoEmEdicao = null;
+      })
+      .catch((error) => {
+        console.error("Erro ao atualizar:", error);
+        alert("❌ Erro ao atualizar. Tenta novamente.");
+      });
+  } else {
+    // Guardar nova ação
+    db.collection("acoesDividendos")
+      .add(dadosAcao)
+      .then(() => {
+        alert("✅ Ação guardada com sucesso na Firebase!");
+        limparCamposSec6();
+      })
+      .catch((error) => {
+        console.error("Erro ao guardar ação:", error);
+        alert("❌ Ocorreu um erro ao guardar. Verifica a ligação com a Firebase.");
+      });
+  }
+}
+
+//Eliminar um Registo
+function eliminarAcao(id) {
+  if (confirm("⚠️ Tens a certeza que queres eliminar esta ação?")) {
+    db.collection("acoesDividendos")
+      .doc(id)
+      .delete()
+      .then(() => {
+        alert("✅ Ação eliminada com sucesso.");
+        filtrarAcoes(); // Recarrega os resultados após eliminar
+      })
+      .catch((error) => {
+        console.error("Erro ao eliminar ação:", error);
+        alert("❌ Erro ao eliminar. Tenta novamente.");
+      });
+  }
 }

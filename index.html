@@ -379,8 +379,7 @@
       </select>
     </div>
     <div class="buttons">
-      <button onclick="guardarAcaoFirebase()">💾 Guardar</button>
-      <button onclick="atualizarAcaoFirebase()">🔄 Atualizar</button>
+      <button onclick="guardarOuAtualizarAcaoFirebase()">💾 Guardar / Atualizar</button>
     </div>
   </div>
 
@@ -393,51 +392,57 @@
 
     <div id="filtrosMesContainer" class="hidden">
       <div class="filtros-container">
-        <label>
-          
-          <select id="filtroSetor">
-            <option value="">Selecione um Setor</option>
-            <option value="ETF">ETF's</option>
-            <option value="Saúde">Saúde</option>
-            <option value="ConsumoCiclico">Consumo Cíclico</option>
-            <option value="Tecnologia">Tecnologia</option>
-            <option value="Financas">Finanças</option>
-            <option value="Materiais">Materiais</option>
-            <option value="Energia">Energia</option>
-            <option value="Defesa">Defesa</option>
-            <option value="Industria">Indústria</option>
-            <option value="ConsumoDefensivo">Consumo Defensivo</option>
-          </select>
-        </label>
-        <label>
-          
-          <select id="filtroMercado">
-            <option value="">Selecione um Mercado</option>
-            <option value="PT">Portugal</option>
-            <option value="EU">Europa</option>
-            <option value="USA">Estados Unidos</option>
-            <option value="USAsp500">EUA (SP500)</option>
-          </select>
-        </label>
-        <label>
-          
-          <select id="filtroMes">
-            <option value="">Selecione um Mês</option>
-            <option value="Janeiro">Janeiro</option>
-            <option value="Fevereiro">Fevereiro</option>
-            <option value="Março">Março</option>
-            <option value="Abril">Abril</option>
-            <option value="Maio">Maio</option>
-            <option value="Junho">Junho</option>
-            <option value="Julho">Julho</option>
-            <option value="Agosto">Agosto</option>
-            <option value="Setembro">Setembro</option>
-            <option value="Outubro">Outubro</option>
-            <option value="Novembro">Novembro</option>
-            <option value="Dezembro">Dezembro</option>
-          </select>
-        </label>
-      </div>
+  <label>
+    <select id="filtroSetor">
+      <option value="">Selecione um Setor</option>
+      <option value="ETF">ETF's</option>
+      <option value="Saúde">Saúde</option>
+      <option value="ConsumoCiclico">Consumo Cíclico</option>
+      <option value="Tecnologia">Tecnologia</option>
+      <option value="Financas">Finanças</option>
+      <option value="Materiais">Materiais</option>
+      <option value="Energia">Energia</option>
+      <option value="Defesa">Defesa</option>
+      <option value="Industria">Indústria</option>
+      <option value="ConsumoDefensivo">Consumo Defensivo</option>
+      <option value="Imobiliário">Imobiliário</option>
+    </select>
+  </label>
+  <label>
+    <select id="filtroPeriodicidade"> <!-- ✅ CORRIGIDO -->
+      <option value="">Selecione a Periodicidade</option>
+      <option value="Mensal">Mensal</option>
+      <option value="Trimestral">Trimestral</option>
+      <option value="Semestral">Semestral</option>
+      <option value="Anual">Anual</option>
+    </select>
+    <select id="filtroMercado">
+      <option value="">Selecione um Mercado</option>
+      <option value="PT">Portugal</option>
+      <option value="EU">Europa</option>
+      <option value="USA">Estados Unidos</option>
+      <option value="USAsp500">EUA (SP500)</option>
+    </select>
+  </label>
+  <label>
+    <select id="filtroMes">
+      <option value="">Selecione um Mês</option>
+      <option value="Janeiro">Janeiro</option>
+      <option value="Fevereiro">Fevereiro</option>
+      <option value="Março">Março</option>
+      <option value="Abril">Abril</option>
+      <option value="Maio">Maio</option>
+      <option value="Junho">Junho</option>
+      <option value="Julho">Julho</option>
+      <option value="Agosto">Agosto</option>
+      <option value="Setembro">Setembro</option>
+      <option value="Outubro">Outubro</option>
+      <option value="Novembro">Novembro</option>
+      <option value="Dezembro">Dezembro</option>
+    </select>
+  </label>
+</div>
+
       <div class="buttons">
         <button onclick="filtrarAcoes()">🔎 Aplicar Filtros</button>
       </div>
