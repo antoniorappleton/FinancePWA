@@ -336,14 +336,25 @@
     <div class="form-grid">
       <input type="text" id="nomeAcaoReg" placeholder="Nome da Ação" />
       <input type="text" id="tickerAcaoReg" placeholder="Ticker" />
-      <input type="text" id="Setor" placeholder="Setor" />
-      <input type="text" id="Mercado" placeholder="Mercado" />
-      <input
-        type="number"
-        id="valorDividendoReg"
-        step="0.01"
-        placeholder="Valor do Dividendo (€)"
-      />
+      <select id="Setor" placeholder="Setor" >
+        <option value="">Seleciona o Setor</option>
+        <option value="Energia">Energia</option>
+        <option value="Consumo Defensivo">Consumo Defensivo</option>
+        <option value="Materiais">Materiais</option>
+        <option value="Industria">Industria</option>
+        <option value="Tecnologia">Tecnologia</option>
+        <option value="Saúde">Saúde</option>
+        <option value="Imobiliário">Imobiliário</option>
+        <option value="Finanças">Finanças</option>
+      </select>
+      <select id="Mercado" placeholder="Mercado" >
+        <option value="">Seleciona o Mercado</option>
+        <option value="PT">Portugal</option>
+        <option value="EU">Fevereiro</option>
+        <option value="USA">Americano</option>
+        <option value="USAsp500">Americano (SP500)</option>
+      </select>
+      <input type="number" id="valorDividendoReg" step="0.01" placeholder="Valor do Dividendo (€)"/>
       <select id="mesDividendoReg">
         <option value="">Seleciona o mês</option>
         <option value="Janeiro">Janeiro</option>
@@ -358,6 +369,13 @@
         <option value="Outubro">Outubro</option>
         <option value="Novembro">Novembro</option>
         <option value="Dezembro">Dezembro</option>
+      </select>
+      <select id="periodicidade" placeholder="Periodicidade" >
+        <option value="">Seleciona a Frequência</option>
+        <option value="Anual">Anual</option>
+        <option value="Semestral">Semestral</option>
+        <option value="Trimestral">Trimestral</option>
+        <option value="Mensal">Mensal</option>
       </select>
     </div>
     <div class="buttons">

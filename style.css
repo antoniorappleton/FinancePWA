@@ -675,5 +675,6 @@ button:hover {
 
 /* 💡 Cor dos botões principais */
 button {
-  background-color: #007BFF; /* Azul principal, muda aqui para verde ou outro */
+  background-color: #050505; /* Azul principal, muda aqui para verde ou outro */
+  border-radius: 50px;
 }

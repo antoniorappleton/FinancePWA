@@ -371,54 +371,90 @@ function enviarEmail() {
 }
 
 function filtrarAcoes() {
-  const setor = document
-    .getElementById("filtroSetor")
-    .value.trim()
-    .toLowerCase();
-  const mercado = document
-    .getElementById("filtroMercado")
-    .value.trim()
-    .toLowerCase();
-  const mes = document.getElementById("filtroMes").value;
+  const setorInput = document.getElementById("filtroSetor").value;
+  const mercadoInput = document.getElementById("filtroMercado").value;
+  const mesInput = document.getElementById("filtroMes").value;
 
   const resultadoDiv = document.getElementById("resultadoFiltroMes");
   resultadoDiv.innerHTML = "A carregar...";
 
-  db.collection("acoesDividendos")
+  let query = db.collection("acoesDividendos");
+
+  if (setorInput) query = query.where("setor", "==", setorInput);
+  if (mercadoInput) query = query.where("mercado", "==", mercadoInput);
+  if (mesInput) query = query.where("mes", "==", mesInput);
+
+  query
     .get()
-    .then((querySnapshot) => {
+    .then((snapshot) => {
+      if (snapshot.empty) {
+        resultadoDiv.innerHTML =
+          "<p>Nenhuma ação encontrada com os filtros aplicados.</p>";
+        return;
+      }
+
       let html = "<ul>";
-      let count = 0;
-
-      querySnapshot.forEach((doc) => {
+      snapshot.forEach((doc) => {
         const dados = doc.data();
-        const matchSetor = !setor || dados.setor.toLowerCase().includes(setor);
-        const matchMercado =
-          !mercado || dados.mercado.toLowerCase().includes(mercado);
-        const matchMes = !mes || dados.mes === mes;
-
-        if (matchSetor && matchMercado && matchMes) {
-          html += `<li>
-                  <strong>${dados.nome}</strong> (${dados.ticker})<br>
-                  Setor: ${dados.setor} | Mercado: ${dados.mercado} | Dividendo: €${dados.dividendo} | 
-                  Mês: ${dados.mes}<br><button onclick="editarAcao('${doc.id}', ${JSON.stringify(dados).replace(/"/g,"&quot;"
-                  )})">✏️ Editar</button></li>`;
-                  count++;
-        }
+        html += `<li>
+          <strong>${dados.nome}</strong> (${dados.ticker})<br>
+          Setor: ${dados.setor} | Mercado: ${dados.mercado} | Dividendo: €${dados.dividendo} | Mês: ${dados.mes}<br>
+          <button onclick="editarAcao('${doc.id}', ${JSON.stringify(dados).replace(
+            /"/g,
+            "&quot;"
+          )})">✏️ Editar</button>
+        </li>`;
       });
-
       html += "</ul>";
-      resultadoDiv.innerHTML =
-        count > 0
-          ? html
-          : "<p>Nenhuma ação encontrada com os filtros aplicados.</p>";
+      resultadoDiv.innerHTML = html;
     })
     .catch((error) => {
-      console.error("Erro ao filtrar:", error);
-      resultadoDiv.innerHTML =
-        "<p style='color:red;'>Erro ao carregar dados.</p>";
+      // Se falhar por falta de índice, cai para filtragem local
+      console.warn("⚠️ Erro no Firestore. A usar fallback local:", error);
+
+      db.collection("acoesDividendos")
+        .get()
+        .then((querySnapshot) => {
+          let html = "<ul>";
+          let count = 0;
+
+          querySnapshot.forEach((doc) => {
+            const dados = doc.data();
+
+            const matchSetor =
+              !setorInput ||
+              dados.setor?.toLowerCase() === setorInput.toLowerCase();
+            const matchMercado =
+              !mercadoInput ||
+              dados.mercado?.toLowerCase() === mercadoInput.toLowerCase();
+            const matchMes = !mesInput || dados.mes === mesInput;
+
+            if (matchSetor && matchMercado && matchMes) {
+              html += `<li>
+                <strong>${dados.nome}</strong> (${dados.ticker})<br>
+                Setor: ${dados.setor} | Mercado: ${dados.mercado} | Dividendo: €${dados.dividendo} | Mês: ${dados.mes}<br>
+                <button onclick="editarAcao('${doc.id}', ${JSON.stringify(
+                  dados
+                ).replace(/"/g, "&quot;")})">✏️ Editar</button>
+              </li>`;
+              count++;
+            }
+          });
+
+          html += "</ul>";
+          resultadoDiv.innerHTML =
+            count > 0
+              ? html
+              : "<p>Nenhuma ação encontrada com os filtros aplicados.</p>";
+        })
+        .catch((err) => {
+          console.error("Erro total:", err);
+          resultadoDiv.innerHTML =
+            "<p style='color:red;'>Erro ao carregar dados.</p>";
+        });
     });
 }
+
 // Variável global para armazenar o ID do documento em edição
 let idAcaoEmEdicao = null;
 
@@ -487,4 +523,43 @@ function toggleFiltrosMes() {
     filtrosDiv.classList.add("hidden");
     botao.textContent = "▼";
   }
+}
+
+//Guardar na Firebase
+function guardarAcaoFirebase() {
+  const nome = document.getElementById("nomeAcaoReg").value.trim();
+  const ticker = document.getElementById("tickerAcaoReg").value.trim();
+  const setor = document.getElementById("Setor").value.trim();
+  const mercado = document.getElementById("Mercado").value.trim();
+  const dividendo = parseFloat(document.getElementById("valorDividendoReg").value);
+  const mes = document.getElementById("mesDividendoReg").value;
+
+  if (!nome || !ticker || !setor || !mercado || isNaN(dividendo) || !mes) {
+    alert("⚠️ Preenche todos os campos corretamente.");
+    return;
+  }
+
+  db.collection("acoesDividendos")
+    .add({
+      nome,
+      ticker,
+      setor,
+      mercado,
+      dividendo,
+      mes,
+      timestamp: new Date()
+    })
+    .then(() => {
+      alert("✅ Ação guardada com sucesso na Firebase!");
+      document.getElementById("nomeAcaoReg").value = "";
+      document.getElementById("tickerAcaoReg").value = "";
+      document.getElementById("Setor").value = "";
+      document.getElementById("Mercado").value = "";
+      document.getElementById("valorDividendoReg").value = "";
+      document.getElementById("mesDividendoReg").value = "";
+    })
+    .catch((error) => {
+      console.error("Erro ao guardar ação:", error);
+      alert("❌ Ocorreu um erro ao guardar. Verifica a ligação com a Firebase.");
+    });
 }
