@@ -402,3 +402,56 @@ function filtrarAcoes() {
     resultadoDiv.innerHTML = "<p style='color:red;'>Erro ao carregar dados.</p>";
   });
 }
+// Variável global para armazenar o ID do documento em edição
+let idAcaoEmEdicao = null;
+
+// Função para preencher o formulário com os dados da ação selecionada
+function editarAcao(docId, dados) {
+  idAcaoEmEdicao = docId;
+  document.getElementById("nomeAcaoReg").value = dados.nome;
+  document.getElementById("tickerAcaoReg").value = dados.ticker;
+  document.getElementById("Setor").value = dados.setor;
+  document.getElementById("Mercado").value = dados.mercado;
+  document.getElementById("valorDividendoReg").value = dados.dividendo;
+  document.getElementById("mesDividendoReg").value = dados.mes;
+  alert("Modo de edição ativado. Altere os dados e clique em 'Atualizar'.");
+}
+
+// Função para atualizar a ação no Firestore
+function atualizarAcaoFirebase() {
+  if (!idAcaoEmEdicao) {
+    alert("Nenhuma ação selecionada para edição.");
+    return;
+  }
+
+  const nome = document.getElementById("nomeAcaoReg").value.trim();
+  const ticker = document.getElementById("tickerAcaoReg").value.trim();
+  const setor = document.getElementById("Setor").value;
+  const mercado = document.getElementById("Mercado").value;
+  const dividendo = parseFloat(document.getElementById("valorDividendoReg").value);
+  const mes = document.getElementById("mesDividendoReg").value;
+
+  if (!nome || !ticker || !setor || !mercado || isNaN(dividendo) || !mes) {
+    alert("Preenche todos os campos corretamente.");
+    return;
+  }
+
+  db.collection("acoesDividendos").doc(idAcaoEmEdicao).update({
+    nome,
+    ticker,
+    setor,
+    mercado,
+    dividendo,
+    mes,
+    timestamp: new Date()
+  })
+  .then(() => {
+    alert("✅ Ação atualizada com sucesso!");
+    limparCamposSec6();
+    idAcaoEmEdicao = null;
+  })
+  .catch((error) => {
+    console.error("Erro ao atualizar:", error);
+    alert("❌ Erro ao atualizar. Tenta novamente.");
+  });
+}

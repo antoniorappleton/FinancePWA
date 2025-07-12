@@ -36,9 +36,9 @@
         style="
           margin-bottom: 4px;
           padding: 10px;
-          border: 1px solid #ffffff;
+          border: 1px solid #090909;
           border-radius: 5px;
-          background: #34495e;
+          background: #fefcfc;
         "
       >
         <h3 style="margin: 10px 0 2px 0">TP1 (Target Price 1):</h3>
@@ -334,24 +334,24 @@
         <h3>📋 Registar Ação com Dividendos</h3>
         <div class="form-grid">
           <label
-            >Nome da Ação:
-            <input type="text" id="nomeAcaoReg" />
+            >
+            <input type="text" id="nomeAcaoReg" placeholder="Nome da Ação"/>
           </label>
           <label
-            >Ticker:
-            <input type="text" id="tickerAcaoReg" />
+            >
+            <input type="text" id="tickerAcaoReg" placeholder="Ticker"/>
           </label>
           <label
-            >Setor:
-            <input type="text" id="Setor" />
+            >
+            <input type="text" id="Setor" placeholder="Setor"/>
           </label>
           <label
-            >Mercado:
-            <input type="text" id="Mercado" />
+            >
+            <input type="text" id="Mercado" placeholder="Mercado"/>
           </label>
           <label
-            >Valor do Dividendo (€):
-            <input type="number" id="valorDividendoReg" step="0.01" />
+            >
+            <input type="number" id="valorDividendoReg" step="0.01" placeholder="Valor do Dividendo (€)"/>
           </label>
           <label
             >Mês dos Dividendos:
@@ -424,6 +424,16 @@
         </div>
         <button onclick="filtrarAcoes()">🔎 Aplicar Filtros</button>
         <div id="resultadoFiltroMes" class="resultado-acoes"></div>
+      <button onclick="atualizarAcaoFirebase()">🔄 Atualizar</button>
+      <!--Botão Editar dados na Firebase -->
+      <button onclick="editarAcao('ID_DO_DOC', {
+        nome: 'NOME',
+        ticker: 'TICKER',
+        setor: 'SETOR',
+        mercado: 'MERCADO',
+        dividendo: VALOR,
+        mes: 'MES'
+        })">✏️ Editar</button>
       </div>
 
       <div class="buttons">
