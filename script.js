@@ -371,36 +371,53 @@ function enviarEmail() {
 }
 
 function filtrarAcoes() {
-  const setor = document.getElementById("filtroSetor").value.trim().toLowerCase();
-  const mercado = document.getElementById("filtroMercado").value.trim().toLowerCase();
+  const setor = document
+    .getElementById("filtroSetor")
+    .value.trim()
+    .toLowerCase();
+  const mercado = document
+    .getElementById("filtroMercado")
+    .value.trim()
+    .toLowerCase();
   const mes = document.getElementById("filtroMes").value;
 
   const resultadoDiv = document.getElementById("resultadoFiltroMes");
   resultadoDiv.innerHTML = "A carregar...";
 
-  db.collection("acoesDividendos").get().then((querySnapshot) => {
-    let html = "<ul>";
-    let count = 0;
+  db.collection("acoesDividendos")
+    .get()
+    .then((querySnapshot) => {
+      let html = "<ul>";
+      let count = 0;
 
-    querySnapshot.forEach((doc) => {
-      const dados = doc.data();
-      const matchSetor = !setor || dados.setor.toLowerCase().includes(setor);
-      const matchMercado = !mercado || dados.mercado.toLowerCase().includes(mercado);
-      const matchMes = !mes || dados.mes === mes;
+      querySnapshot.forEach((doc) => {
+        const dados = doc.data();
+        const matchSetor = !setor || dados.setor.toLowerCase().includes(setor);
+        const matchMercado =
+          !mercado || dados.mercado.toLowerCase().includes(mercado);
+        const matchMes = !mes || dados.mes === mes;
 
-      if (matchSetor && matchMercado && matchMes) {
-        html += `<li><strong>${dados.nome}</strong> (${dados.ticker})<br>
-        Setor: ${dados.setor} | Mercado: ${dados.mercado} | Dividendo: €${dados.dividendo} | Mês: ${dados.mes}</li>`;
-        count++;
-      }
+        if (matchSetor && matchMercado && matchMes) {
+          html += `<li>
+                  <strong>${dados.nome}</strong> (${dados.ticker})<br>
+                  Setor: ${dados.setor} | Mercado: ${dados.mercado} | Dividendo: €${dados.dividendo} | 
+                  Mês: ${dados.mes}<br><button onclick="editarAcao('${doc.id}', ${JSON.stringify(dados).replace(/"/g,"&quot;"
+                  )})">✏️ Editar</button></li>`;
+                  count++;
+        }
+      });
+
+      html += "</ul>";
+      resultadoDiv.innerHTML =
+        count > 0
+          ? html
+          : "<p>Nenhuma ação encontrada com os filtros aplicados.</p>";
+    })
+    .catch((error) => {
+      console.error("Erro ao filtrar:", error);
+      resultadoDiv.innerHTML =
+        "<p style='color:red;'>Erro ao carregar dados.</p>";
     });
-
-    html += "</ul>";
-    resultadoDiv.innerHTML = count > 0 ? html : "<p>Nenhuma ação encontrada com os filtros aplicados.</p>";
-  }).catch((error) => {
-    console.error("Erro ao filtrar:", error);
-    resultadoDiv.innerHTML = "<p style='color:red;'>Erro ao carregar dados.</p>";
-  });
 }
 // Variável global para armazenar o ID do documento em edição
 let idAcaoEmEdicao = null;
@@ -428,7 +445,9 @@ function atualizarAcaoFirebase() {
   const ticker = document.getElementById("tickerAcaoReg").value.trim();
   const setor = document.getElementById("Setor").value;
   const mercado = document.getElementById("Mercado").value;
-  const dividendo = parseFloat(document.getElementById("valorDividendoReg").value);
+  const dividendo = parseFloat(
+    document.getElementById("valorDividendoReg").value
+  );
   const mes = document.getElementById("mesDividendoReg").value;
 
   if (!nome || !ticker || !setor || !mercado || isNaN(dividendo) || !mes) {
@@ -436,22 +455,36 @@ function atualizarAcaoFirebase() {
     return;
   }
 
-  db.collection("acoesDividendos").doc(idAcaoEmEdicao).update({
-    nome,
-    ticker,
-    setor,
-    mercado,
-    dividendo,
-    mes,
-    timestamp: new Date()
-  })
-  .then(() => {
-    alert("✅ Ação atualizada com sucesso!");
-    limparCamposSec6();
-    idAcaoEmEdicao = null;
-  })
-  .catch((error) => {
-    console.error("Erro ao atualizar:", error);
-    alert("❌ Erro ao atualizar. Tenta novamente.");
-  });
+  db.collection("acoesDividendos")
+    .doc(idAcaoEmEdicao)
+    .update({
+      nome,
+      ticker,
+      setor,
+      mercado,
+      dividendo,
+      mes,
+      timestamp: new Date(),
+    })
+    .then(() => {
+      alert("✅ Ação atualizada com sucesso!");
+      limparCamposSec6();
+      idAcaoEmEdicao = null;
+    })
+    .catch((error) => {
+      console.error("Erro ao atualizar:", error);
+      alert("❌ Erro ao atualizar. Tenta novamente.");
+    });
+}
+function toggleFiltrosMes() {
+  const filtrosDiv = document.getElementById("filtrosMesContainer");
+  const botao = document.getElementById("btnMostrarFiltros");
+
+  if (filtrosDiv.classList.contains("hidden")) {
+    filtrosDiv.classList.remove("hidden");
+    botao.textContent = "▲";
+  } else {
+    filtrosDiv.classList.add("hidden");
+    botao.textContent = "▼";
+  }
 }
