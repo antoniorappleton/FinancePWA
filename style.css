@@ -14,7 +14,7 @@
   max-width: 100%;
   padding: 15px;
   font-size: 1rem;
-  border-radius: 8px;
+  border-radius: 60px;
   background: #626466;
   border: none;
   color: white;
@@ -92,7 +92,7 @@ button {
   color: white;
   padding: 10px 20px;
   margin: 8px 6px 0 0;
-  border-radius: 6px;
+  border-radius: 60px;
   cursor: pointer;
   font-size: 16px;
   transition: background-color 0.25s ease;
@@ -113,15 +113,14 @@ p {
   margin-top: 15px;
   width: 100%;
   display: flex;
-  justify-content: center;
-  /* ou 'flex-end' se quiseres à direita */
+  justify-content: center;/* ou 'flex-end' se quiseres à direita */
 }
 
 .buttons button {
   width: 250px;
   padding: 20px;
   font-size: 1rem;
-  border-radius: 8px;
+  border-radius: 10px;
   background: #212122;
   border: none;
   color: white;
@@ -547,4 +546,134 @@ label input {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+* {
+  box-sizing: border-box;
+}
+
+/*adicionado periência*/
+/*Tornar tudo responsivo e centrado na largura total*/
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f7f9fa;
+  color: #212121;
+  width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* Garante que todas as "screens" ocupam a largura total */
+.screen {
+  padding: 16px;
+  width: 100%;
+  max-width: 768px;
+  margin: 0 auto;
+}
+/*Melhorar o espaçamento e separadores entre secções e títulos*/
+.section {
+  margin-bottom: 32px;
+  padding: 16px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+/* Títulos */
+.section h3, .section h4 {
+  margin-bottom: 16px;
+  font-size: 1.25rem;
+  color: #2c3e50;
+  border-bottom: 1px solid #dcdcdc;
+  padding-bottom: 6px;
+}
+/*Melhorar campos de input e etiquetas*/
+.section label {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #333;
+  margin-bottom: 6px;
+}
+
+.section input[type="text"],
+.section input[type="number"],
+.section select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+/*Organizar botões e formulários responsivamente*/
+button {
+  padding: 10px 16px;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 6px;
+  margin: 6px 4px 0 0;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  opacity: 0.85;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.buttons button {
+  flex: 1 1 45%;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+/*Melhorar visual de listagens e resultados*/
+.resultado-acoes {
+  background-color: #f0f4f8;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 12px;
+  font-size: 0.9rem;
+  color: #1c2833;
+}
+
+.resultado-acoes ul {
+  padding-left: 20px;
+}
+
+.resultado-acoes li {
+  margin-bottom: 12px;
+  padding: 10px;
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+/*Mobile-first ajustes e boas práticas*/
+@media (min-width: 600px) {
+  .form-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .buttons {
+    justify-content: space-between;
+  }
+}
+/* 💡 Cor do texto das labels na secção 6 */
+#sec6Screen label {
+  color: #333; /* Podes alterar aqui a cor do texto das etiquetas */
+}
+
+/* 💡 Cor dos botões principais */
+button {
+  background-color: #007BFF; /* Azul principal, muda aqui para verde ou outro */
 }
