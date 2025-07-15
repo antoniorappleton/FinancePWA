@@ -655,6 +655,16 @@ function guardarOuAtualizarAcaoFirebase() {
   }
 }
 
+//Popup Filtros Stocks
+function abrirPopupFiltro() {
+  document.getElementById("popupFiltro").classList.add("show");
+}
+
+function fecharPopupFiltro() {
+  document.getElementById("popupFiltro").classList.remove("show");
+}
+
+
 //Eliminar um Registo
 function eliminarAcao(id) {
   if (confirm("⚠️ Tens a certeza que queres eliminar esta ação?")) {
