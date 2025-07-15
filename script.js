@@ -560,6 +560,7 @@ function prepararSimulacao(nome, dividendo) {
   document.getElementById("botoesSimulacaoRapida").classList.remove("hidden");
 }
 
+
 //Função simularValorRapido(valor)
 function simularValorRapido(valor) {
   const tp1 = parseFloat(document.getElementById("tp1").value);
@@ -582,6 +583,19 @@ function simularValorRapido(valor) {
 
   // Esconde os botões após simular
   document.getElementById("botoesSimulacaoRapida").classList.add("hidden");
+}
+//Quando clico no Botão Voltar no menu Simular
+function voltarMenu() {
+  // Esconde todas as secções
+  const secoes = document.querySelectorAll(".screen");
+  secoes.forEach((secao) => secao.classList.add("hidden"));
+
+  // Mostra apenas o menu principal
+  document.getElementById("screen2").classList.remove("hidden");
+
+  // Esconde os botões de simulação rápida
+  const botoes = document.getElementById("botoesSimulacaoRapida");
+  if (botoes) botoes.classList.add("hidden");
 }
 
 
