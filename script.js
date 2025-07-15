@@ -277,6 +277,13 @@ function voltarMenu() {
 
   // Mostra apenas o menu principal
   document.getElementById("screen2").classList.remove("hidden");
+  secoes.forEach((secao) => secao.classList.add("hidden"));
+
+  document.getElementById("screen2").classList.remove("hidden");
+
+  // 🔒 Esconde os botões de simulação rápida se estiverem visíveis
+  const botoes = document.getElementById("botoesSimulacaoRapida");
+  if (botoes) botoes.classList.add("hidden");
 }
 
 function limparCampos() {
@@ -299,6 +306,36 @@ function limparCampos() {
     });
   }
 }
+
+//secção 5
+function abrirSecao(num) {
+  document.getElementById("screen2").classList.add("hidden");
+  for (let i = 1; i <= 6; i++) {
+    document.getElementById(`sec${i}Screen`).classList.add("hidden");
+  }
+  document.getElementById(`sec${num}Screen`).classList.remove("hidden");
+
+  // 🔄 Garante que os botões de simulação rápida estão sempre escondidos ao entrar no screen 5
+  if (num === 5) {
+    const botoes = document.getElementById("botoesSimulacaoRapida");
+    if (botoes && !botoes.classList.contains("hidden")) {
+      botoes.classList.add("hidden");
+    }
+  }
+}
+
+function prepararSimulacao(nome,dividendo) {
+  console.log("Preparar simulação para:", nome, "com dividendo:", dividendo);
+  abrirSecao(5); // Vai para screen simulação
+  document.getElementById("nomeAcao").value = nome;
+
+  // Mostra os botões de simulação rápida
+  const botoes = document.getElementById("botoesSimulacaoRapida");
+  if (botoes) {
+    botoes.classList.remove("hidden");
+  }
+}
+
 
 // 🚨 NOVO: Limpar Gráfico
 function limparGrafico() {
@@ -385,12 +422,12 @@ function toggleFiltrosMes() {
 }
 
 
-//Filtrar Base Dados Firebase por 
+// Filtrar Base Dados Firebase por múltiplos critérios combinados
 function filtrarAcoes() {
   const setor = document.getElementById("filtroSetor").value;
   const mercado = document.getElementById("filtroMercado").value;
   const mes = document.getElementById("filtroMes").value;
-  const periodicidade = document.getElementById("filtroPeriodicidade").value; // ✅ nome corrigido
+  const periodicidade = document.getElementById("filtroPeriodicidade").value;
 
   const resultadoDiv = document.getElementById("resultadoFiltroMes");
   resultadoDiv.innerHTML = "A carregar...";
@@ -404,22 +441,34 @@ function filtrarAcoes() {
       querySnapshot.forEach((doc) => {
         const dados = doc.data();
 
-        const matchSetor = !setor || dados.setor === setor;
-        const matchMercado = !mercado || dados.mercado === mercado;
-        const matchMes = !mes || dados.mes === mes;
-        const matchPeriodicidade = !periodicidade || dados.periodicidade === periodicidade;
+        const matchSetor =
+          !setor || dados.setor?.trim().toLowerCase() === setor.trim().toLowerCase();
+        const matchMercado =
+          !mercado || dados.mercado?.trim().toLowerCase() === mercado.trim().toLowerCase();
+        const matchMes =
+          !mes || dados.mes?.trim().toLowerCase() === mes.trim().toLowerCase();
+        const matchPeriodicidade =
+          !periodicidade || dados.periodicidade?.trim().toLowerCase() === periodicidade.trim().toLowerCase();
 
         if (matchSetor && matchMercado && matchMes && matchPeriodicidade) {
-            html += `<li>
-                <strong>${dados.nome}</strong> (${dados.ticker})<br>
-                Setor: ${dados.setor} | Mercado: ${dados.mercado} | Dividendo: €${dados.dividendo} | 
-                Mês: ${dados.mes} | Periodicidade: ${dados.periodicidade}<br>
-                <button onclick="editarAcao('${doc.id}', ${JSON.stringify(dados).replace(/"/g, "&quot;")})">✏️ Editar</button>
-                <button onclick="eliminarAcao('${doc.id}')">🗑️ Eliminar</button>
-                </li>`;
-                count++;
+          html += `<li>
+            <strong>${dados.nome}</strong> (${dados.ticker})<br>
+            Setor: ${dados.setor} | Mercado: ${dados.mercado} | Dividendo: €${
+            dados.dividendo
+          } |
+            Mês: ${dados.mes} | Periodicidade: ${dados.periodicidade}<br>
+            <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-top: 5px;">
+              <button onclick="editarAcao('${doc.id}', ${JSON.stringify(
+            dados
+          ).replace(/"/g, "&quot;")})">✏️ Editar</button>
+              <button onclick="eliminarAcao('${doc.id}')">🗑️ Eliminar</button>
+              <button onclick="prepararSimulacao('${dados.nome}', ${
+            dados.dividendo
+          })">📊 Simular</button>
+            </div>
+          </li>`;
+          count++;
         }
-
       });
 
       html += "</ul>";
@@ -489,6 +538,52 @@ function editarAcao(id, dados) {
   document.getElementById("mesDividendoReg").value = dados.mes || "";
   document.getElementById("periodicidade").value = dados.periodicidade || "";
 }
+
+//preparar simulação
+function prepararSimulacao(nome, dividendo) {
+  // Vai para o screen de Simulação
+  document
+    .querySelectorAll(".screen")
+    .forEach((s) => s.classList.add("hidden"));
+  document.getElementById("sec5Screen").classList.remove("hidden");
+
+  // Preenche nome e dividendo
+  document.getElementById("nomeAcao").value = nome;
+  document.getElementById("dividendo").value = dividendo || 0;
+
+  // Limpa TP1, TP2, Investimento
+  document.getElementById("tp1").value = "";
+  document.getElementById("tp2").value = "";
+  document.getElementById("investimento").value = "";
+
+  // Mostra os botões de simulação rápida
+  document.getElementById("botoesSimulacaoRapida").classList.remove("hidden");
+}
+
+//Função simularValorRapido(valor)
+function simularValorRapido(valor) {
+  const tp1 = parseFloat(document.getElementById("tp1").value);
+  const tp2 = parseFloat(document.getElementById("tp2").value);
+  const dividendo = parseFloat(document.getElementById("dividendo").value || 0);
+
+  if (isNaN(tp1) || isNaN(tp2)) {
+    alert("⚠️ Introduz TP1 e TP2 antes de simular.");
+    return;
+  }
+
+  document.getElementById("investimento").value = valor;
+  guardarSimulacao(
+    document.getElementById("nomeAcao").value,
+    tp1,
+    tp2,
+    valor,
+    dividendo
+  );
+
+  // Esconde os botões após simular
+  document.getElementById("botoesSimulacaoRapida").classList.add("hidden");
+}
+
 
 //Guardar na Firebase
 let idAcaoEmEdicao = null;

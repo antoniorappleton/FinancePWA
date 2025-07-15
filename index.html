@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="style.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="manifest" href="manifest.json" />
-    
+
     <!-- Enviar email via EmailJS-->
     <script>
       (function () {
@@ -271,10 +271,23 @@
             id="investimento"
             placeholder="Valor Investido (€)"
           />
+          <input type="number" id="dividendo" placeholder="Dividendo por ação (€)" />
+          <div
+            id="botoesSimulacaoRapida"
+            class="hidden buttons"
+            style="margin-top: 10px; text-align: center"
+          >
+            <button onclick="simularValorRapido(500)">💶 500</button>
+            <button onclick="simularValorRapido(1000)">💶 1000</button>
+            <button onclick="simularValorRapido(1500)">💶 1500</button>
+            <button onclick="simularValorRapido(2000)">💶 2000</button>
+            <button onclick="simularValorRapido(2500)">💶 2500</button>
+            <button onclick="simularValorRapido(3000)">💶 3000</button>
+          </div>
+
           <button onclick="simularEGUardar()">Simular e Guardar</button>
         </div>
         <h2>Tabela de Simulações</h2>
-
         <div class="tabela-wrapper">
           <table id="tabelaSimulacoes">
             <thead>
@@ -308,9 +321,7 @@
         <!-- Popup -->
         <div id="popupEmail" class="hidden">
           <h3>Enviar Simulação</h3>
-
           <div id="dadosSimulacao"></div>
-
           <div class="email-form">
             <input
               type="email"
@@ -319,7 +330,6 @@
               required
             />
           </div>
-
           <div class="botoes-popup">
             <button onclick="enviarEmail()">Enviar</button>
             <button onclick="fecharPopupEmail()">Cancelar</button>
@@ -329,134 +339,152 @@
     </div>
 
     <!-- SECÇÃO 6: Registo e Filtro de Ações -->
-<div id="sec6Screen" class="screen hidden">
-  <!-- REGISTO -->
-  <div class="section">
-    <h3>📋 Registar Ação com Dividendos</h3>
-    <div class="form-grid">
-      <input type="text" id="nomeAcaoReg" placeholder="Nome da Ação" />
-      <input type="text" id="tickerAcaoReg" placeholder="Ticker" />
-      <select id="Setor" placeholder="Setor" >
-        <option value="">Seleciona o Setor</option>
-        <option value="Energia">Energia</option>
-        <option value="Consumo Defensivo">Consumo Defensivo</option>
-        <option value="Materiais">Materiais</option>
-        <option value="Industria">Industria</option>
-        <option value="Tecnologia">Tecnologia</option>
-        <option value="Saúde">Saúde</option>
-        <option value="Imobiliário">Imobiliário</option>
-        <option value="Finanças">Finanças</option>
-      </select>
-      <select id="Mercado" placeholder="Mercado" >
-        <option value="">Seleciona o Mercado</option>
-        <option value="PT">Portugal</option>
-        <option value="EU">Europeu</option>
-        <option value="USA">Americano</option>
-        <option value="USAsp500">Americano (SP500)</option>
-      </select>
-      <input type="number" id="valorDividendoReg" step="0.01" placeholder="Valor do Dividendo (€)"/>
-      <select id="mesDividendoReg">
-        <option value="">Seleciona o mês</option>
-        <option value="Janeiro">Janeiro</option>
-        <option value="Fevereiro">Fevereiro</option>
-        <option value="Março">Março</option>
-        <option value="Abril">Abril</option>
-        <option value="Maio">Maio</option>
-        <option value="Junho">Junho</option>
-        <option value="Julho">Julho</option>
-        <option value="Agosto">Agosto</option>
-        <option value="Setembro">Setembro</option>
-        <option value="Outubro">Outubro</option>
-        <option value="Novembro">Novembro</option>
-        <option value="Dezembro">Dezembro</option>
-      </select>
-      <select id="periodicidade" placeholder="Periodicidade" >
-        <option value="">Seleciona a Frequência</option>
-        <option value="Anual">Anual</option>
-        <option value="Semestral">Semestral</option>
-        <option value="Trimestral">Trimestral</option>
-        <option value="Mensal">Mensal</option>
-      </select>
-    </div>
-    <div class="buttons">
-      <button onclick="guardarOuAtualizarAcaoFirebase()">💾 Guardar / Atualizar</button>
-    </div>
-  </div>
-
-  <!-- FILTROS -->
-  <div class="section">
-    <div class="section-header">
-      <h4>🔍 Filtrar Ações</h4>
-      <button id="btnMostrarFiltros" onclick="toggleFiltrosMes()">▼</button>
-    </div>
-
-    <div id="filtrosMesContainer" class="hidden">
-      <div class="filtros-container">
-  <label>
-    <select id="filtroSetor">
-      <option value="">Selecione um Setor</option>
-      <option value="ETF">ETF's</option>
-      <option value="Saúde">Saúde</option>
-      <option value="ConsumoCiclico">Consumo Cíclico</option>
-      <option value="Tecnologia">Tecnologia</option>
-      <option value="Financas">Finanças</option>
-      <option value="Materiais">Materiais</option>
-      <option value="Energia">Energia</option>
-      <option value="Defesa">Defesa</option>
-      <option value="Industria">Indústria</option>
-      <option value="ConsumoDefensivo">Consumo Defensivo</option>
-      <option value="Imobiliário">Imobiliário</option>
-    </select>
-  </label>
-  <label>
-    <select id="filtroPeriodicidade"> <!-- ✅ CORRIGIDO -->
-      <option value="">Selecione a Periodicidade</option>
-      <option value="Mensal">Mensal</option>
-      <option value="Trimestral">Trimestral</option>
-      <option value="Semestral">Semestral</option>
-      <option value="Anual">Anual</option>
-    </select>
-    <select id="filtroMercado">
-      <option value="">Selecione um Mercado</option>
-      <option value="PT">Portugal</option>
-      <option value="EU">Europa</option>
-      <option value="USA">Estados Unidos</option>
-      <option value="USAsp500">EUA (SP500)</option>
-    </select>
-  </label>
-  <label>
-    <select id="filtroMes">
-      <option value="">Selecione um Mês</option>
-      <option value="Janeiro">Janeiro</option>
-      <option value="Fevereiro">Fevereiro</option>
-      <option value="Março">Março</option>
-      <option value="Abril">Abril</option>
-      <option value="Maio">Maio</option>
-      <option value="Junho">Junho</option>
-      <option value="Julho">Julho</option>
-      <option value="Agosto">Agosto</option>
-      <option value="Setembro">Setembro</option>
-      <option value="Outubro">Outubro</option>
-      <option value="Novembro">Novembro</option>
-      <option value="Dezembro">Dezembro</option>
-    </select>
-  </label>
-</div>
-
-      <div class="buttons">
-        <button onclick="filtrarAcoes()">🔎 Aplicar Filtros</button>
+    <div id="sec6Screen" class="screen hidden">
+      <!-- REGISTO -->
+      <div class="section">
+        <h3>📋 Registar Ação com Dividendos</h3>
+        <div class="form-grid">
+          <input type="text" id="nomeAcaoReg" placeholder="Nome da Ação" />
+          <input type="text" id="tickerAcaoReg" placeholder="Ticker" />
+          <select id="Setor" placeholder="Setor">
+            <option value="">Seleciona o Setor</option>
+            <option value="ETF">ETF's</option>
+            <option value="Saúde">Saúde</option>
+            <option value="ConsumoCiclico">Consumo Cíclico</option>
+            <option value="Tecnologia">Tecnologia</option>
+            <option value="Financas">Finanças</option>
+            <option value="Materiais">Materiais</option>
+            <option value="Energia">Energia</option>
+            <option value="Defesa">Defesa</option>
+            <option value="Industria">Indústria</option>
+            <option value="ConsumoDefensivo">Consumo Defensivo</option>
+            <option value="Imobiliario">Imobiliário</option>
+            <option value="Automovel">Automóvel</option>
+            <option value="Telecomunicacoes">Telecomunicações</option>
+            <option value="Alimentacao">Alimentação</option>
+            <option value="InfraestruturasEnergia">
+              Infraestruturas / Energia
+            </option>
+          </select>
+          <select id="Mercado" placeholder="Mercado">
+            <option value="">Seleciona o Mercado</option>
+            <option value="Portugal">Portugal</option>
+            <option value="Europeu">Europeu</option>
+            <option value="Americano">Americano</option>
+            <option value="AmericanoSP500">Americano SP500</option>
+          </select>
+          <input
+            type="number"
+            id="valorDividendoReg"
+            step="0.01"
+            placeholder="Valor do Dividendo (€)"
+          />
+          <select id="mesDividendoReg">
+            <option value="">Seleciona o mês</option>
+            <option value="Janeiro">Janeiro</option>
+            <option value="Fevereiro">Fevereiro</option>
+            <option value="Março">Março</option>
+            <option value="Abril">Abril</option>
+            <option value="Maio">Maio</option>
+            <option value="Junho">Junho</option>
+            <option value="Julho">Julho</option>
+            <option value="Agosto">Agosto</option>
+            <option value="Setembro">Setembro</option>
+            <option value="Outubro">Outubro</option>
+            <option value="Novembro">Novembro</option>
+            <option value="Dezembro">Dezembro</option>
+          </select>
+          <select id="periodicidade" placeholder="Periodicidade">
+            <option value="">Seleciona a Frequência</option>
+            <option value="Anual">Anual</option>
+            <option value="Semestral">Semestral</option>
+            <option value="Trimestral">Trimestral</option>
+            <option value="Mensal">Mensal</option>
+          </select>
+        </div>
+        <div class="buttons">
+          <button onclick="guardarOuAtualizarAcaoFirebase()">
+            💾 Guardar / Atualizar
+          </button>
+        </div>
       </div>
-    </div>
 
-    <div id="resultadoFiltroMes" class="resultado-acoes"></div>
-  </div>
-  <div class="buttons">
+      <!-- FILTROS -->
+      <div class="section">
+        <div class="section-header">
+          <h4>🔍 Filtrar Ações</h4>
+          <button id="btnMostrarFiltros" onclick="toggleFiltrosMes()">▼</button>
+        </div>
+        <div id="filtrosMesContainer" class="hidden">
+          <div class="filtros-container">
+            <label>
+              <select id="filtroSetor">
+                <option value="">Selecione um Setor</option>
+                <option value="Saúde">Saúde</option>
+                <option value="ConsumoCiclico">Consumo Cíclico</option>
+                <option value="Tecnologia">Tecnologia</option>
+                <option value="Financas">Finanças</option>
+                <option value="Materiais">Materiais</option>
+                <option value="Energia">Energia</option>
+                <option value="Defesa">Defesa</option>
+                <option value="Industria">Indústria</option>
+                <option value="ConsumoDefensivo">Consumo Defensivo</option>
+                <option value="Imobiliario">Imobiliário</option>
+                <option value="Automovel">Automóvel</option>
+                <option value="Telecomunicacoes">Telecomunicações</option>
+                <option value="Alimentacao">Alimentação</option>
+                <option value="InfraestruturasEnergia">
+                  Infraestruturas / Energia
+                </option>
+              </select>
+            </label>
+            <label>
+              <select id="filtroPeriodicidade">
+                <!-- ✅ CORRIGIDO -->
+                <option value="">Selecione a Periodicidade</option>
+                <option value="Mensal">Mensal</option>
+                <option value="Trimestral">Trimestral</option>
+                <option value="Semestral">Semestral</option>
+                <option value="Anual">Anual</option>
+              </select>
+              <select id="filtroMercado">
+                <option value="">Seleciona o Mercado</option>
+                <option value="Portugal">Portugal</option>
+                <option value="Europeu">Europeu</option>
+                <option value="Americano">Americano</option>
+                <option value="AmericanoSP500">Americano SP500</option>
+              </select>
+            </label>
+            <label>
+              <select id="filtroMes">
+                <option value="">Selecione um Mês</option>
+                <option value="Janeiro">Janeiro</option>
+                <option value="Fevereiro">Fevereiro</option>
+                <option value="Março">Março</option>
+                <option value="Abril">Abril</option>
+                <option value="Maio">Maio</option>
+                <option value="Junho">Junho</option>
+                <option value="Julho">Julho</option>
+                <option value="Agosto">Agosto</option>
+                <option value="Setembro">Setembro</option>
+                <option value="Outubro">Outubro</option>
+                <option value="Novembro">Novembro</option>
+                <option value="Dezembro">Dezembro</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="buttons">
+            <button onclick="filtrarAcoes()">🔎 Aplicar Filtros</button>
+          </div>
+        </div>
+
+        <div id="resultadoFiltroMes" class="resultado-acoes"></div>
+      </div>
+      <div class="buttons">
         <button onclick="voltarMenu()">Voltar ao Menu</button>
       </div>
     </div>
-</div>
-
-
     <script src="script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </body>
