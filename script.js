@@ -590,7 +590,7 @@ function simularValorRapido(valor) {
   );
 
   // Esconde os botões após simular
-  document.getElementById("botoesSimulacaoRapida").classList.add("hidden");
+  //document.getElementById("botoesSimulacaoRapida").classList.add("hidden");
 }
 //Quando clico no Botão Voltar no menu Simular
 function voltarMenu() {
