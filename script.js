@@ -331,8 +331,8 @@ function abrirSecao(num) {
   }
 }
 
-function prepararSimulacao(nome,dividendo) {
-  console.log("Preparar simulação para:", nome, "com dividendo:", dividendo);
+function prepararSimulacao(nome,valorStock,dividendo) {
+  console.log("Preparar simulação para:", nome,"a TP1",valorStock,"com dividendo:", dividendo);
   abrirSecao(5); // Vai para screen simulação
   document.getElementById("nomeAcao").value = nome;
 
@@ -461,18 +461,15 @@ function filtrarAcoes() {
         if (matchSetor && matchMercado && matchMes && matchPeriodicidade) {
           html += `<li>
             <strong>${dados.nome}</strong> (${dados.ticker})<br>
-            Setor: ${dados.setor} | Mercado: ${dados.mercado} | Dividendo: €${
-            dados.dividendo
-          } |
+            Setor: ${dados.setor} | Mercado: ${dados.mercado} | valorStock: €${dados.valorStock} |Dividendo: €${dados.dividendo} |
             Mês: ${dados.mes} | Periodicidade: ${dados.periodicidade}<br>
             <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-top: 5px;">
               <button onclick="editarAcao('${doc.id}', ${JSON.stringify(
             dados
           ).replace(/"/g, "&quot;")})">✏️ Editar</button>
               <button onclick="eliminarAcao('${doc.id}')">🗑️ Eliminar</button>
-              <button onclick="prepararSimulacao('${dados.nome}', ${
-            dados.dividendo
-          })">📊 Simular</button>
+              <button onclick="prepararSimulacao('${dados.nome}','${dados.valorStock}', ${
+            dados.dividendo})">📊 Simular</button>
             </div>
           </li>`;
           count++;
@@ -547,24 +544,18 @@ function editarAcao(id, dados) {
   document.getElementById("periodicidade").value = dados.periodicidade || "";
 }
 
-//preparar simulação
-function prepararSimulacao(nome, dividendo) {
-  // Vai para o screen de Simulação
-  document
-    .querySelectorAll(".screen")
-    .forEach((s) => s.classList.add("hidden"));
-  document.getElementById("sec5Screen").classList.remove("hidden");
+//preparar simulação do screen 6 para o 5
+function prepararSimulacao(nome, valorStock, dividendo) {
+  console.log("Preparar simulação para:", nome, "com dividendo:", dividendo, "e TP1:", valorStock);
+  abrirSecao(5); // Vai para screen simulação
 
-  // Preenche nome e dividendo
   document.getElementById("nomeAcao").value = nome;
   document.getElementById("dividendo").value = dividendo || 0;
+  document.getElementById("tp1").value = valorStock || "";
 
-  // Limpa TP1, TP2, Investimento
-  document.getElementById("tp1").value = "";
   document.getElementById("tp2").value = "";
   document.getElementById("investimento").value = "";
 
-  // Mostra os botões de simulação rápida
   document.getElementById("botoesSimulacaoRapida").classList.remove("hidden");
 }
 
