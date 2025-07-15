@@ -8,6 +8,14 @@ const firebaseConfig = {
   appId: "1:383837988480:web:dd114574838c6a9dbb2865",
 };
 
+// Registo do Service Worker (PWA)
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker
+    .register("sw.js")
+    .then((reg) => console.log("SW registado!", reg))
+    .catch((err) => console.error("SW falhou:", err));
+}
+
 // Inicializar Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
@@ -16,6 +24,7 @@ const db = firebase.firestore();
 function goToScreen2() {
   document.getElementById("screen1").classList.add("hidden");
   document.getElementById("screen2").classList.remove("hidden");
+  document.getElementById("botoesSimulacaoRapida").classList.add("hidden buttons");
 }
 
 function goToScreen1() {
@@ -134,13 +143,6 @@ function calcularInvestimento4() {
   }
 }
 
-// Registo do Service Worker (PWA)
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker
-    .register("sw.js")
-    .then((reg) => console.log("SW registado!", reg))
-    .catch((err) => console.error("SW falhou:", err));
-}
 //Botão +Info
 function toggleInfo(id) {
   const info = document.getElementById(id);
@@ -187,16 +189,20 @@ function voltarMenu() {
 //Simulações
 const simulacoes = [];
 
-function guardarSimulacao(nomeAcao, tp1, tp2, valorInvestido) {
+//Fórmulas de Lucros
+function guardarSimulacao(nomeAcao, tp1, tp2, valorInvestido, dividendo = 0) {
   const crescimento = ((tp2 - tp1) / tp1) * 100;
-  const lucro = (tp2 - tp1) * (valorInvestido / tp1);
+  const numeroAcoes = valorInvestido / tp1;
+  const lucroValorizacao = (tp2 - tp1) * numeroAcoes;
+  const lucroDividendos = numeroAcoes * dividendo;
+  const lucroTotal = lucroValorizacao + lucroDividendos;
 
   const novaSimulacao = {
     nomeAcao,
     tp1,
     tp2,
     valorInvestido,
-    lucro: parseFloat(lucro.toFixed(2)),
+    lucro: parseFloat(lucroTotal.toFixed(2)),
     crescimentoPercentual: parseFloat(crescimento.toFixed(2)),
   };
 
@@ -205,6 +211,7 @@ function guardarSimulacao(nomeAcao, tp1, tp2, valorInvestido) {
   atualizarGrafico();
 }
 
+//Atualizar a Tabela
 function atualizarTabela() {
   const corpoTabela = document.querySelector("#tabelaSimulacoes tbody");
   corpoTabela.innerHTML = "";
@@ -307,7 +314,7 @@ function limparCampos() {
   }
 }
 
-//secção 5
+//secção 5 - Simulador
 function abrirSecao(num) {
   document.getElementById("screen2").classList.add("hidden");
   for (let i = 1; i <= 6; i++) {
@@ -407,6 +414,8 @@ function enviarEmail() {
   window.location.href = mailtoLink;
 }
 
+//Menu 6 - Registar/Editar e Filtrar Empresas com Dividendos 
+
 //Botão secção dos filtros
 function toggleFiltrosMes() {
   const filtrosDiv = document.getElementById("filtrosMesContainer");
@@ -420,7 +429,6 @@ function toggleFiltrosMes() {
     botao.textContent = "▼";
   }
 }
-
 
 // Filtrar Base Dados Firebase por múltiplos critérios combinados
 function filtrarAcoes() {
