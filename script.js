@@ -260,22 +260,22 @@ function atualizarGrafico() {
     },
   });
 }
-
+//Botão Simular e Guardar para passar para o gráfico
 function simularEGUardar() {
   const nome = document.getElementById("nomeAcao").value;
   const tp1 = parseFloat(document.getElementById("tp1").value);
   const tp2 = parseFloat(document.getElementById("tp2").value);
-  const investimento = parseFloat(
-    document.getElementById("investimento").value
-  );
+  const investimento = parseFloat(document.getElementById("investimento").value);
+  const dividendo = parseFloat(document.getElementById("dividendo").value || 0);
 
   if (!nome || isNaN(tp1) || isNaN(tp2) || isNaN(investimento)) {
     alert("Preenche todos os campos!");
     return;
   }
 
-  guardarSimulacao(nome, tp1, tp2, investimento);
+  guardarSimulacao(nome, tp1, tp2, investimento, dividendo);
 }
+
 
 function voltarMenu() {
   // Esconde todas as secções
