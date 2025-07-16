@@ -709,3 +709,9 @@ function eliminarAcao(id) {
       });
   }
 }
+
+
+function mostrarSecao(id) {
+  document.querySelectorAll(".screen").forEach(sec => sec.classList.add("hidden"));
+  document.getElementById(id).classList.remove("hidden");
+}
