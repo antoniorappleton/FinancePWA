@@ -460,11 +460,11 @@ label input {
 /* Resultado do filtro */
 #resultadoFiltroMes {
   margin-top: 20px;
-  background-color: #1c2833;
-  color: #ecf0f1;
+  background-color: #c2c3c4;
+  color: #101212;
   padding: 12px;
   border-radius: 8px;
-  max-height: 250px;
+  max-height: 400px;
   overflow-y: auto;
   font-size: 0.95em;
   line-height: 1.5em;

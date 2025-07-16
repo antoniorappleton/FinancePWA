@@ -532,20 +532,20 @@ function atualizarAcaoFirebase() {
     });
 }
 
-//Editar a Firebase
-function editarAcao(id, dados) {
-  idAcaoEmEdicao = id;
-  document.getElementById("nomeAcaoReg").value = dados.nome || "";
-  document.getElementById("tickerAcaoReg").value = dados.ticker || "";
-  document.getElementById("Setor").value = dados.setor || "";
-  document.getElementById("Mercado").value = dados.mercado || "";
-  document.getElementById("valorDividendoReg").value = dados.dividendo || "";
-  document.getElementById("mesDividendoReg").value = dados.mes || "";
-  document.getElementById("periodicidade").value = dados.periodicidade || "";
+// Abrir popup e mostrar todas as empresas por defeito
+function abrirPopupFiltro() {
+  filtrarAcoes(); // mostra todas as empresas
+  document.getElementById("popupFiltro").classList.add("show");
 }
 
-//preparar simulação do screen 6 para o 5
+// Fechar popup
+function fecharPopupFiltro() {
+  document.getElementById("popupFiltro").classList.remove("show");
+}
+
+// preparar simulação do screen 6 para o 5
 function prepararSimulacao(nome, valorStock, dividendo) {
+  fecharPopupFiltro(); // fecha o popup ao simular
   console.log("Preparar simulação para:", nome, "com dividendo:", dividendo, "e TP1:", valorStock);
   abrirSecao(5); // Vai para screen simulação
 
@@ -557,6 +557,19 @@ function prepararSimulacao(nome, valorStock, dividendo) {
   document.getElementById("investimento").value = "";
 
   document.getElementById("botoesSimulacaoRapida").classList.remove("hidden");
+}
+
+// editar ação
+function editarAcao(id, dados) {
+  fecharPopupFiltro(); // fecha o popup ao editar
+  idAcaoEmEdicao = id;
+  document.getElementById("nomeAcaoReg").value = dados.nome || "";
+  document.getElementById("tickerAcaoReg").value = dados.ticker || "";
+  document.getElementById("Setor").value = dados.setor || "";
+  document.getElementById("Mercado").value = dados.mercado || "";
+  document.getElementById("valorDividendoReg").value = dados.dividendo || "";
+  document.getElementById("mesDividendoReg").value = dados.mes || "";
+  document.getElementById("periodicidade").value = dados.periodicidade || "";
 }
 
 
@@ -654,16 +667,6 @@ function guardarOuAtualizarAcaoFirebase() {
       });
   }
 }
-
-//Popup Filtros Stocks
-function abrirPopupFiltro() {
-  document.getElementById("popupFiltro").classList.add("show");
-}
-
-function fecharPopupFiltro() {
-  document.getElementById("popupFiltro").classList.remove("show");
-}
-
 
 //Eliminar um Registo
 function eliminarAcao(id) {
