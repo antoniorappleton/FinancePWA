@@ -436,6 +436,14 @@ function filtrarAcoes() {
   const mercado = document.getElementById("filtroMercado").value;
   const mes = document.getElementById("filtroMes").value;
   const periodicidade = document.getElementById("filtroPeriodicidade").value;
+  const nomeInput = document
+    .getElementById("filtroNome")
+    .value.trim()
+    .toLowerCase();
+  const tickerInput = document
+    .getElementById("filtroTicker")
+    .value.trim()
+    .toLowerCase();
 
   const resultadoDiv = document.getElementById("resultadoFiltroMes");
   resultadoDiv.innerHTML = "A carregar...";
@@ -450,33 +458,43 @@ function filtrarAcoes() {
         const dados = doc.data();
 
         const matchSetor =
-          !setor || dados.setor?.trim().toLowerCase() === setor.trim().toLowerCase();
+          !setor ||
+          dados.setor?.trim().toLowerCase() === setor.trim().toLowerCase();
         const matchMercado =
-          !mercado || dados.mercado?.trim().toLowerCase() === mercado.trim().toLowerCase();
+          !mercado ||
+          dados.mercado?.trim().toLowerCase() === mercado.trim().toLowerCase();
         const matchMes =
           !mes || dados.mes?.trim().toLowerCase() === mes.trim().toLowerCase();
         const matchPeriodicidade =
-          !periodicidade || dados.periodicidade?.trim().toLowerCase() === periodicidade.trim().toLowerCase();
+          !periodicidade ||
+          dados.periodicidade?.trim().toLowerCase() ===
+            periodicidade.trim().toLowerCase();
+        const matchNome =
+          !nomeInput || dados.nome?.toLowerCase().includes(nomeInput);
+        const matchTicker =
+          !tickerInput || dados.ticker?.toLowerCase().includes(tickerInput);
 
-        if (matchSetor && matchMercado && matchMes && matchPeriodicidade) {
+        if (
+          matchSetor &&
+          matchMercado &&
+          matchMes &&
+          matchPeriodicidade &&
+          matchNome &&
+          matchTicker
+        ) {
           html += `<li>
             <strong>${dados.nome}</strong> (${dados.ticker})<br>
-            Setor: ${dados.setor} | Mercado: ${dados.mercado} | valorStock: €${
-            dados.valorStock
-          } |Dividendo: €${dados.dividendo} |
+            Setor: ${dados.setor} | Mercado: ${dados.mercado} | Dividendo: €${
+            dados.dividendo
+          } |
             Mês: ${dados.mes} | Periodicidade: ${dados.periodicidade}<br>
-            <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-top: 5px;">
-              <button onclick="editarAcao('${doc.id}', ${JSON.stringify(
+            <button onclick="editarAcao('${doc.id}', ${JSON.stringify(
             dados
           ).replace(/"/g, "&quot;")})">✏️ Editar</button>
-              <button onclick="prepararSimulacao('${dados.nome}','${
-            dados.valorStock
-          }', ${
-            dados.dividendo
-          })">📊 Simular</button><button onclick="eliminarAcao('${
-            doc.id
-          }')">🗑️ Eliminar</button>
-            </div>
+            <button onclick="eliminarAcao('${doc.id}')">🗑️ Eliminar</button>
+            <button onclick="prepararSimulacao('${dados.nome}', ${
+            dados.valorStock || 0
+          }, ${dados.dividendo || 0})">📈 Simular</button>
           </li>`;
           count++;
         }
@@ -494,6 +512,7 @@ function filtrarAcoes() {
         "<p style='color:red;'>Erro ao carregar dados.</p>";
     });
 }
+
 
 //Atualizar a Firebase
 function atualizarAcaoFirebase() {

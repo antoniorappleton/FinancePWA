@@ -422,7 +422,21 @@
 <div id="popupFiltro" class="popup hidden">
   <div class="popup-content">
     <h4>🔍 Filtros</h4>
+    <input
+    type="text"
+    id="filtroNome"
+    placeholder="🔠 Filtrar por Nome da Ação"
+    oninput="filtrarAcoes()"
+    style="margin-bottom: 10px; width: 100%; padding: 8px; border-radius: 5px;"
+  />
 
+  <input
+    type="text"
+    id="filtroTicker"
+    placeholder="🔠 Filtrar por Ticker"
+    oninput="filtrarAcoes()"
+    style="margin-bottom: 15px; width: 100%; padding: 8px; border-radius: 5px;"
+  />
     <select id="filtroSetor">
       <option value="">Selecione um Setor</option>
       <option value="Alimentacao">Alimentação</option>
