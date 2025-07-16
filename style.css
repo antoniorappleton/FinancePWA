@@ -47,9 +47,26 @@ body {
   box-sizing: border-box;
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
   width: 100%;
-  max-width: 480px;/* ou 600px para tablets */
+  max-width: 600px;/* ou 600px para tablets */
   margin: 0 auto;
   padding: 20px;
+}
+/* Estilo para ecrãs pequenos (telemóveis) */
+@media (max-width: 600px) {
+  .screen {
+    padding: 15px;
+    max-width: 95%;
+  }
+
+  .form-grid input,
+  .form-grid select {
+    font-size: 1rem;
+  }
+
+  button {
+    font-size: 0.95rem;
+    padding: 10px 12px;
+  }
 }
 
 .hidden {
