@@ -461,15 +461,21 @@ function filtrarAcoes() {
         if (matchSetor && matchMercado && matchMes && matchPeriodicidade) {
           html += `<li>
             <strong>${dados.nome}</strong> (${dados.ticker})<br>
-            Setor: ${dados.setor} | Mercado: ${dados.mercado} | valorStock: €${dados.valorStock} |Dividendo: €${dados.dividendo} |
+            Setor: ${dados.setor} | Mercado: ${dados.mercado} | valorStock: €${
+            dados.valorStock
+          } |Dividendo: €${dados.dividendo} |
             Mês: ${dados.mes} | Periodicidade: ${dados.periodicidade}<br>
             <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-top: 5px;">
               <button onclick="editarAcao('${doc.id}', ${JSON.stringify(
             dados
           ).replace(/"/g, "&quot;")})">✏️ Editar</button>
-              <button onclick="eliminarAcao('${doc.id}')">🗑️ Eliminar</button>
-              <button onclick="prepararSimulacao('${dados.nome}','${dados.valorStock}', ${
-            dados.dividendo})">📊 Simular</button>
+              <button onclick="prepararSimulacao('${dados.nome}','${
+            dados.valorStock
+          }', ${
+            dados.dividendo
+          })">📊 Simular</button><button onclick="eliminarAcao('${
+            doc.id
+          }')">🗑️ Eliminar</button>
             </div>
           </li>`;
           count++;
