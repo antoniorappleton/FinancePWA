@@ -24,7 +24,9 @@ const db = firebase.firestore();
 function goToScreen2() {
   document.getElementById("screen1").classList.add("hidden");
   document.getElementById("screen2").classList.remove("hidden");
-  document.getElementById("botoesSimulacaoRapida").classList.add("hidden buttons");
+  document
+    .getElementById("botoesSimulacaoRapida")
+    .classList.add("hidden buttons");
 }
 
 function goToScreen1() {
@@ -265,7 +267,9 @@ function simularEGUardar() {
   const nome = document.getElementById("nomeAcao").value;
   const tp1 = parseFloat(document.getElementById("tp1").value);
   const tp2 = parseFloat(document.getElementById("tp2").value);
-  const investimento = parseFloat(document.getElementById("investimento").value);
+  const investimento = parseFloat(
+    document.getElementById("investimento").value
+  );
   const dividendo = parseFloat(document.getElementById("dividendo").value || 0);
 
   if (!nome || isNaN(tp1) || isNaN(tp2) || isNaN(investimento)) {
@@ -275,7 +279,6 @@ function simularEGUardar() {
 
   guardarSimulacao(nome, tp1, tp2, investimento, dividendo);
 }
-
 
 function voltarMenu() {
   // Esconde todas as secções
@@ -331,8 +334,15 @@ function abrirSecao(num) {
   }
 }
 
-function prepararSimulacao(nome,valorStock,dividendo) {
-  console.log("Preparar simulação para:", nome,"a TP1",valorStock,"com dividendo:", dividendo);
+function prepararSimulacao(nome, valorStock, dividendo) {
+  console.log(
+    "Preparar simulação para:",
+    nome,
+    "a TP1",
+    valorStock,
+    "com dividendo:",
+    dividendo
+  );
   abrirSecao(5); // Vai para screen simulação
   document.getElementById("nomeAcao").value = nome;
 
@@ -342,7 +352,6 @@ function prepararSimulacao(nome,valorStock,dividendo) {
     botoes.classList.remove("hidden");
   }
 }
-
 
 // 🚨 NOVO: Limpar Gráfico
 function limparGrafico() {
@@ -414,7 +423,7 @@ function enviarEmail() {
   window.location.href = mailtoLink;
 }
 
-//Menu 6 - Registar/Editar e Filtrar Empresas com Dividendos 
+//Menu 6 - Registar/Editar e Filtrar Empresas com Dividendos
 
 //Botão secção dos filtros
 function toggleFiltrosMes() {
@@ -475,29 +484,28 @@ function filtrarAcoes() {
           !tickerInput || dados.ticker?.toLowerCase().includes(tickerInput);
 
         if (
-          matchSetor &&
-          matchMercado &&
-          matchMes &&
-          matchPeriodicidade &&
-          matchNome &&
-          matchTicker
-        ) {
-          html += `<li>
-            <strong>${dados.nome}</strong> (${dados.ticker})<br>
-            Setor: ${dados.setor} | Mercado: ${dados.mercado} | Dividendo: €${
-            dados.dividendo
-          } |
-            Mês: ${dados.mes} | Periodicidade: ${dados.periodicidade}<br>
-            <button onclick="editarAcao('${doc.id}', ${JSON.stringify(
-            dados
-          ).replace(/"/g, "&quot;")})">✏️ Editar</button>
-            <button onclick="eliminarAcao('${doc.id}')">🗑️ Eliminar</button>
-            <button onclick="prepararSimulacao('${dados.nome}', ${
-            dados.valorStock || 0
-          }, ${dados.dividendo || 0})">📈 Simular</button>
-          </li>`;
-          count++;
-        }
+  matchSetor &&
+  matchMercado &&
+  matchMes &&
+  matchPeriodicidade &&
+  matchNome &&
+  matchTicker
+) {
+  html += `
+    <li>
+      <strong>${dados.nome}</strong> (${dados.ticker})<br>
+      Setor: ${dados.setor} | Mercado: ${dados.mercado} | Dividendo: €${dados.dividendo} |
+      Mês: ${dados.mes} | Periodicidade: ${dados.periodicidade} | Valor da Ação: €${dados.valorStock || "N/D"}<br>
+      <div class="botoes-acoes">
+        <button title="Editar" onclick="editarAcao('${doc.id}', ${JSON.stringify(dados).replace(/"/g, "&quot;")})">✏️</button>
+        <button title="Eliminar" onclick="eliminarAcao('${doc.id}')">🗑️</button>
+        <button title="Simular" onclick="prepararSimulacao('${dados.nome}', ${dados.valorStock || 0}, ${dados.dividendo || 0})">📈</button>
+      </div>
+    </li>
+  `;
+  count++;
+}
+
       });
 
       html += "</ul>";
@@ -513,7 +521,6 @@ function filtrarAcoes() {
     });
 }
 
-
 //Atualizar a Firebase
 function atualizarAcaoFirebase() {
   if (!idAcaoEmEdicao) {
@@ -526,10 +533,20 @@ function atualizarAcaoFirebase() {
   const setor = document.getElementById("Setor").value;
   const mercado = document.getElementById("Mercado").value;
   const periodicidade = document.getElementById("Periodicidade").value;
-  const dividendo = parseFloat(document.getElementById("valorDividendoReg").value);
+  const dividendo = parseFloat(
+    document.getElementById("valorDividendoReg").value
+  );
   const mes = document.getElementById("mesDividendoReg").value;
 
-  if (!nome || !ticker || !setor || !mercado || isNaN(dividendo) || !mes || !periodicidade) {
+  if (
+    !nome ||
+    !ticker ||
+    !setor ||
+    !mercado ||
+    isNaN(dividendo) ||
+    !mes ||
+    !periodicidade
+  ) {
     alert("Preenche todos os campos corretamente.");
     return;
   }
@@ -571,7 +588,14 @@ function fecharPopupFiltro() {
 // preparar simulação do screen 6 para o 5
 function prepararSimulacao(nome, valorStock, dividendo) {
   fecharPopupFiltro(); // fecha o popup ao simular
-  console.log("Preparar simulação para:", nome, "com dividendo:", dividendo, "e TP1:", valorStock);
+  console.log(
+    "Preparar simulação para:",
+    nome,
+    "com dividendo:",
+    dividendo,
+    "e TP1:",
+    valorStock
+  );
   abrirSecao(5); // Vai para screen simulação
 
   document.getElementById("nomeAcao").value = nome;
@@ -596,7 +620,6 @@ function editarAcao(id, dados) {
   document.getElementById("mesDividendoReg").value = dados.mes || "";
   document.getElementById("periodicidade").value = dados.periodicidade || "";
 }
-
 
 //Função simularValorRapido(valor)
 function simularValorRapido(valor) {
@@ -635,7 +658,6 @@ function voltarMenu() {
   if (botoes) botoes.classList.add("hidden");
 }
 
-
 //Guardar na Firebase
 let idAcaoEmEdicao = null;
 
@@ -644,11 +666,21 @@ function guardarOuAtualizarAcaoFirebase() {
   const ticker = document.getElementById("tickerAcaoReg").value.trim();
   const setor = document.getElementById("Setor").value.trim();
   const mercado = document.getElementById("Mercado").value.trim();
-  const dividendo = parseFloat(document.getElementById("valorDividendoReg").value);
+  const dividendo = parseFloat(
+    document.getElementById("valorDividendoReg").value
+  );
   const mes = document.getElementById("mesDividendoReg").value;
   const periodicidade = document.getElementById("periodicidade").value;
 
-  if (!nome || !ticker || !setor || !mercado || isNaN(dividendo) || !mes || !periodicidade) {
+  if (
+    !nome ||
+    !ticker ||
+    !setor ||
+    !mercado ||
+    isNaN(dividendo) ||
+    !mes ||
+    !periodicidade
+  ) {
     alert("⚠️ Preenche todos os campos corretamente.");
     return;
   }
@@ -661,7 +693,7 @@ function guardarOuAtualizarAcaoFirebase() {
     dividendo,
     mes,
     periodicidade,
-    timestamp: new Date()
+    timestamp: new Date(),
   };
 
   if (idAcaoEmEdicao) {
@@ -688,7 +720,9 @@ function guardarOuAtualizarAcaoFirebase() {
       })
       .catch((error) => {
         console.error("Erro ao guardar ação:", error);
-        alert("❌ Ocorreu um erro ao guardar. Verifica a ligação com a Firebase.");
+        alert(
+          "❌ Ocorreu um erro ao guardar. Verifica a ligação com a Firebase."
+        );
       });
   }
 }
@@ -710,8 +744,9 @@ function eliminarAcao(id) {
   }
 }
 
-
 function mostrarSecao(id) {
-  document.querySelectorAll(".screen").forEach(sec => sec.classList.add("hidden"));
+  document
+    .querySelectorAll(".screen")
+    .forEach((sec) => sec.classList.add("hidden"));
   document.getElementById(id).classList.remove("hidden");
 }
