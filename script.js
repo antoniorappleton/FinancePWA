@@ -658,7 +658,10 @@ function voltarMenu() {
   if (botoes) botoes.classList.add("hidden");
 }
 
-//Guardar na Firebase
+//Use o ticker como ID do documento no Firestore (evita duplicações).
+//Adicione o campo origem: "webapp" para rastrear a origem dos dados
+//Use .set(..., { merge: true }) para atualizar ou criar o documento de forma segura.
+
 let idAcaoEmEdicao = null;
 
 function guardarOuAtualizarAcaoFirebase() {
@@ -693,8 +696,26 @@ function guardarOuAtualizarAcaoFirebase() {
     dividendo,
     mes,
     periodicidade,
+    origem: "webapp",
     timestamp: new Date(),
   };
+
+  // Se estiver a editar, usa o ID do documento em edição; senão, usa o ticker como ID
+  const docId = idAcaoEmEdicao || ticker;
+  
+db.collection("acoesDividendos")
+    .doc(docId)
+    .set(dadosAcao, { merge: true }) // Cria ou atualiza sem apagar campos existentes
+    .then(() => {
+      alert(idAcaoEmEdicao ? "✅ Ação atualizada com sucesso!" : "✅ Ação guardada com sucesso na Firebase!");
+      limparCamposSec6();
+      idAcaoEmEdicao = null;
+    })
+    .catch((error) => {
+      console.error("Erro ao guardar/atualizar:", error);
+      alert("❌ Erro ao guardar/atualizar. Verifica a ligação com a Firebase.");
+    });
+}
 
   if (idAcaoEmEdicao) {
     // Atualizar ação existente
@@ -725,7 +746,6 @@ function guardarOuAtualizarAcaoFirebase() {
         );
       });
   }
-}
 
 //Eliminar um Registo
 function eliminarAcao(id) {
