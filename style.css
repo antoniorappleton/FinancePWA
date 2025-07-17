@@ -55,7 +55,7 @@ body {
 @media (max-width: 600px) {
   .screen {
     padding: 15px;
-    max-width: 95%;
+    max-width: 100%;
   }
 
   .form-grid input,
