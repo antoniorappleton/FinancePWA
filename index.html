@@ -285,11 +285,9 @@
             <button onclick="simularValorRapido(3000)">💶 3000</button>
           </div>
           <button onclick="simularEGUardar()">Simular com gráfico</button>
-          <button
-            onclick="document.getElementById('popupReforco').classList.toggle('hidden')"
-          >
-            Simular Reforço de Investimento
-          </button>
+          <button onclick="document.getElementById('popupReforco').classList.toggle('hidden')">Simular Reforço de Investimento</button>
+          <!-- Botão para abrir o popup -->
+        <button onclick="abrirSimulador()">Abrir Simulador de Ações</button>
         </div>
         <h2>Tabela de Simulações</h2>
         <div class="tabela-wrapper">
@@ -352,64 +350,73 @@
         </div>
         
         <!--Popup Procura ação para investir-->
-        <!-- Botão para abrir o popup -->
-        <button onclick="abrirSimulador()">Abrir Simulador de Ações</button>
+        
 
         <!-- Modal (popup) oculto inicialmente -->
-         <div id="resultadoSimulacao" class="resultado-container">
-        <div
-          id="simuladorModal"
-          style="
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-            z-index: 999;
-          "
-        >
-          <div
-            style="
-              background: #fff;
-              padding: 20px;
-              border-radius: 10px;
-              width: 90%;
-              max-width: 400px;
-              margin: 100px auto;
-              position: relative;
-            "
-          >
-            <button
-              onclick="fecharSimulador()"
-              style="position: absolute; top: 10px; right: 10px"
-            >
-              ❌
-            </button>
+<div
+  id="simuladorModal"
+  style="
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 999;
+  "
+>
+  <div
+    style="
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 400px;
+      margin: 100px auto;
+      position: relative;
+      max-height: 90%;
+      overflow-y: auto;
+    "
+  >
+    <button
+      onclick="fecharSimulador()"
+      style="position: absolute; top: 10px; right: 10px"
+    >
+      ❌
+    </button>
 
-            <h2>Simulador de Ações 📊</h2>
+    <h2>Simulador de Ações 📊</h2>
 
-            <label>Montante a investir (€)</label>
-            <input
-              type="number"
-              id="inputInvestimento"
-              placeholder="Ex: 1500"
-            />
+    <label>Montante a investir (€)</label>
+    <input
+      type="number"
+      id="inputInvestimento"
+      placeholder="Ex: 1500"
+    />
 
-            <label>Lucro desejado (€)</label>
-            <input type="number" id="inputLucro" placeholder="Ex: 100" />
+    <label>Lucro desejado (€)</label>
+    <input type="number" id="inputLucro" placeholder="Ex: 100" />
 
-            <label>Crescimento estimado (%) <small>(opcional)</small></label>
-            <input type="number" id="inputCrescimento" placeholder="Ex: 5" />
+    <label>Crescimento estimado (%) <small>(opcional)</small></label>
+    <input type="number" id="inputCrescimento" placeholder="Ex: 5" />
 
-            <button onclick="simular()">Simular</button>
+    <button onclick="simular()">Simular</button>
 
-            <div id="resultadoSimulacao" style="margin-top: 15px"></div>
-          </div>
-        </div>
-        </div>
+    <!-- Resultados com scroll interno -->
+    <div
+      id="resultadoSimulacao"
+      style="
+        margin-top: 15px;
+        max-height: 250px;
+        overflow-y: auto;
+        padding-right: 10px;
+      "
+    ></div>
+  </div>
+</div>
+
 
 
         <!-- Popup -->
