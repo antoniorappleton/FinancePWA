@@ -198,8 +198,7 @@ label input {
   background-color: #ffffff;
   padding: 20px;
   border-radius: 10px;
-  margin-bottom: 30px;
-  /* 👈 Espaçamento entre as secções */
+  margin-bottom: 30px;/* 👈 Espaçamento entre as secções */
 }
 
 /* Container da Tabela */
@@ -663,6 +662,10 @@ button:hover {
   color: #1c2833;
 }
 
+.hidden {
+  display: none;
+}
+
 .resultado-acoes ul {
   padding-left: 20px;
 }
@@ -757,4 +760,30 @@ button {
 
 .botoes-acoes button:hover {
   background-color: #515050;
+}
+
+/*Popup Reforço*/
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.popup-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+}
+
+.hidden {
+  display: none;
 }

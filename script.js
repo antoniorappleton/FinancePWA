@@ -770,3 +770,37 @@ function mostrarSecao(id) {
     .forEach((sec) => sec.classList.add("hidden"));
   document.getElementById(id).classList.remove("hidden");
 }
+
+//Secção Reforço
+function abrirPopupReforco() {
+  document.getElementById("popupReforco").classList.remove("hidden");
+}
+
+function fecharPopupReforco() {
+  document.getElementById("popupReforco").classList.add("hidden");
+}
+
+function calcularMediaPonderada() {
+  const invest1 = parseFloat(document.getElementById("invest1").value.replace(",", "."));
+  const preco1 = parseFloat(document.getElementById("preco1").value.replace(",", "."));
+  const invest22 = parseFloat(document.getElementById("invest22").value.replace(",", "."));
+  const preco2 = parseFloat(document.getElementById("preco2").value.replace(",", "."));
+
+  if (!isNaN(invest1) && !isNaN(preco1) && !isNaN(invest22) && !isNaN(preco2) && preco1 > 0 && preco2 > 0) {
+    const qtd1 = invest1 / preco1;
+    const qtd2 = invest22 / preco2;
+    const totalQtd = qtd1 + qtd2;
+    const totalInvestido = invest1 + invest22;
+    const precoMedio = totalInvestido / totalQtd;
+
+    const html = `
+      <p>📊 <strong>Preço Médio:</strong> ${precoMedio.toFixed(2)} €</p>
+      <p>📦 <strong>Total de Ações:</strong> ${totalQtd.toFixed(2)}</p>
+      <p>💰 <strong>Total Investido:</strong> ${totalInvestido.toFixed(2)} €</p>
+    `;
+
+    document.getElementById("resultadoReforco").innerHTML = html;
+  } else {
+    document.getElementById("resultadoReforco").innerHTML = "❌ Preencha todos os campos corretamente.";
+  }
+}

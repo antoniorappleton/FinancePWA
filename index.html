@@ -284,8 +284,12 @@
             <button onclick="simularValorRapido(2500)">💶 2500</button>
             <button onclick="simularValorRapido(3000)">💶 3000</button>
           </div>
-
           <button onclick="simularEGUardar()">Simular e Guardar</button>
+          <button
+            onclick="document.getElementById('popupReforco').classList.toggle('hidden')"
+          >
+            Simular Reforço de Investimento
+          </button>
         </div>
         <h2>Tabela de Simulações</h2>
         <div class="tabela-wrapper">
@@ -303,7 +307,6 @@
             <tbody></tbody>
           </table>
         </div>
-
         <!-- Botão Limpar-->
         <div class="grafico-wrapper">
           <canvas id="graficoLucro" width="400" height="200"></canvas>
@@ -317,6 +320,24 @@
 
         <!-- Botão para abrir o popup -->
         <button onclick="abrirPopupEmail()">Enviar Simulação por Email</button>
+
+        <!-- POPUP DE REFORÇO -->
+<div id="popupReforco" class="popup hidden">
+  <div class="popup-content">
+    <h3>📈 Simular Reforço de Investimento</h3>
+    <div class="form-grid">
+      <input type="number" id="invest1" placeholder="Investimento Inicial (€)"/>
+      <input type="number" id="preco1" placeholder="Preço por Ação 1 (€)" />
+      <input type="number" id="invest22" placeholder="Reforço (€)" />
+      <input type="number" id="preco2" placeholder="Preço por Ação 2 (€)" />
+    </div>
+    <button onclick="calcularMediaPonderada()">Calcular</button>
+    <div id="resultadoReforco" class="resultado-popup"></div>
+    <div class="buttons">
+      <button onclick="fecharPopupReforco()">Fechar</button>
+    </div>
+  </div>
+</div>
 
         <!-- Popup -->
         <div id="popupEmail" class="hidden">
@@ -342,7 +363,7 @@
     <div id="sec6Screen" class="screen hidden">
       <!-- REGISTO -->
       <div class="section">
-        <h3>3. Consulta e Registo de Acções c/ Dividendos</h3>
+        <h3>4. Consulta e Registo de Acções c/ Dividendos</h3>
         <div class="form-grid">
           <input type="text" id="nomeAcaoReg" placeholder="Nome da Ação" />
           <input type="text" id="tickerAcaoReg" placeholder="Ticker" />
