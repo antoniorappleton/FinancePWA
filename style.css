@@ -787,3 +787,12 @@ button {
 .hidden {
   display: none;
 }
+
+/*container top10*/
+.resultado-container {
+  max-height: 400px; /* ou outro valor, consoante o teu layout */
+  overflow-y: auto;
+  padding-right: 10px; /* espaço para scroll */
+  margin-top: 1rem;
+}
+

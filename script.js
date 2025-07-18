@@ -804,3 +804,82 @@ function calcularMediaPonderada() {
     document.getElementById("resultadoReforco").innerHTML = "❌ Preencha todos os campos corretamente.";
   }
 }
+//Objetivo: Identificar, entre várias ações (com base em dados reais), qual é a mais provável de atingir 
+// um lucro X com um investimento Y, considerando o preço da ação, o dividendo anual e eventualmente uma previsão de valorização.
+
+// Simulador de ações com base em investimento, crescimento esperado e lucro desejado
+
+function abrirSimulador() {
+  document.getElementById('simuladorModal').style.display = 'block';
+}
+
+function fecharSimulador() {
+  document.getElementById('simuladorModal').style.display = 'none';
+}
+
+async function simular() {
+  const investimento = parseFloat(document.getElementById('inputInvestimento').value);
+  const crescimentoEstimado = parseFloat(document.getElementById('inputCrescimento').value) || 0;
+  const lucroDesejado = parseFloat(document.getElementById('inputLucro').value) || 0;
+
+  const db = firebase.firestore();
+  const acoesRef = db.collection("acoesDividendos");
+  const snapshot = await acoesRef.get();
+
+  let resultados = [];
+
+  snapshot.forEach(doc => {
+    const acao = doc.data();
+
+    let preco = parseFloat(acao.valorStock);
+    let dividendo = parseFloat(acao.dividendo);
+
+    if (!preco || preco <= 0 || isNaN(preco)) return;
+    if (isNaN(dividendo)) dividendo = 0;
+
+    const quantidade = Math.floor(investimento / preco);
+    if (quantidade === 0) return;
+
+    const lucroValorizacao = quantidade * preco * (crescimentoEstimado / 100);
+    const lucroDividendos = quantidade * dividendo;
+    const lucroTotal = lucroValorizacao + lucroDividendos;
+
+    resultados.push({
+      nome: acao.nome,
+      preco,
+      dividendo,
+      quantidade,
+      lucroValorizacao,
+      lucroDividendos,
+      lucroTotal,
+      diferenca: Math.abs(lucroTotal - lucroDesejado)
+    });
+  });
+
+  const resultado = document.getElementById('resultadoSimulacao');
+
+  if (resultados.length === 0) {
+    resultado.innerHTML = "<p>⚠️ Nenhuma ação válida para este investimento.</p>";
+    return;
+  }
+
+  // Ordenar pelas mais próximas do lucro desejado (menor diferença absoluta)
+  const topMaisProximas = resultados.sort((a, b) => a.diferenca - b.diferenca).slice(0, 10);
+
+  let html = `<h3>🔍 Top 10 mais próximas do lucro desejado (${lucroDesejado.toFixed(2)}€)</h3>`;
+
+  topMaisProximas.forEach((acao, i) => {
+    html += `
+      <hr />
+      <p><strong>Top ${i + 1}: ${acao.nome}</strong></p>
+      <p>Preço atual: €${acao.preco.toFixed(2)}</p>
+      <p>Dividendos: €${acao.dividendo.toFixed(2)} por ação</p>
+      <p>Quantidade a comprar: ${acao.quantidade}</p>
+      <p>Lucro com valorização: €${acao.lucroValorizacao.toFixed(2)}</p>
+      <p>Lucro com dividendos: €${acao.lucroDividendos.toFixed(2)}</p>
+      <p><strong>Lucro total estimado: €${acao.lucroTotal.toFixed(2)}</strong> (diferença: €${acao.diferenca.toFixed(2)})</p>
+    `;
+  });
+
+  resultado.innerHTML = html;
+}
