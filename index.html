@@ -284,10 +284,13 @@
             <button onclick="simularValorRapido(2500)">💶 2500</button>
             <button onclick="simularValorRapido(3000)">💶 3000</button>
           </div>
+
+        <div class="buttons">
           <button onclick="simularEGUardar()">Simular com gráfico</button>
           <button onclick="document.getElementById('popupReforco').classList.toggle('hidden')">Simular Reforço de Investimento</button>
           <!-- Botão para abrir o popup -->
         <button onclick="abrirSimulador()">Abrir Simulador de Ações</button>
+        </div>
         </div>
         <h2>Tabela de Simulações</h2>
         <div class="tabela-wrapper">
@@ -380,12 +383,6 @@
       overflow-y: auto;
     "
   >
-    <button
-      onclick="fecharSimulador()"
-      style="position: absolute; top: 10px; right: 10px"
-    >
-      ❌
-    </button>
 
     <h2>Simulador de Ações 📊</h2>
 
@@ -403,6 +400,10 @@
     <input type="number" id="inputCrescimento" placeholder="Ex: 5" />
 
     <button onclick="simular()">Simular</button>
+    <button onclick="fecharSimulador()" style="position: absolute; top: 10px; right: 10px"
+    >
+      ❌
+    </button>
 
     <!-- Resultados com scroll interno -->
     <div
