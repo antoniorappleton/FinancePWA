@@ -247,10 +247,12 @@
     </div>
 
     <!-- SECÇÃO 5 - Simulação -->
-    <div id="sec5Screen" class="screen hidden">
+  <div id="sec5Screen" class="screen hidden">
       <div class="section">
         <div class="section-header">
           <h4>2. Simulador de Lucros</h4>
+          
+          
         </div>
         <div class="info-text" id="info5">
           <h5>
@@ -258,6 +260,10 @@
             gráficos ilustrativos
           </h5>
         </div>
+        <div class="grafico-wrapper">
+        <button onclick="document.getElementById('popupReforco').classList.toggle('hidden')"> Simular Reforço de Investimento</button>
+            <!-- Botão para abrir o popup -->
+            <button onclick="abrirSimulador()">Abrir Simulador de Ações</button></div>
         <div class="formulario">
           <input type="text" id="nomeAcao" placeholder="Nome da Ação" />
           <input type="number" id="tp1" placeholder="TP1" />
@@ -285,12 +291,9 @@
             <button onclick="simularValorRapido(3000)">💶 3000</button>
           </div>
 
-        <div class="buttons">
-          <button onclick="simularEGUardar()">Simular com gráfico</button>
-          <button onclick="document.getElementById('popupReforco').classList.toggle('hidden')">Simular Reforço de Investimento</button>
-          <!-- Botão para abrir o popup -->
-        <button onclick="abrirSimulador()">Abrir Simulador de Ações</button>
-        </div>
+          <div class="grafico-wrapper">
+            <button onclick="simularEGUardar()">Simular com gráfico</button>
+          </div>
         </div>
         <h2>Tabela de Simulações</h2>
         <div class="tabela-wrapper">
@@ -309,18 +312,19 @@
           </table>
         </div>
         <!-- Botão Limpar-->
+         <button onclick="limparGrafico()">Limpar Gráfico🗑️</button>
+         <!-- Botão para abrir o popup enviar email -->
+        <button onclick="abrirPopupEmail()">Enviar Simulação por Email</button>
         <div class="grafico-wrapper">
           <canvas id="graficoLucro" width="400" height="200"></canvas>
-          <button onclick="limparGrafico()">Limpar Gráfico🗑️</button>
+          
+          
         </div>
         <!-- Fim do botão Limpar-->
       </div>
       <div class="buttons">
         <button onclick="limparCampos()">Apagar Tudo</button>
         <button onclick="voltarMenu()">Voltar ao Menu</button>
-
-        <!-- Botão para abrir o popup -->
-        <button onclick="abrirPopupEmail()">Enviar Simulação por Email</button>
 
         <!-- POPUP DE REFORÇO -->
         <div id="popupReforco" class="popup hidden">
@@ -351,74 +355,72 @@
             </div>
           </div>
         </div>
-        
+
         <!--Popup Procura ação para investir-->
-        
 
         <!-- Modal (popup) oculto inicialmente -->
-<div
-  id="simuladorModal"
-  style="
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
-    z-index: 999;
-  "
->
-  <div
-    style="
-      background: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      width: 90%;
-      max-width: 400px;
-      margin: 100px auto;
-      position: relative;
-      max-height: 90%;
-      overflow-y: auto;
-    "
-  >
+        <div
+          id="simuladorModal"
+          style="
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 999;
+          "
+        >
+          <div
+            style="
+              background: #fff;
+              padding: 20px;
+              border-radius: 10px;
+              width: 90%;
+              max-width: 400px;
+              margin: 100px auto;
+              position: relative;
+              max-height: 90%;
+              overflow-y: auto;
+            "
+          >
+            <h2>Simulador de Ações 📊</h2>
 
-    <h2>Simulador de Ações 📊</h2>
+            <label>Montante a investir (€)</label>
+            <input
+              type="number"
+              id="inputInvestimento"
+              placeholder="Ex: 1500"
+            />
 
-    <label>Montante a investir (€)</label>
-    <input
-      type="number"
-      id="inputInvestimento"
-      placeholder="Ex: 1500"
-    />
+            <label>Lucro desejado (€)</label>
+            <input type="number" id="inputLucro" placeholder="Ex: 100" />
 
-    <label>Lucro desejado (€)</label>
-    <input type="number" id="inputLucro" placeholder="Ex: 100" />
+            <label>Crescimento estimado (%) <small>(opcional)</small></label>
+            <input type="number" id="inputCrescimento" placeholder="Ex: 5" />
 
-    <label>Crescimento estimado (%) <small>(opcional)</small></label>
-    <input type="number" id="inputCrescimento" placeholder="Ex: 5" />
+            <button onclick="simular()">Simular</button>
+            <button
+              onclick="fecharSimulador()"
+              style="position: absolute; top: 10px; right: 10px"
+            >
+              ❌
+            </button>
 
-    <button onclick="simular()">Simular</button>
-    <button onclick="fecharSimulador()" style="position: absolute; top: 10px; right: 10px"
-    >
-      ❌
-    </button>
-
-    <!-- Resultados com scroll interno -->
-    <div
-      id="resultadoSimulacao"
-      style="
-        margin-top: 15px;
-        max-height: 250px;
-        overflow-y: auto;
-        padding-right: 10px;
-      "
-    ></div>
-  </div>
-</div>
-
-
+            <!-- Resultados com scroll interno -->
+            <div
+              id="resultadoSimulacao"
+              style="
+                margin-top: 15px;
+                max-height: 250px;
+                overflow-y: auto;
+                padding-right: 10px;
+              "
+            ></div>
+          </div>
+        </div>
 
         <!-- Popup -->
         <div id="popupEmail" class="hidden">
@@ -440,11 +442,12 @@
       </div>
     </div>
 
+
     <!-- SECÇÃO 6: Registo e Filtro de Ações -->
     <div id="sec6Screen" class="screen hidden">
       <!-- REGISTO -->
       <div class="section">
-        <h3>4. Consulta e Registo de Acções c/ Dividendos</h3>
+        <h3>4.Registo e Consulta de Acções c/ Dividendos</h3>
         <div class="form-grid">
           <input type="text" id="nomeAcaoReg" placeholder="Nome da Ação" />
           <input type="text" id="tickerAcaoReg" placeholder="Ticker" />
@@ -476,6 +479,12 @@
             <option value="Americano">Americano</option>
             <option value="Americano SP500">Americano SP500</option>
           </select>
+          <input
+            type="number"
+            id="valorStock"
+            step="0.01"
+            placeholder="Valor da Ação (€)"
+          />
           <input
             type="number"
             id="valorDividendoReg"

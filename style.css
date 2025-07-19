@@ -245,12 +245,23 @@ label input {
 
 /*Botão Limpar Gráfico*/
 .grafico-wrapper {
-  position: relative;
-  width: 100%;
-  max-width: 400px;
-  /* Ajusta conforme o teu layout */
-  margin: 0 auto;
+  display: flex;
+  justify-content: center; /* Centraliza os botões horizontalmente */
+  flex-wrap: wrap;         /* Permite que os botões se ajustem em telas pequenas */
+  gap: 10px;               /* Espaço entre os botões */
+  margin: 20px auto;
+  max-width: 100%;
 }
+.grafico-wrapper button {
+  padding: 10px 15px;
+  font-size: 14px;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
 
 #limparGraficoBtn {
   position: absolute;
@@ -794,5 +805,33 @@ button {
   overflow-y: auto;
   padding-right: 10px; /* espaço para scroll */
   margin-top: 1rem;
+}
+
+
+.popup {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 999;
+}
+
+.popup-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 600px;
+  margin: 50px auto;
+  position: relative;
+  max-height: 90%;
+  overflow-y: auto;
+}
+
+.popup:not(.hidden) {
+  display: block;
 }
 

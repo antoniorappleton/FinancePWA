@@ -672,6 +672,9 @@ function guardarOuAtualizarAcaoFirebase() {
   const dividendo = parseFloat(
     document.getElementById("valorDividendoReg").value
   );
+  const valorStock = parseFloat(
+    document.getElementById("valorStock").value
+  );
   const mes = document.getElementById("mesDividendoReg").value;
   const periodicidade = document.getElementById("periodicidade").value;
 
@@ -681,6 +684,7 @@ function guardarOuAtualizarAcaoFirebase() {
     !setor ||
     !mercado ||
     isNaN(dividendo) ||
+    isNaN(valorStock) ||
     !mes ||
     !periodicidade
   ) {
@@ -693,6 +697,7 @@ function guardarOuAtualizarAcaoFirebase() {
     ticker,
     setor,
     mercado,
+    valorStock,
     dividendo,
     mes,
     periodicidade,
@@ -882,4 +887,13 @@ async function simular() {
   });
 
   resultado.innerHTML = html;
+}
+
+
+function abrirPopupSimuladorGrafico() {
+  document.getElementById("popupSimuladorGrafico").classList.remove("hidden");
+}
+
+function fecharPopupSimuladorGrafico() {
+  document.getElementById("popupSimuladorGrafico").classList.add("hidden");
 }
