@@ -251,19 +251,21 @@
       <div class="section">
         <div class="section-header">
           <h4>2. Simulador de Lucros</h4>
-          
-          
         </div>
+        <button class="info-toggle" onclick="toggleInfo('info5')">
+            ℹ️ +info
+          </button>
         <div class="info-text" id="info5">
           <h5>
-            Simulação de Lucros entre duas ou mais potenciais Acões, com
-            gráficos ilustrativos
+            Este ecrã permite simular lucros com ações, incluindo dividendos, 
+            com visualização em tabela e gráfico. Oferece ainda funções de simulação rápida, 
+            cálculo de reforços de investimento e envio por email.
           </h5>
         </div>
         <div class="grafico-wrapper">
         <button onclick="document.getElementById('popupReforco').classList.toggle('hidden')"> Simular Reforço de Investimento</button>
             <!-- Botão para abrir o popup -->
-            <button onclick="abrirSimulador()">Abrir Simulador de Ações</button></div>
+            <button onclick="abrirSimulador()">Procura TOP 10 para investir</button></div>
         <div class="formulario">
           <input type="text" id="nomeAcao" placeholder="Nome da Ação" />
           <input type="number" id="tp1" placeholder="TP1" />
