@@ -448,8 +448,8 @@
       <div class="section">
         <h3>4.Registo e Consulta de Acções c/ Dividendos</h3>
         <div class="form-grid">
-          <input type="text" id="nomeAcaoReg" placeholder="Nome da Ação" />
-          <input type="text" id="tickerAcaoReg" placeholder="Ticker" />
+          <input type="search" id="nomeAcaoReg" placeholder="Nome da Ação" />
+          <input type="search" id="tickerAcaoReg" placeholder="Ticker" />
           <select id="Setor" placeholder="Setor">
             <option value="">Selecione um Setor</option>
             <option value="Alimentacao">Alimentação</option>
@@ -537,7 +537,7 @@
       <div class="popup-content">
         <h4>🔍 Filtros</h4>
         <input
-          type="text"
+          type="search"
           id="filtroNome"
           placeholder="🔠 Filtrar por Nome da Ação"
           oninput="filtrarAcoes()"
@@ -550,7 +550,7 @@
         />
 
         <input
-          type="text"
+          type="search"
           id="filtroTicker"
           placeholder="🔠 Filtrar por Ticker"
           oninput="filtrarAcoes()"
