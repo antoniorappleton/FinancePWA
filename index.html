@@ -247,25 +247,66 @@
     </div>
 
     <!-- SECÇÃO 5 - Simulação -->
-  <div id="sec5Screen" class="screen hidden">
+    <div id="sec5Screen" class="screen hidden">
       <div class="section">
         <div class="section-header">
           <h4>2. Simulador de Lucros</h4>
         </div>
         <button class="info-toggle" onclick="toggleInfo('info5')">
-            ℹ️ +info
-          </button>
+          ℹ️ +info
+        </button>
         <div class="info-text" id="info5">
           <h5>
-            Este ecrã permite simular lucros com ações, incluindo dividendos, 
-            com visualização em tabela e gráfico. Oferece ainda funções de simulação rápida, 
-            cálculo de reforços de investimento e envio por email.
+            Este ecrã permite simular lucros com ações, incluindo dividendos,
+            com visualização em tabela e gráfico. Oferece ainda funções de
+            simulação rápida, cálculo de reforços de investimento e envio por
+            email.
           </h5>
         </div>
         <div class="grafico-wrapper">
-        <button onclick="document.getElementById('popupReforco').classList.toggle('hidden')"> Simular Reforço de Investimento</button>
-            <!-- Botão para abrir o popup -->
-            <button onclick="abrirSimulador()">Procura TOP 10 para investir</button></div>
+          <button
+            onclick="document.getElementById('popupReforco').classList.toggle('hidden')"
+          >
+            Simular Reforço de Investimento
+          </button>
+          <!-- Botão para abrir o popup -->
+          <button onclick="abrirSimulador()">
+            Procura TOP 10 para investir
+          </button>
+          <button onclick="abrirSimuladorTP2()">
+            Determina o TP2 com TP1 e lucro
+          </button>
+        </div>
+
+        <!-- Popup TP2 -->
+        <div id="popupTP2" class="popup hidden">
+          <div class="popup-content">
+            <h3>🎯 Calcular TP2 necessário</h3>
+            <input
+              type="number"
+              id="tp1Input"
+              placeholder="TP1 (preço de compra €)"
+            />
+            <input
+              type="number"
+              id="investimentoInput"
+              placeholder="Valor Investido (€)"
+            />
+            <input
+              type="number"
+              id="lucroDesejadoInput"
+              placeholder="Lucro Desejado (€)"
+            />
+
+            <div class="buttons">
+              <button onclick="calcularTP2()">Calcular TP2</button>
+              <button onclick="fecharSimuladorTP2()">Fechar</button>
+            </div>
+
+            <div id="resultadoTP2" class="resultado-popup"></div>
+          </div>
+        </div>
+
         <div class="formulario">
           <input type="text" id="nomeAcao" placeholder="Nome da Ação" />
           <input type="number" id="tp1" placeholder="TP1" />
@@ -314,13 +355,11 @@
           </table>
         </div>
         <!-- Botão Limpar-->
-         <button onclick="limparGrafico()">Limpar Gráfico🗑️</button>
-         <!-- Botão para abrir o popup enviar email -->
+        <button onclick="limparGrafico()">Limpar Gráfico🗑️</button>
+        <!-- Botão para abrir o popup enviar email -->
         <button onclick="abrirPopupEmail()">Enviar Simulação por Email</button>
         <div class="grafico-wrapper">
           <canvas id="graficoLucro" width="400" height="200"></canvas>
-          
-          
         </div>
         <!-- Fim do botão Limpar-->
       </div>
@@ -350,7 +389,7 @@
                 placeholder="Preço por Ação 2 (€)"
               />
             </div>
-            
+
             <div id="resultadoReforco" class="resultado-popup"></div>
             <div class="buttons">
               <button onclick="calcularMediaPonderada()">Calcular</button>
@@ -404,10 +443,10 @@
             <label>Crescimento estimado (%) <small>(opcional)</small></label>
             <input type="number" id="inputCrescimento" placeholder="Ex: 5" />
 
-            <div class="buttons"><button onclick="simular()">Simular</button>
+            <div class="buttons">
+              <button onclick="simular()">Simular</button>
               <button onclick="fecharSimulador()">fechar</button>
             </div>
-            
 
             <!-- Resultados com scroll interno -->
             <div
@@ -441,7 +480,6 @@
         </div>
       </div>
     </div>
-
 
     <!-- SECÇÃO 6: Registo e Filtro de Ações -->
     <div id="sec6Screen" class="screen hidden">

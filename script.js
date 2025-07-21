@@ -897,3 +897,37 @@ function abrirPopupSimuladorGrafico() {
 function fecharPopupSimuladorGrafico() {
   document.getElementById("popupSimuladorGrafico").classList.add("hidden");
 }
+
+//TP2
+function abrirSimuladorTP2() {
+  document.getElementById("popupTP2").classList.remove("hidden");
+}
+
+function fecharSimuladorTP2() {
+  document.getElementById("popupTP2").classList.add("hidden");
+  document.getElementById("resultadoTP2").innerHTML = "";
+  document.getElementById("tp1Input").value = "";
+  document.getElementById("investimentoInput").value = "";
+  document.getElementById("lucroDesejadoInput").value = "";
+}
+
+function calcularTP2() {
+  const tp1 = parseFloat(document.getElementById("tp1Input").value.replace(",", "."));
+  const investimento = parseFloat(document.getElementById("investimentoInput").value.replace(",", "."));
+  const lucroDesejado = parseFloat(document.getElementById("lucroDesejadoInput").value.replace(",", "."));
+
+  const resultadoDiv = document.getElementById("resultadoTP2");
+
+  if (isNaN(tp1) || isNaN(investimento) || isNaN(lucroDesejado) || tp1 <= 0 || investimento <= 0) {
+    resultadoDiv.innerHTML = "❌ Preencha todos os campos corretamente.";
+    return;
+  }
+
+  const numAcoes = investimento / tp1;
+  const tp2 = tp1 + (lucroDesejado / numAcoes);
+
+  resultadoDiv.innerHTML = `
+    <p>📈 Para atingir um lucro de <strong>${lucroDesejado.toFixed(2)}€</strong>, a ação tem de atingir:</p>
+    <p>🎯 <strong>TP2 = ${tp2.toFixed(2)}€</strong></p>
+  `;
+}
