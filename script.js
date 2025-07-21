@@ -964,6 +964,7 @@ function calcularTP2() {
   const tp1 = parseFloat(document.getElementById("tp1Input").value.replace(",", "."));
   const investimento = parseFloat(document.getElementById("investimentoInput").value.replace(",", "."));
   const lucroDesejado = parseFloat(document.getElementById("lucroDesejadoInput").value.replace(",", "."));
+  
 
   const resultadoDiv = document.getElementById("resultadoTP2");
 
@@ -974,10 +975,12 @@ function calcularTP2() {
 
   const numAcoes = investimento / tp1;
   const tp2 = tp1 + (lucroDesejado / numAcoes);
+  const percent = ((tp2/tp1)-1)*100;
+    document.getElementById("percent_2").textContent = percent.toFixed(2) + "%";
 
   resultadoDiv.innerHTML = `
     <p>📈 Para atingir um lucro de <strong>${lucroDesejado.toFixed(2)}€</strong>, a ação tem de atingir:</p>
-    <p>🎯 <strong>TP2 = ${tp2.toFixed(2)}€</strong></p>
+    <p>🎯 <strong>TP2 = ${tp2.toFixed(2)}€ a uma taxa de crescimento ${percent.toFixed(2)}%</strong></p>
   `;
 }
 
