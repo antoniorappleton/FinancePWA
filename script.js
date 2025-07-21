@@ -574,16 +574,19 @@ function atualizarAcaoFirebase() {
     });
 }
 
-// Abrir popup e mostrar todas as empresas por defeito
 function abrirPopupFiltro() {
   filtrarAcoes(); // mostra todas as empresas
-  document.getElementById("popupFiltro").classList.add("show");
+  const popup = document.getElementById("popupFiltro");
+  popup.classList.remove("hidden");
+  popup.classList.add("show");
 }
 
-// Fechar popup
 function fecharPopupFiltro() {
-  document.getElementById("popupFiltro").classList.remove("show");
+  const popup = document.getElementById("popupFiltro");
+  popup.classList.remove("show");
+  popup.classList.add("hidden");
 }
+
 
 // preparar simulação do screen 6 para o 5
 function prepararSimulacao(nome, valorStock, dividendo) {
@@ -826,9 +829,9 @@ function fecharSimulador() {
   document.getElementById('simuladorModal').style.display = 'block';
 //}
 
-//function fecharSimulador() {
+function fecharSimulador() {
   document.getElementById('simuladorModal').style.display = 'none';
-//}
+}
 
 async function simular() {
   const investimento = parseFloat(document.getElementById('inputInvestimento').value);
