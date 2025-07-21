@@ -220,23 +220,58 @@ function atualizarTabela() {
 
   simulacoes.forEach((sim, index) => {
     const linha = document.createElement("tr");
-
     linha.innerHTML = `
       <td>${sim.nomeAcao}</td>
       <td>${sim.tp1}</td>
       <td>${sim.tp2}</td>
       <td>${sim.valorInvestido}</td>
-      <td>${sim.lucro}</td>
+      <td>${sim.lucro.toFixed(2)}</td>
       <td>${sim.crescimentoPercentual}%</td>
-      <td><button onclick="removerSimulacao(${index})">❌</button></td>
+      <td>
+        <button onclick="removerSimulacao(${index})">❌</button>
+      </td>
+      <td>
+        <input type="checkbox" onchange="atualizarSomaLucros()" class="checkbox-lucro" data-lucro="${sim.lucro}">
+      </td>
     `;
-
     corpoTabela.appendChild(linha);
   });
+
+  atualizarSomaLucros(); // Atualiza o total sempre que a tabela é renderizada
 }
+
 function removerSimulacao(index) {
   simulacoes.splice(index, 1); // Remove 1 elemento na posição index
   atualizarTabela();           // Re-renderiza a tabela
+  atualizarGrafico();          // Atualiza o gráfico com as simulações restantes
+}
+
+function atualizarSomaLucros() {
+  const checkboxes = document.querySelectorAll(".checkbox-lucro");
+  let total = 0;
+
+  checkboxes.forEach((cb) => {
+    if (cb.checked) {
+      total += parseFloat(cb.dataset.lucro);
+    }
+  });
+
+  mostrarTotalLucro(total);
+}
+function mostrarTotalLucro(valor) {
+  let totalRow = document.getElementById("linha-total-lucro");
+
+  if (!totalRow) {
+    totalRow = document.createElement("tr");
+    totalRow.id = "linha-total-lucro";
+    totalRow.innerHTML = `
+      <td colspan="4"><strong>Total Lucro Selecionado:</strong></td>
+      <td colspan="4" id="valorTotalLucro"><strong>${valor.toFixed(2)} €</strong></td>
+    `;
+    document.querySelector("#tabelaSimulacoes tbody").appendChild(totalRow);
+  } else {
+    totalRow.querySelector("#valorTotalLucro").innerHTML = `<strong>${valor.toFixed(2)} €</strong>`;
+  }
 }
 
 
