@@ -351,6 +351,7 @@ function prepararSimulacao(nome, valorStock, dividendo) {
   if (botoes) {
     botoes.classList.remove("hidden");
   }
+  
 }
 
 // 🚨 NOVO: Limpar Gráfico
@@ -823,14 +824,6 @@ function abrirSimulador() {
 
 function fecharSimulador() {
   document.getElementById("simuladorModal").classList.add("hidden");
-}
-
-//function abrirSimulador() {
-  document.getElementById('simuladorModal').style.display = 'block';
-//}
-
-function fecharSimulador() {
-  document.getElementById('simuladorModal').style.display = 'none';
 }
 
 async function simular() {
