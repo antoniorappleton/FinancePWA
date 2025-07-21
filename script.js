@@ -367,8 +367,10 @@ function limparGrafico() {
 
 //Enviar Email
 function abrirPopupEmail() {
+  document.getElementById("popupSimulacao").classList.add("hidden");
   const popup = document.getElementById("popupEmail");
   popup.classList.remove("hidden");
+  
 
   const dadosDiv = document.getElementById("dadosSimulacao");
 
