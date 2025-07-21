@@ -218,8 +218,9 @@ function atualizarTabela() {
   const corpoTabela = document.querySelector("#tabelaSimulacoes tbody");
   corpoTabela.innerHTML = "";
 
-  simulacoes.forEach((sim) => {
+  simulacoes.forEach((sim, index) => {
     const linha = document.createElement("tr");
+
     linha.innerHTML = `
       <td>${sim.nomeAcao}</td>
       <td>${sim.tp1}</td>
@@ -227,10 +228,17 @@ function atualizarTabela() {
       <td>${sim.valorInvestido}</td>
       <td>${sim.lucro}</td>
       <td>${sim.crescimentoPercentual}%</td>
+      <td><button onclick="removerSimulacao(${index})">❌</button></td>
     `;
+
     corpoTabela.appendChild(linha);
   });
 }
+function removerSimulacao(index) {
+  simulacoes.splice(index, 1); // Remove 1 elemento na posição index
+  atualizarTabela();           // Re-renderiza a tabela
+}
+
 
 let grafico;
 
@@ -944,4 +952,34 @@ function abrirPopupSimulacao() {
 
 function fecharPopupSimulacao() {
   document.getElementById("popupSimulacao").classList.add("hidden");
+}
+
+//botão Somar Lucros
+function somarLucros() {
+  const corpoTabela = document.querySelector("#tabelaSimulacoes tbody");
+  if (!corpoTabela) return;
+
+  // Soma os lucros
+  let totalLucro = 0;
+  simulacoes.forEach(sim => {
+    totalLucro += Number(sim.lucro || 0);
+  });
+
+  // Remove linha de total anterior, se já existir
+  const linhaAnterior = document.querySelector(".linha-total");
+  if (linhaAnterior) linhaAnterior.remove();
+
+  // Cria nova linha de total
+  const linhaTotal = document.createElement("tr");
+  linhaTotal.classList.add("linha-total");
+  linhaTotal.style.fontWeight = "bold";
+  linhaTotal.style.backgroundColor = "#d1f0d1"; // verde claro
+
+  linhaTotal.innerHTML = `
+    <td colspan="4" style="text-align:right;">Total de Lucros:</td>
+    <td>${totalLucro.toFixed(2)} €</td>
+    <td>-</td>
+  `;
+
+  corpoTabela.appendChild(linhaTotal);
 }

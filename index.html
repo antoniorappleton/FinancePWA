@@ -312,22 +312,22 @@
             </div>
 
             <button onclick="simularEGUardar()">Simular com gráfico</button>
-
-            <h4>📊 Resultados</h4>
-            <table id="tabelaSimulacoes">
-              <thead>
-                <tr>
-                  <th>Ação</th>
-                  <th>TP1</th>
-                  <th>TP2</th>
-                  <th>Investido</th>
-                  <th>Lucro</th>
-                  <th>% Crescimento</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-
+            <button onclick="somarLucros()">Somar Lucros</button>
+            
+              <table id="tabelaSimulacoes">
+                <thead>
+                  <tr>
+                    <th>Ação</th>
+                    <th>TP1</th>
+                    <th>TP2</th>
+                    <th>Investido</th>
+                    <th>Lucro</th>
+                    <th>% Crescimento</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+           
             <canvas id="graficoLucro" height="200"></canvas>
 
             <div class="buttons">
@@ -514,7 +514,9 @@
           </select>
         </div>
         <div class="buttons">
-          <button onclick="guardarOuAtualizarAcaoFirebase()">💾 Guardar / Atualizar</button>
+          <button onclick="guardarOuAtualizarAcaoFirebase()">
+            💾 Guardar / Atualizar
+          </button>
         </div>
       </div>
 
