@@ -815,12 +815,20 @@ function calcularMediaPonderada() {
 // Simulador de ações com base em investimento, crescimento esperado e lucro desejado
 
 function abrirSimulador() {
-  document.getElementById('simuladorModal').style.display = 'block';
+  document.getElementById("simuladorModal").classList.remove("hidden");
 }
 
 function fecharSimulador() {
-  document.getElementById('simuladorModal').style.display = 'none';
+  document.getElementById("simuladorModal").classList.add("hidden");
 }
+
+//function abrirSimulador() {
+  document.getElementById('simuladorModal').style.display = 'block';
+//}
+
+//function fecharSimulador() {
+  document.getElementById('simuladorModal').style.display = 'none';
+//}
 
 async function simular() {
   const investimento = parseFloat(document.getElementById('inputInvestimento').value);
@@ -891,11 +899,11 @@ async function simular() {
 
 
 function abrirPopupSimuladorGrafico() {
-  document.getElementById("popupSimuladorGrafico").classList.remove("hidden");
+  document.getElementById("popupSimuladorGrafico").classList.remove("popup hidden");
 }
 
 function fecharPopupSimuladorGrafico() {
-  document.getElementById("popupSimuladorGrafico").classList.add("hidden");
+  document.getElementById("popupSimuladorGrafico").classList.add("popup hidden");
 }
 
 //TP2
@@ -930,4 +938,12 @@ function calcularTP2() {
     <p>📈 Para atingir um lucro de <strong>${lucroDesejado.toFixed(2)}€</strong>, a ação tem de atingir:</p>
     <p>🎯 <strong>TP2 = ${tp2.toFixed(2)}€</strong></p>
   `;
+}
+
+function abrirPopupSimulacao() {
+  document.getElementById("popupSimulacao").classList.remove("hidden");
+}
+
+function fecharPopupSimulacao() {
+  document.getElementById("popupSimulacao").classList.add("hidden");
 }

@@ -246,7 +246,7 @@
       </div>
     </div>
 
-    <!-- SECÇÃO 5 - Simulação -->
+    <!-- SECÇÃO 5 - Simulação (secção 2 agora)-->
     <div id="sec5Screen" class="screen hidden">
       <div class="section">
         <div class="section-header">
@@ -263,111 +263,83 @@
             email.
           </h5>
         </div>
-        <div class="grafico-wrapper">
-          <button
-            onclick="document.getElementById('popupReforco').classList.toggle('hidden')"
-          >
-            Simular Reforço de Investimento
-          </button>
-          <!-- Botão para abrir o popup -->
-          <button onclick="abrirSimulador()">
-            Procura TOP 10 para investir
-          </button>
-          <button onclick="abrirSimuladorTP2()">
-            Determina o TP2 com TP1 e lucro
-          </button>
+        <div
+          class="buttons"
+          style="
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 300px;
+            margin: auto;
+          "
+        >
+          <button onclick="abrirPopupSimulacao()">Simular com Gráfico</button>
+          <button onclick="abrirPopupReforco()">Simular Reforço</button>
+          <button onclick="abrirSimuladorTP2()">Calcular TP2</button>
+          <button onclick="abrirSimulador()">🔎 TOP 10 para Investir</button>
+        </div>
+        <div class="buttons">
+          <button onclick="voltarMenu()">Voltar ao Menu</button>
         </div>
 
-        <!-- Popup TP2 -->
-        <div id="popupTP2" class="popup hidden">
+        <!-- POPUP SIMULAÇÃO COM GRÁFICO -->
+        <div id="popupSimulacao" class="popup hidden">
           <div class="popup-content">
-            <h3>🎯 Calcular TP2 necessário</h3>
+            <h3>📈 Simulador com Gráfico</h3>
+
+            <input type="text" id="nomeAcao" placeholder="Nome da Ação" />
+            <input type="number" id="tp1" placeholder="TP1" />
+            <input type="number" id="tp2" placeholder="TP2" />
             <input
               type="number"
-              id="tp1Input"
-              placeholder="TP1 (preço de compra €)"
+              id="investimento"
+              placeholder="Investido (€)"
             />
             <input
               type="number"
-              id="investimentoInput"
-              placeholder="Valor Investido (€)"
-            />
-            <input
-              type="number"
-              id="lucroDesejadoInput"
-              placeholder="Lucro Desejado (€)"
+              id="dividendo"
+              placeholder="Dividendo por ação (€)"
             />
 
-            <div class="buttons">
-              <button onclick="calcularTP2()">Calcular TP2</button>
-              <button onclick="fecharSimuladorTP2()">Fechar</button>
+            <div
+              id="botoesSimulacaoRapida"
+              style="text-align: center; margin: 10px 0"
+            >
+              <button onclick="simularValorRapido(500)">💶 500</button>
+              <button onclick="simularValorRapido(1000)">💶 1000</button>
+              <button onclick="simularValorRapido(1500)">💶 1500</button>
+              <button onclick="simularValorRapido(2000)">💶 2000</button>
             </div>
 
-            <div id="resultadoTP2" class="resultado-popup"></div>
-          </div>
-        </div>
-
-        <div class="formulario">
-          <input type="text" id="nomeAcao" placeholder="Nome da Ação" />
-          <input type="number" id="tp1" placeholder="TP1" />
-          <input type="number" id="tp2" placeholder="TP2" />
-          <input
-            type="number"
-            id="investimento"
-            placeholder="Valor Investido (€)"
-          />
-          <input
-            type="number"
-            id="dividendo"
-            placeholder="Dividendo por ação (€)"
-          />
-          <div
-            id="botoesSimulacaoRapida"
-            class="hidden"
-            style="margin-top: 10px; text-align: center"
-          >
-            <button onclick="simularValorRapido(500)">💶 500</button>
-            <button onclick="simularValorRapido(1000)">💶 1000</button>
-            <button onclick="simularValorRapido(1500)">💶 1500</button>
-            <button onclick="simularValorRapido(2000)">💶 2000</button>
-            <button onclick="simularValorRapido(2500)">💶 2500</button>
-            <button onclick="simularValorRapido(3000)">💶 3000</button>
-          </div>
-
-          <div class="grafico-wrapper">
             <button onclick="simularEGUardar()">Simular com gráfico</button>
+
+            <h4>📊 Resultados</h4>
+            <table id="tabelaSimulacoes">
+              <thead>
+                <tr>
+                  <th>Ação</th>
+                  <th>TP1</th>
+                  <th>TP2</th>
+                  <th>Investido</th>
+                  <th>Lucro</th>
+                  <th>% Crescimento</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+
+            <canvas id="graficoLucro" height="200"></canvas>
+
+            <div class="buttons">
+              <button onclick="limparCampos()">Limpar</button>
+              <button onclick="limparGrafico()">🧹 Limpar Gráfico</button>
+              <button onclick="abrirPopupEmail()">📧 Enviar Email</button>
+              <button onclick="fecharPopupSimulacao()">❌ Fechar</button>
+            </div>
           </div>
         </div>
-        <h2>Tabela de Simulações</h2>
-        <div class="tabela-wrapper">
-          <table id="tabelaSimulacoes">
-            <thead>
-              <tr>
-                <th>Ação</th>
-                <th>TP1</th>
-                <th>TP2</th>
-                <th>Investido</th>
-                <th>Lucro</th>
-                <th>% Crescimento</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-        <!-- Botão Limpar-->
-        <button onclick="limparGrafico()">Limpar Gráfico🗑️</button>
-        <!-- Botão para abrir o popup enviar email -->
-        <button onclick="abrirPopupEmail()">Enviar Simulação por Email</button>
-        <div class="grafico-wrapper">
-          <canvas id="graficoLucro" width="400" height="200"></canvas>
-        </div>
-        <!-- Fim do botão Limpar-->
-      </div>
-      <div class="buttons">
-        <button onclick="limparCampos()">Apagar Tudo</button>
-        <button onclick="voltarMenu()">Voltar ao Menu</button>
 
-        <!-- POPUP DE REFORÇO -->
+        <!-- Popup Reforço -->
         <div id="popupReforco" class="popup hidden">
           <div class="popup-content">
             <h3>📈 Simular Reforço de Investimento</h3>
@@ -389,7 +361,6 @@
                 placeholder="Preço por Ação 2 (€)"
               />
             </div>
-
             <div id="resultadoReforco" class="resultado-popup"></div>
             <div class="buttons">
               <button onclick="calcularMediaPonderada()">Calcular</button>
@@ -398,70 +369,56 @@
           </div>
         </div>
 
-        <!--Popup Procura ação para investir-->
+        <!-- Popup TP2 -->
+        <div id="popupTP2" class="popup hidden">
+          <div class="popup-content">
+            <h3>🎯 Calcular TP2</h3>
+            <input
+              type="number"
+              id="tp1Input"
+              placeholder="TP1 (preço de compra €)"
+            />
+            <input
+              type="number"
+              id="investimentoInput"
+              placeholder="Valor Investido (€)"
+            />
+            <input
+              type="number"
+              id="lucroDesejadoInput"
+              placeholder="Lucro Desejado (€)"
+            />
+            <div class="buttons">
+              <button onclick="calcularTP2()">Calcular TP2</button>
+              <button onclick="fecharSimuladorTP2()">Fechar</button>
+            </div>
+            <div id="resultadoTP2" class="resultado-popup"></div>
+          </div>
+        </div>
 
-        <!-- Modal (popup) oculto inicialmente -->
-        <div
-          id="simuladorModal"
-          style="
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-            z-index: 999;
-          "
-        >
-          <div
-            style="
-              background: #fff;
-              padding: 20px;
-              border-radius: 10px;
-              width: 90%;
-              max-width: 400px;
-              margin: 100px auto;
-              position: relative;
-              max-height: 90%;
-              overflow-y: auto;
-            "
-          >
-            <h2>Simulador de Ações 📊</h2>
-
+        <!-- Popup TOP 10 -->
+        <div id="simuladorModal" class="popup hidden">
+          <div class="popup-content">
+            <h3>🔎 Top 10 para Investir</h3>
             <label>Montante a investir (€)</label>
             <input
               type="number"
               id="inputInvestimento"
               placeholder="Ex: 1500"
             />
-
             <label>Lucro desejado (€)</label>
             <input type="number" id="inputLucro" placeholder="Ex: 100" />
-
             <label>Crescimento estimado (%) <small>(opcional)</small></label>
             <input type="number" id="inputCrescimento" placeholder="Ex: 5" />
-
             <div class="buttons">
               <button onclick="simular()">Simular</button>
-              <button onclick="fecharSimulador()">fechar</button>
+              <button onclick="fecharSimulador()">Fechar</button>
             </div>
-
-            <!-- Resultados com scroll interno -->
-            <div
-              id="resultadoSimulacao"
-              style="
-                margin-top: 15px;
-                max-height: 250px;
-                overflow-y: auto;
-                padding-right: 10px;
-              "
-            ></div>
+            <div id="resultadoSimulacao" class="resultado-container"></div>
           </div>
         </div>
 
-        <!-- Popup -->
+        <!-- Popup Email -->
         <div id="popupEmail" class="hidden">
           <h3>Enviar Simulação</h3>
           <div id="dadosSimulacao"></div>
@@ -661,6 +618,7 @@
         </div>
         <div id="resultadoFiltroMes" class="resultado-popup"></div>
       </div>
+      <h3>@Antonioappleton</h3>
     </div>
     <script src="script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
