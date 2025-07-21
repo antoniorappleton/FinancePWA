@@ -759,38 +759,24 @@ button {
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.6);
   justify-content: center;
-  align-items: center;
   z-index: 9999;
 }
 
-
 /*container top10*/
 .resultado-container {
-  max-height: 400px; /* ou outro valor, consoante o teu layout */
+  max-height: 1000vh; /* ou outro valor, consoante o teu layout */
   overflow-y: auto;
   padding-right: 10px; /* espaço para scroll */
   margin-top: 1rem;
-}
-
-
-.popup {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.6);
-  z-index: 999;
 }
 
 .popup-content {
   padding: 20px;
   margin: 50px auto;
   position: relative;
-  max-height: 90%;
+  max-height: 90vh;
   background: white;
-  width: 90%;
+  width: 90vw;
   max-width: 600px;
   border-radius: 10px;
   overflow-y: auto;
