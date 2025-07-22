@@ -1,798 +1,821 @@
-.buttons-grid {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  margin-bottom: 20px;
-  text-align: center;
-  width: 100%;
-  /* <- antes estava 250px, estava a limitar os botões */
-}
-
-.buttons-grid button {
-  flex: 1 1 100%;
-  max-width: 100%;
-  padding: 15px;
-  font-size: 1rem;
-  border-radius: 60px;
-  background: #626466;
-  border: none;
-  color: white;
-  cursor: pointer;
-  text-align: center;
-  white-space: normal;
-  /* permite quebra de linha se o texto for longo */
-}
-
-
-.buttons-grid button:hover {
-  background: #323234;
-}
-
-body {
-  font-family: Arial, sans-serif;
-  background: #ffffff;
-  color: #fff;
-  margin: 0;
-  padding: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  min-height: 100vh;
-}
-
-.screen {
-  background: #fcfcfc;
-  border-radius: 10px;
-  box-sizing: border-box;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
-  width: 100%;
-  max-width: 600px;/* ou 600px para tablets */
-  margin: 0 auto;
-  padding: 20px;
-}
-/* Estilo para ecrãs pequenos (telemóveis) */
-@media (max-width: 600px) {
-  .screen {
-    padding: 15px;
-    max-width: 100%;
+  .buttons-grid {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    text-align: center;
+    width: 100%;
+    /* <- antes estava 250px, estava a limitar os botões */
   }
 
-  .form-grid input,
-  .form-grid select {
+  .buttons-grid button {
+    flex: 1 1 100%;
+    max-width: 100%;
+    padding: 15px;
     font-size: 1rem;
+    border-radius: 60px;
+    background: #626466;
+    border: none;
+    color: white;
+    cursor: pointer;
+    text-align: center;
+    white-space: normal;
+    /* permite quebra de linha se o texto for longo */
+  }
+
+
+  .buttons-grid button:hover {
+    background: #323234;
+  }
+
+  body {
+    font-family: Arial, sans-serif;
+    background: #ffffff;
+    color: #fff;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+  }
+
+  .screen {
+    background: #fcfcfc;
+    border-radius: 10px;
+    box-sizing: border-box;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 600px;/* ou 600px para tablets */
+    margin: 0 auto;
+    padding: 20px;
+  }
+  /* Estilo para ecrãs pequenos (telemóveis) */
+  @media (max-width: 600px) {
+    .screen {
+      padding: 15px;
+      max-width: 100%;
+    }
+
+    .form-grid input,
+    .form-grid select {
+      font-size: 1rem;
+    }
+
+    button {
+      font-size: 0.95rem;
+      padding: 10px 12px;
+    }
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  h1,
+  h2 {
+    color: #141515;
+    margin-bottom: 4px;
+  }
+
+  h3,
+  h5,
+  h6,
+  h4 {
+    color: #0e0f0f;
+    margin-bottom: 0px;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+    color: #131313;
+  }
+
+  input[type="number"] {
+    width: 100%;
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: none;
+    margin-top: 3px;
+    margin-bottom: 12px;
+    box-sizing: border-box;
   }
 
   button {
-    font-size: 0.95rem;
-    padding: 10px 12px;
-  }
-}
-
-.hidden {
-  display: none;
-}
-
-h1,
-h2 {
-  color: #141515;
-  margin-bottom: 4px;
-}
-
-h3,
-h5,
-h6,
-h4 {
-  color: #0e0f0f;
-  margin-bottom: 0px;
-}
-
-label {
-  display: block;
-  margin-bottom: 8px;
-  color: #131313;
-}
-
-input[type="number"] {
-  width: 100%;
-  padding: 6px 8px;
-  border-radius: 6px;
-  border: none;
-  margin-top: 3px;
-  margin-bottom: 12px;
-  box-sizing: border-box;
-}
-
-button {
-  background-color: #1c1c1d;
-  border: none;
-  color: white;
-  padding: 10px 20px;
-  margin: 8px 6px 0 0;
-  border-radius: 60px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.25s ease;
-  width: 250px;
-}
-
-button:hover {
-  background-color: #383a3b;
-}
-
-p {
-  margin: 6px 0 10px;
-  font-weight: bold;
-  color: #313334;
-}
-
-.buttons {
-  margin-top: 15px;
-  width: 100%;
-  display: flex;
-  justify-content: center;/* ou 'flex-end' se quiseres à direita */
-}
-
-.buttons button {
-  width: 250px;
-  padding: 20px;
-  font-size: 1rem;
-  border-radius: 10px;
-  background: #212122;
-  border: none;
-  color: white;
-  cursor: pointer;
-  text-align: center;
-}
-
-.buttons button:hover {
-  background: #505152;
-}
-
-label input {
-  margin-right: 10px;
-  color: #121212;
-}
-
-#tp2_4 {
-  font-weight: bold;
-  margin-left: 5px;
-}
-
-.info-text {
-  display: none;
-  background-color: #f3f4f5;
-  padding: 0.1rem;
-  margin: 0.5rem 0;
-  border-left: 4px solid rgb(34, 34, 34);
-  border-radius: 4px;
-  font-size: 0.9rem;
-  color: #343636;
-}
-
-.section-header {
-  display: fixed;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.section-header h3 {
-  margin: 0;
-  font-size: 1.1rem;
-  font-weight: bold;
-  color: rgb(25, 24, 24);
-}
-
-.info-toggle {
-  background: none;
-  border: none;
-  color: #3e4447;
-  font-size: 0.9rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.section {
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 10px;
-  margin-bottom: 30px;/* 👈 Espaçamento entre as secções */
-}
-
-/* Container da Tabela */
-.tabela-wrapper {
-  overflow-x: auto;
-  width: 100%;
-  margin-top: 10px;
-  border-radius: 8px;
-}
-
-.tabela-scroll-wrapper {
-  overflow-x: auto;
-  max-width: 100%;
-  margin-bottom: 1.5rem;
-  border-radius: 8px;
-}
-
-/* Tabela Estilizada */
-
-
-#tabelaSimulacoes {
-  border-collapse: collapse;
-  background-color: #ecf0f1;
-  font-size: 0.95em;
-  min-width: 600px;
-  width: 100%;
-}
-
-#tabelaSimulacoes tbody tr:hover {
-  background-color: #d6eaf8;
-}
-
-#tabelaSimulacoes tbody tr {
-  background-color: #ffffff;
-  color: #2c3e50;
-}
-
-#tabelaSimulacoes thead {
-  background-color: #dadee1;
-  color: #121212;
-  text-align: left;
-}
-
-#tabelaSimulacoes th,
-#tabelaSimulacoes td {
-  padding: 12px 16px;
-  border-bottom: 1px solid #bdc3c7;
-  white-space: nowrap;
-}
-
-/*Botão Limpar Gráfico*/
-.grafico-wrapper {
-  display: flex;
-  justify-content: center; /* Centraliza os botões horizontalmente */
-  flex-wrap: wrap;         /* Permite que os botões se ajustem em telas pequenas */
-  gap: 10px;               /* Espaço entre os botões */
-  margin: 20px auto;
-  max-width: 100%;
-}
-.grafico-wrapper button {
-  padding: 10px 15px;
-  font-size: 14px;
-  background-color: black;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-
-#limparGraficoBtn {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  color: #ffffff;
-  /* Branco para sobressair */
-}
-
-#limparGraficoBtn:hover {
-  color: #ff5555;
-  /* Fica vermelho ao passar o rato */
-}
-
-/* Estilo geral do popup */
-#popupEmail {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #ffffff;
-  border: 2px solid #424243;
-  border-radius: 10px;
-  padding: 20px;
-  width: 90%;
-  max-width: 400px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-}
-
-/*ENVIAR EMAIL*/
-
-/* Estilo geral do popup */
-#popupEmail {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #ffffff;
-  border: 2px solid #242424;
-  border-radius: 10px;
-  padding: 20px;
-  width: 90%;
-  max-width: 400px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-}
-
-/* Título do popup */
-#popupEmail h3 {
-  margin-top: 0;
-  font-size: 1.4em;
-  color: #151515;
-  text-align: center;
-}
-
-/* Campo de email */
-#popupEmail input[type="email"] {
-  width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #3b3939;
-  border-radius: 5px;
-  font-size: 1em;
-}
-
-/* Botões */
-#popupEmail button {
-  padding: 10px 15px;
-  margin: 5px;
-  border: none;
-  border-radius: 5px;
-  font-size: 1em;
-  cursor: pointer;
-}
-
-#popupEmail button:first-of-type {
-  background-color: #2d2e30;
-  color: white;
-}
-
-#popupEmail button:last-of-type {
-  background-color: #ccc;
-  color: #333;
-}
-
-
-/* Conteúdo das simulações */
-#dadosSimulacao {
-  background-color: #f0f5f6;
-  color: #383636;
-  padding: 10px;
-  border-radius: 5px;
-  max-height: 200px;
-  overflow-y: auto;
-  font-size: 0.95em;
-  line-height: 1.5em;
-  border: 1px solid #ddd;
-  margin-bottom: 10px;
-}
-
-#dadosSimulacao p {
-  margin: 6px 0;
-}
-
-#dadosSimulacao p strong {
-  color: #007BFF;
-}
-
-#dadosSimulacao hr {
-  border: none;
-  border-top: 1px solid #ccc;
-  margin: 10px 0;
-}
-
-/* Ocultar popup */
-.hidden {
-  display: none;
-}
-
-/* Caixa de entrada de email */
-#popupEmail .email-form {
-  margin-bottom: 15px;
-  text-align: center;
-}
-
-#popupEmail input[type="email"] {
-  width: 95%;
-  max-width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 1em;
-}
-
-/* Alinhamento central dos botões */
-#popupEmail .botoes-popup {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
-
-/* Secção 6 - Registo de Ações */
-#sec6Screen .section {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-#sec6Screen label {
-  display: flex;
-  flex-direction: column;
-  font-weight: bold;
-  color: #ecf0f1;
-}
-
-#sec6Screen input,
-#sec6Screen select,
-#sec6Screen textarea {
-  padding: 8px;
-  border-radius: 6px;
-  border: none;
-  font-size: 1em;
-  margin-top: 4px;
-  box-sizing: border-box;
-}
-
-#sec6Screen textarea {
-  resize: vertical;
-}
-
-/* Botão para mostrar filtros */
-#btnMostrarFiltros {
-  background-color: #2c2e2e;
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  margin-top: 10px;
-  transition: background-color 0.3s ease;
-}
-
-#btnMostrarFiltros:hover {
-  background-color: #3d3f3f;
-}
-
-/* Container dos botões de mês */
-#filtrosMesContainer {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 15px;
-  justify-content: center;
-  animation: fadeIn 0.4s ease-in-out;
-}
-
-#filtrosMesContainer.hidden {
-  display: none;
-}
-
-#filtrosMesContainer button {
-  flex: 1 1 30%;
-  padding: 10px;
-  background-color: #2c3e50;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.9em;
-  transition: background-color 0.3s ease;
-}
-
-#filtrosMesContainer button:hover {
-  background-color: #1a252f;
-}
-
-/* Resultado do filtro */
-#resultadoFiltroMes {
-  margin-top: 20px;
-  background-color: #f3f0f0;
-  color: #101212;
-  padding: 12px;
-  border-radius: 8px;
-  max-height: 400px;
-  overflow-y: auto;
-  font-size: 0.95em;
-  line-height: 1.5em;
-}
-
-/* Animação suave */
-/* Secção 6 - Registo e Filtro */
-#sec6Screen .form-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 12px;
-}
-
-#sec6Screen .filtros-container {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-
-#sec6Screen label {
-  display: flex;
-  flex-direction: column;
-  font-weight: bold;
-  color: #ecf0f1;
-}
-
-#sec6Screen input,
-#sec6Screen select {
-  padding: 8px;
-  border-radius: 6px;
-  border: none;
-  font-size: 1em;
-  margin-top: 4px;
-  box-sizing: border-box;
-}
-
-#resultadoFiltroMes.resultado-acoes {
-  margin-top: 15px;
-  background-color: #f6f6f6;
-  color: #141414;
-  padding: 12px;
-  border-radius: 8px;
-  max-height: 300px;
-  overflow-y: auto;
-  font-size: 0.95em;
-  line-height: 1.5em;
-}
-
-#resultadoFiltroMes ul {
-  padding-left: 20px;
-}
-
-#resultadoFiltroMes li {
-  margin-bottom: 10px;
-  border-bottom: 1px solid #000000;
-  padding-bottom: 6px;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
+    background-color: #1c1c1d;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    margin: 8px 6px 0 0;
+    border-radius: 60px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.25s ease;
+    width: 250px;
   }
 
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  button:hover {
+    background-color: #383a3b;
   }
-}
 
-.form-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-* {
-  box-sizing: border-box;
-}
-
-/*adicionado periência*/
-/*Tornar tudo responsivo e centrado na largura total*/
-body, html {
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #f7f9fa;
-  color: #212121;
-  width: 100%;
-  min-height: 100vh;
-  box-sizing: border-box;
-}
-
-/* Garante que todas as "screens" ocupam a largura total */
-.screen {
-  padding: 16px;
-  width: 100%;
-  max-width: 768px;
-  margin: 0 auto;
-}
-/*Melhorar o espaçamento e separadores entre secções e títulos*/
-.section {
-  margin-bottom: 32px;
-  padding: 16px;
-  background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-}
-
-/* Títulos */
-.section h3, .section h4 {
-  margin-bottom: 16px;
-  font-size: 1.25rem;
-  color: #2c3e50;
-  border-bottom: 1px solid #dcdcdc;
-  padding-bottom: 6px;
-}
-/*Melhorar campos de input e etiquetas*/
-.section label {
-  font-weight: 600;
-  font-size: 0.95rem;
-  color: #333;
-  margin-bottom: 6px;
-}
-
-.section input[type="text"],
-.section input[type="number"],
-.section select {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 1rem;
-}
-/*Organizar botões e formulários responsivamente*/
-button {
-  padding: 10px 16px;
-  font-size: 0.95rem;
-  border: none;
-  border-radius: 6px;
-  margin: 6px 4px 0 0;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-button:hover {
-  opacity: 0.85;
-}
-
-.buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.buttons button {
-  flex: 1 1 45%;
-}
-
-.form-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 12px;
-}
-/*Melhorar visual de listagens e resultados*/
-.resultado-acoes {
-  background-color: #f0f4f8;
-  padding: 12px;
-  border-radius: 8px;
-  margin-top: 12px;
-  font-size: 0.9rem;
-  color: #1c2833;
-}
-
-.hidden {
-  display: none;
-}
-
-.resultado-acoes ul {
-  padding-left: 20px;
-}
-
-.resultado-acoes li {
-  margin-bottom: 12px;
-  padding: 10px;
-  background: #ffffff;
-  border: 1px solid #e9e9e9;
-  border-radius: 6px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
-}
-/*Mobile-first ajustes e boas práticas*/
-@media (min-width: 600px) {
-  .form-grid {
-    grid-template-columns: repeat(2, 1fr);
+  p {
+    margin: 6px 0 10px;
+    font-weight: bold;
+    color: #313334;
   }
 
   .buttons {
-    justify-content: space-between;
+    margin-top: 15px;
+    width: 100%;
+    display: flex;
+    justify-content: center;/* ou 'flex-end' se quiseres à direita */
   }
-}
-/* 💡 Cor do texto das labels na secção 6 */
-#sec6Screen label {
-  color: #d7d6d6; /* Podes alterar aqui a cor do texto das etiquetas */
-}
 
-/* 💡 Cor dos botões principais */
-button {
-  background-color: #050505; /* Azul principal, muda aqui para verde ou outro */
-  border-radius: 50px;
-}
+  .buttons button {
+    width: 250px;
+    padding: 20px;
+    font-size: 1rem;
+    border-radius: 10px;
+    background: #212122;
+    border: none;
+    color: white;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  .buttons button:hover {
+    background: #505152;
+  }
+
+  label input {
+    margin-right: 10px;
+    color: #121212;
+  }
+
+  #tp2_4 {
+    font-weight: bold;
+    margin-left: 5px;
+  }
+
+  .info-text {
+    display: none;
+    background-color: #f3f4f5;
+    padding: 0.1rem;
+    margin: 0.5rem 0;
+    border-left: 4px solid rgb(34, 34, 34);
+    border-radius: 4px;
+    font-size: 0.9rem;
+    color: #343636;
+  }
+
+  .section-header {
+    display: fixed;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .section-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: rgb(25, 24, 24);
+  }
+
+  .info-toggle {
+    background: none;
+    border: none;
+    color: #3e4447;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .section {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;/* 👈 Espaçamento entre as secções */
+  }
+
+  .tabela-scroll-wrapper {
+    overflow-x: auto;
+    width: 100%;
+    margin-top: 1rem;
+    border-radius: 8px;
+    background: white;
+  }
+
+  #tabelaSimulacoes {
+    border-collapse: collapse;
+    background-color: #ecf0f1;
+    font-size: 0.95em;
+    min-width: 700px; /* força scroll horizontal se necessário */
+    width: 100%;
+  }
+
+  #tabelaSimulacoes th,
+  #tabelaSimulacoes td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #bdc3c7;
+    white-space: nowrap;
+  }
+
+  #tabelaSimulacoes thead {
+    background-color: #dadee1;
+    color: #121212;
+  }
+
+  #tabelaSimulacoes tbody tr {
+    background-color: #ffffff;
+    color: #2c3e50;
+  }
+
+  #tabelaSimulacoes tbody tr:hover {
+    background-color: #d6eaf8;
+  }
 
 
-.popup.show {
-  display: flex;
-}
+  /*Botão Limpar Gráfico*/
+  .grafico-wrapper {
+    display: flex;
+    justify-content: center; /* Centraliza os botões horizontalmente */
+    flex-wrap: wrap;         /* Permite que os botões se ajustem em telas pequenas */
+    gap: 10px;               /* Espaço entre os botões */
+    margin: 20px auto;
+    max-width: 100%;
+  }
+  .grafico-wrapper button {
+    padding: 10px 15px;
+    font-size: 14px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
 
-.popup-content select,
-.popup-content button {
-  width: 100%;
-  margin-bottom: 10px;
-}
 
-.resultado-popup {
-  flex-grow: 1;
-  overflow-y: auto;
-  margin-top: 10px;
-}
+  #limparGraficoBtn {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #ffffff;
+    /* Branco para sobressair */
+  }
 
-/*botões dentro do filtro*/
-.botoes-acoes {
-  display: flex;
-  gap: 6px;
-  margin-top: 4px;
-}
+  #limparGraficoBtn:hover {
+    color: #ff5555;
+    /* Fica vermelho ao passar o rato */
+  }
 
-.botoes-acoes button {
-  background-color: #111111;
-  border: none;
-  border-radius: 4px;
-  padding: 6px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
+  /* Estilo geral do popup */
+  #popupEmail {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    border: 2px solid #424243;
+    border-radius: 10px;
+    padding: 20px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+  }
 
-.botoes-acoes button:hover {
-  background-color: #515050;
-}
+  /*ENVIAR EMAIL*/
 
-/*Popup Reforço*/
-.popup {
-  display: flex;
-  align-items: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.6);
-  justify-content: center;
-  z-index: 9999;
-}
+  /* Estilo geral do popup */
+  #popupEmail {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    border: 2px solid #242424;
+    border-radius: 10px;
+    padding: 20px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+  }
 
-/*container top10*/
-.resultado-container {
-  max-height: 1000vh; /* ou outro valor, consoante o teu layout */
-  overflow-y: auto;
-  padding-right: 10px; /* espaço para scroll */
-  margin-top: 1rem;
-}
+  /* Título do popup */
+  #popupEmail h3 {
+    margin-top: 0;
+    font-size: 1.4em;
+    color: #151515;
+    text-align: center;
+  }
 
-.popup-content {
-  padding: 20px;
-  margin: 50px auto;
-  position: relative;
-  max-height: 90vh;
-  background: white;
-  width: 90vw;
-  max-width: 600px;
-  border-radius: 10px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-}
+  /* Campo de email */
+  #popupEmail input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #3b3939;
+    border-radius: 5px;
+    font-size: 1em;
+  }
 
-.popup:not(.hidden) {
-  display: block;
-}
-.hidden {
-  display: none !important;
-}
+  /* Botões */
+  #popupEmail button {
+    padding: 10px 15px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+  }
+
+  #popupEmail button:first-of-type {
+    background-color: #2d2e30;
+    color: white;
+  }
+
+  #popupEmail button:last-of-type {
+    background-color: #ccc;
+    color: #333;
+  }
+
+
+  /* Conteúdo das simulações */
+  #dadosSimulacao {
+    background-color: #f0f5f6;
+    color: #383636;
+    padding: 10px;
+    border-radius: 5px;
+    max-height: 200px;
+    overflow-y: auto;
+    font-size: 0.95em;
+    line-height: 1.5em;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+  }
+
+  #dadosSimulacao p {
+    margin: 6px 0;
+  }
+
+  #dadosSimulacao p strong {
+    color: #007BFF;
+  }
+
+  #dadosSimulacao hr {
+    border: none;
+    border-top: 1px solid #ccc;
+    margin: 10px 0;
+  }
+
+  /* Ocultar popup */
+  .hidden {
+    display: none;
+  }
+
+  /* Caixa de entrada de email */
+  #popupEmail .email-form {
+    margin-bottom: 15px;
+    text-align: center;
+  }
+
+  #popupEmail input[type="email"] {
+    width: 95%;
+    max-width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+  }
+
+  /* Alinhamento central dos botões */
+  #popupEmail .botoes-popup {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  /* Secção 6 - Registo de Ações */
+  #sec6Screen .section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  #sec6Screen label {
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+    color: #ecf0f1;
+  }
+
+  #sec6Screen input,
+  #sec6Screen select,
+  #sec6Screen textarea {
+    padding: 8px;
+    border-radius: 6px;
+    border: none;
+    font-size: 1em;
+    margin-top: 4px;
+    box-sizing: border-box;
+  }
+
+  #sec6Screen textarea {
+    resize: vertical;
+  }
+
+  /* Botão para mostrar filtros */
+  #btnMostrarFiltros {
+    background-color: #2c2e2e;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+  }
+
+  #btnMostrarFiltros:hover {
+    background-color: #3d3f3f;
+  }
+
+  /* Container dos botões de mês */
+  #filtrosMesContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 15px;
+    justify-content: center;
+    animation: fadeIn 0.4s ease-in-out;
+  }
+
+  #filtrosMesContainer.hidden {
+    display: none;
+  }
+
+  #filtrosMesContainer button {
+    flex: 1 1 30%;
+    padding: 10px;
+    background-color: #2c3e50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease;
+  }
+
+  #filtrosMesContainer button:hover {
+    background-color: #1a252f;
+  }
+
+  /* Resultado do filtro */
+  #resultadoFiltroMes {
+    margin-top: 20px;
+    background-color: #f3f0f0;
+    color: #101212;
+    padding: 12px;
+    border-radius: 8px;
+    max-height: 400px;
+    overflow-y: auto;
+    font-size: 0.95em;
+    line-height: 1.5em;
+  }
+
+  /* Animação suave */
+  /* Secção 6 - Registo e Filtro */
+  #sec6Screen .form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  #sec6Screen .filtros-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  #sec6Screen label {
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+    color: #ecf0f1;
+  }
+
+  #sec6Screen input,
+  #sec6Screen select {
+    padding: 8px;
+    border-radius: 6px;
+    border: none;
+    font-size: 1em;
+    margin-top: 4px;
+    box-sizing: border-box;
+  }
+
+  #resultadoFiltroMes.resultado-acoes {
+    margin-top: 15px;
+    background-color: #f6f6f6;
+    color: #141414;
+    padding: 12px;
+    border-radius: 8px;
+    max-height: 300px;
+    overflow-y: auto;
+    font-size: 0.95em;
+    line-height: 1.5em;
+  }
+
+  #resultadoFiltroMes ul {
+    padding-left: 20px;
+  }
+
+  #resultadoFiltroMes li {
+    margin-bottom: 10px;
+    border-bottom: 1px solid #000000;
+    padding-bottom: 6px;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  * {
+    box-sizing: border-box;
+  }
+
+  /*adicionado periência*/
+  /*Tornar tudo responsivo e centrado na largura total*/
+  body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f7f9fa;
+    color: #212121;
+    width: 100%;
+    min-height: 100vh;
+    box-sizing: border-box;
+  }
+
+  /* Garante que todas as "screens" ocupam a largura total */
+  .screen {
+    padding: 16px;
+    width: 100%;
+    max-width: 768px;
+    margin: 0 auto;
+  }
+  /*Melhorar o espaçamento e separadores entre secções e títulos*/
+  .section {
+    margin-bottom: 32px;
+    padding: 16px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  }
+
+  /* Títulos */
+  .section h3, .section h4 {
+    margin-bottom: 16px;
+    font-size: 1.25rem;
+    color: #2c3e50;
+    border-bottom: 1px solid #dcdcdc;
+    padding-bottom: 6px;
+  }
+  /*Melhorar campos de input e etiquetas*/
+  .section label {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #333;
+    margin-bottom: 6px;
+  }
+
+  .section input[type="text"],
+  .section input[type="number"],
+  .section select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+  }
+  /*Organizar botões e formulários responsivamente*/
+  button {
+    padding: 10px 16px;
+    font-size: 0.95rem;
+    border: none;
+    border-radius: 6px;
+    margin: 6px 4px 0 0;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  button:hover {
+    opacity: 0.85;
+  }
+
+  .buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .buttons button {
+    flex: 1 1 45%;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  /*Melhorar visual de listagens e resultados*/
+  .resultado-acoes {
+    background-color: #f0f4f8;
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 12px;
+    font-size: 0.9rem;
+    color: #1c2833;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .resultado-acoes ul {
+    padding-left: 20px;
+  }
+
+  .resultado-acoes li {
+    margin-bottom: 12px;
+    padding: 10px;
+    background: #ffffff;
+    border: 1px solid #e9e9e9;
+    border-radius: 6px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+  }
+  /*Mobile-first ajustes e boas práticas*/
+  @media (min-width: 600px) {
+    .form-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .buttons {
+      justify-content: space-between;
+    }
+  }
+  /* 💡 Cor do texto das labels na secção 6 */
+  #sec6Screen label {
+    color: #d7d6d6; /* Podes alterar aqui a cor do texto das etiquetas */
+  }
+
+  /* 💡 Cor dos botões principais */
+  button {
+    background-color: #050505; /* Azul principal, muda aqui para verde ou outro */
+    border-radius: 50px;
+  }
+
+
+  .popup.show {
+    display: flex;
+  }
+
+  .popup-content select,
+  .popup-content button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .resultado-popup {
+    flex-grow: 1;
+    overflow-y: auto;
+    margin-top: 10px;
+  }
+
+  /*botões dentro do filtro*/
+  .botoes-acoes {
+    display: flex;
+    gap: 6px;
+    margin-top: 4px;
+  }
+
+  .botoes-acoes button {
+    background-color: #111111;
+    border: none;
+    border-radius: 4px;
+    padding: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+  .botoes-acoes button:hover {
+    background-color: #515050;
+  }
+
+  /*Popup Reforço*/
+  .popup {
+    display: flex;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+    justify-content: center;
+    z-index: 9999;
+  }
+
+  /*container top10*/
+  .resultado-container {
+    max-height: 1000vh; /* ou outro valor, consoante o teu layout */
+    overflow-y: auto;
+    padding-right: 10px; /* espaço para scroll */
+    margin-top: 1rem;
+  }
+
+  .popup-content {
+    padding: 20px;
+    margin: 50px auto;
+    position: relative;
+    max-height: 90vh;
+    background: white;
+    width: 90vw;
+    max-width: 600px;
+    border-radius: 10px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .popup:not(.hidden) {
+    display: block;
+  }
+  .hidden {
+    display: none !important;
+  }
+
+  /*Tabela Selecionadas em bloco*/
+  .tabela-wrapper {
+    overflow-x: auto;
+    margin-top: 10px;
+    border-radius: 8px;
+  }
+
+  .tabela-bloco {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #f8f9fa;
+    font-size: 0.95em;
+    min-width: 500px;
+    border-radius: 8px;
+  }
+
+  .tabela-bloco thead {
+    background-color: #e0e0e0;
+    color: #333;
+  }
+
+  .tabela-bloco th,
+  .tabela-bloco td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #ccc;
+    white-space: nowrap;
+  }
+
+  .tabela-bloco tbody tr:hover {
+    background-color: #eef5ff;
+  }

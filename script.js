@@ -231,7 +231,9 @@ function atualizarTabela() {
         <button onclick="removerSimulacao(${index})">❌</button>
       </td>
       <td>
-        <input type="checkbox" onchange="atualizarSomaLucros()" class="checkbox-lucro" data-lucro="${sim.lucro}">
+        <input type="checkbox" onchange="atualizarSomaLucros()" class="checkbox-lucro" data-lucro="${
+          sim.lucro
+        }">
       </td>
     `;
     corpoTabela.appendChild(linha);
@@ -242,8 +244,8 @@ function atualizarTabela() {
 
 function removerSimulacao(index) {
   simulacoes.splice(index, 1); // Remove 1 elemento na posição index
-  atualizarTabela();           // Re-renderiza a tabela
-  atualizarGrafico();          // Atualiza o gráfico com as simulações restantes
+  atualizarTabela(); // Re-renderiza a tabela
+  atualizarGrafico(); // Atualiza o gráfico com as simulações restantes
 }
 
 function atualizarSomaLucros() {
@@ -266,14 +268,17 @@ function mostrarTotalLucro(valor) {
     totalRow.id = "linha-total-lucro";
     totalRow.innerHTML = `
       <td colspan="4"><strong>Total Lucro Selecionado:</strong></td>
-      <td colspan="4" id="valorTotalLucro"><strong>${valor.toFixed(2)} €</strong></td>
+      <td colspan="4" id="valorTotalLucro"><strong>${valor.toFixed(
+        2
+      )} €</strong></td>
     `;
     document.querySelector("#tabelaSimulacoes tbody").appendChild(totalRow);
   } else {
-    totalRow.querySelector("#valorTotalLucro").innerHTML = `<strong>${valor.toFixed(2)} €</strong>`;
+    totalRow.querySelector(
+      "#valorTotalLucro"
+    ).innerHTML = `<strong>${valor.toFixed(2)} €</strong>`;
   }
 }
-
 
 let grafico;
 
@@ -307,6 +312,7 @@ function atualizarGrafico() {
 }
 //Botão Simular e Guardar para passar para o gráfico
 function simularEGUardar() {
+  document.querySelector(".tabela-scroll-wrapper")?.classList.remove("hidden");
   const nome = document.getElementById("nomeAcao").value;
   const tp1 = parseFloat(document.getElementById("tp1").value);
   const tp2 = parseFloat(document.getElementById("tp2").value);
@@ -394,7 +400,6 @@ function prepararSimulacao(nome, valorStock, dividendo) {
   if (botoes) {
     botoes.classList.remove("hidden");
   }
-  
 }
 
 // 🚨 NOVO: Limpar Gráfico
@@ -413,7 +418,6 @@ function abrirPopupEmail() {
   document.getElementById("popupSimulacao").classList.add("hidden");
   const popup = document.getElementById("popupEmail");
   popup.classList.remove("hidden");
-  
 
   const dadosDiv = document.getElementById("dadosSimulacao");
 
@@ -530,28 +534,44 @@ function filtrarAcoes() {
           !tickerInput || dados.ticker?.toLowerCase().includes(tickerInput);
 
         if (
-  matchSetor &&
-  matchMercado &&
-  matchMes &&
-  matchPeriodicidade &&
-  matchNome &&
-  matchTicker
-) {
-  html += `
-    <li>
-      <strong>${dados.nome}</strong> (${dados.ticker})<br>
-      Setor: ${dados.setor} | Mercado: ${dados.mercado} | Dividendo: €${dados.dividendo} |
-      Mês: ${dados.mes} | Periodicidade: ${dados.periodicidade} | Valor da Ação: €${dados.valorStock || "N/D"}<br>
-      <div class="botoes-acoes">
-        <button title="Editar" onclick="editarAcao('${doc.id}', ${JSON.stringify(dados).replace(/"/g, "&quot;")})">✏️</button>
-        <button title="Eliminar" onclick="eliminarAcao('${doc.id}')">🗑️</button>
-        <button title="Simular" onclick="prepararSimulacao('${dados.nome}', ${dados.valorStock || 0}, ${dados.dividendo || 0})">📈</button>
+          matchSetor &&
+          matchMercado &&
+          matchMes &&
+          matchPeriodicidade &&
+          matchNome &&
+          matchTicker
+        ) {
+          html += `
+  <li>
+    <label style="display:flex; align-items:center; gap:10px">
+      <input type="checkbox" class="checkbox-selecao" data-nome="${
+        dados.nome
+      }" data-ticker="${dados.ticker}" data-valor="${
+            dados.valorStock || 0
+          }" data-dividendo="${dados.dividendo || 0}">
+      <div>
+        <strong>${dados.nome}</strong> (${dados.ticker})<br>
+        Setor: ${dados.setor} | Mercado: ${dados.mercado} | Dividendo: €${
+            dados.dividendo
+          } <br>
+        Mês: ${dados.mes} | Periodicidade: ${
+            dados.periodicidade
+          } | Valor da Ação: €${dados.valorStock || "N/D"}
       </div>
-    </li>
-  `;
-  count++;
-}
-
+    </label>
+    <div class="botoes-acoes">
+      <button title="Editar" onclick="editarAcao('${doc.id}', ${JSON.stringify(
+            dados
+          ).replace(/"/g, "&quot;")})">✏️</button>
+      <button title="Eliminar" onclick="eliminarAcao('${doc.id}')">🗑️</button>
+      <button title="Simular" onclick="prepararSimulacao('${dados.nome}', ${
+            dados.valorStock || 0
+          }, ${dados.dividendo || 0})">📈</button>
+    </div>
+  </li>
+`;
+          count++;
+        }
       });
 
       html += "</ul>";
@@ -565,6 +585,108 @@ function filtrarAcoes() {
       resultadoDiv.innerHTML =
         "<p style='color:red;'>Erro ao carregar dados.</p>";
     });
+}
+
+//Simular Ações Selecionadas
+function prepararSimulacaoBloco() {
+  const checkboxes = document.querySelectorAll(".checkbox-selecao:checked");
+
+  if (checkboxes.length === 0) {
+    alert("Seleciona pelo menos uma ação para simular em bloco.");
+    return;
+  }
+
+  const acoesSelecionadas = Array.from(checkboxes).map((cb) => ({
+    nome: cb.dataset.nome,
+    ticker: cb.dataset.ticker,
+    valorStock: parseFloat(cb.dataset.valor),
+    dividendo: parseFloat(cb.dataset.dividendo),
+  }));
+
+  localStorage.setItem("acoesSelecionadas", JSON.stringify(acoesSelecionadas));
+
+  // Mostra popup e preenche
+  document.getElementById("popupSimulacaoBloco").classList.remove("hidden");
+  preencherTabelaSimulacaoBloco(acoesSelecionadas);
+
+}
+
+//Mostrar as ações selecionada
+function preencherTabelaSimulacaoBloco(acoes) {
+  const tbody = document.querySelector("#tabelaAcoesSelecionadas tbody");
+  tbody.innerHTML = "";
+
+  acoes.forEach((acao) => {
+    const linha = document.createElement("tr");
+    linha.innerHTML = `
+      <td>${acao.nome}</td>
+      <td>${acao.ticker}</td>
+      <td>€${acao.valorStock.toFixed(2)}</td>
+      <td>€${acao.dividendo.toFixed(2)}</td>
+    `;
+    tbody.appendChild(linha);
+  });
+}
+//Fechar popup Bloco
+function fecharPopupSimulacaoBloco() {
+  document.getElementById("popupSimulacaoBloco").classList.add("hidden");
+}
+
+let acoesParaSimulacao = []; // <-- isto deve estar fora das funções, no topo do ficheiro .js
+
+
+//Lucro máximo
+function calcularDistribuicao() {
+  const investimentoTotal = parseFloat(
+    document.getElementById("investimentoTotal").value
+  );
+  const resultadoDiv = document.getElementById("resultadoDistribuicao");
+  resultadoDiv.innerHTML = "";
+
+  if (isNaN(investimentoTotal) || investimentoTotal <= 0) {
+    resultadoDiv.innerHTML = `<p style="color:red;">💡 Introduz um valor válido a investir.</p>`;
+    return;
+  }
+
+  // Supondo que tens guardado as ações selecionadas aqui:
+  const acoesSelecionadas = window.acoesParaSimulacao || [];
+
+  if (acoesSelecionadas.length === 0) {
+    resultadoDiv.innerHTML = `<p style="color:red;">⚠️ Nenhuma ação selecionada.</p>`;
+    return;
+  }
+
+  // Calcular "peso" com base no rendimento (dividendo / preço)
+  const totalRentabilidade = acoesSelecionadas.reduce((acc, acao) => {
+    const rendimento = acao.dividendo / acao.valorStock;
+    return acc + rendimento;
+  }, 0);
+
+  let html = `<h4>📊 Distribuição:</h4><ul>`;
+  let totalEstimadoLucro = 0;
+
+  acoesSelecionadas.forEach((acao) => {
+    const rendimento = acao.dividendo / acao.valorStock;
+    const proporcao = rendimento / totalRentabilidade;
+    const valorInvestido = investimentoTotal * proporcao;
+    const acoesCompradas = valorInvestido / acao.valorStock;
+    const lucro = acoesCompradas * acao.dividendo;
+
+    totalEstimadoLucro += lucro;
+
+    html += `<li>
+      <strong>${acao.nome}</strong> (${acao.ticker})<br>
+      Investido: €${valorInvestido.toFixed(
+        2
+      )} — Ações: ${acoesCompradas.toFixed(1)}<br>
+      Lucro estimado: <strong>€${lucro.toFixed(2)}</strong>
+    </li><br>`;
+  });
+
+  html += `</ul><p><strong>💰 Lucro Total Estimado: €${totalEstimadoLucro.toFixed(
+    2
+  )}</strong></p>`;
+  resultadoDiv.innerHTML = html;
 }
 
 //Atualizar a Firebase
@@ -632,7 +754,6 @@ function fecharPopupFiltro() {
   popup.classList.remove("show");
   popup.classList.add("hidden");
 }
-
 
 // preparar simulação do screen 6 para o 5
 function prepararSimulacao(nome, valorStock, dividendo) {
@@ -721,9 +842,7 @@ function guardarOuAtualizarAcaoFirebase() {
   const dividendo = parseFloat(
     document.getElementById("valorDividendoReg").value
   );
-  const valorStock = parseFloat(
-    document.getElementById("valorStock").value
-  );
+  const valorStock = parseFloat(document.getElementById("valorStock").value);
   const mes = document.getElementById("mesDividendoReg").value;
   const periodicidade = document.getElementById("periodicidade").value;
 
@@ -756,12 +875,16 @@ function guardarOuAtualizarAcaoFirebase() {
 
   // Se estiver a editar, usa o ID do documento em edição; senão, usa o ticker como ID
   const docId = idAcaoEmEdicao || ticker;
-  
-db.collection("acoesDividendos")
+
+  db.collection("acoesDividendos")
     .doc(docId)
     .set(dadosAcao, { merge: true }) // Cria ou atualiza sem apagar campos existentes
     .then(() => {
-      alert(idAcaoEmEdicao ? "✅ Ação atualizada com sucesso!" : "✅ Ação guardada com sucesso na Firebase!");
+      alert(
+        idAcaoEmEdicao
+          ? "✅ Ação atualizada com sucesso!"
+          : "✅ Ação guardada com sucesso na Firebase!"
+      );
       limparCamposSec6();
       idAcaoEmEdicao = null;
     })
@@ -771,35 +894,35 @@ db.collection("acoesDividendos")
     });
 }
 
-  if (idAcaoEmEdicao) {
-    // Atualizar ação existente
-    db.collection("acoesDividendos")
-      .doc(idAcaoEmEdicao)
-      .update(dadosAcao)
-      .then(() => {
-        alert("✅ Ação atualizada com sucesso!");
-        limparCamposSec6();
-        idAcaoEmEdicao = null;
-      })
-      .catch((error) => {
-        console.error("Erro ao atualizar:", error);
-        alert("❌ Erro ao atualizar. Tenta novamente.");
-      });
-  } else {
-    // Guardar nova ação
-    db.collection("acoesDividendos")
-      .add(dadosAcao)
-      .then(() => {
-        alert("✅ Ação guardada com sucesso na Firebase!");
-        limparCamposSec6();
-      })
-      .catch((error) => {
-        console.error("Erro ao guardar ação:", error);
-        alert(
-          "❌ Ocorreu um erro ao guardar. Verifica a ligação com a Firebase."
-        );
-      });
-  }
+if (idAcaoEmEdicao) {
+  // Atualizar ação existente
+  db.collection("acoesDividendos")
+    .doc(idAcaoEmEdicao)
+    .update(dadosAcao)
+    .then(() => {
+      alert("✅ Ação atualizada com sucesso!");
+      limparCamposSec6();
+      idAcaoEmEdicao = null;
+    })
+    .catch((error) => {
+      console.error("Erro ao atualizar:", error);
+      alert("❌ Erro ao atualizar. Tenta novamente.");
+    });
+} else {
+  // Guardar nova ação
+  db.collection("acoesDividendos")
+    .add(dadosAcao)
+    .then(() => {
+      alert("✅ Ação guardada com sucesso na Firebase!");
+      limparCamposSec6();
+    })
+    .catch((error) => {
+      console.error("Erro ao guardar ação:", error);
+      alert(
+        "❌ Ocorreu um erro ao guardar. Verifica a ligação com a Firebase."
+      );
+    });
+}
 
 //Eliminar um Registo
 function eliminarAcao(id) {
@@ -835,12 +958,27 @@ function fecharPopupReforco() {
 }
 
 function calcularMediaPonderada() {
-  const invest1 = parseFloat(document.getElementById("invest1").value.replace(",", "."));
-  const preco1 = parseFloat(document.getElementById("preco1").value.replace(",", "."));
-  const invest22 = parseFloat(document.getElementById("invest22").value.replace(",", "."));
-  const preco2 = parseFloat(document.getElementById("preco2").value.replace(",", "."));
+  const invest1 = parseFloat(
+    document.getElementById("invest1").value.replace(",", ".")
+  );
+  const preco1 = parseFloat(
+    document.getElementById("preco1").value.replace(",", ".")
+  );
+  const invest22 = parseFloat(
+    document.getElementById("invest22").value.replace(",", ".")
+  );
+  const preco2 = parseFloat(
+    document.getElementById("preco2").value.replace(",", ".")
+  );
 
-  if (!isNaN(invest1) && !isNaN(preco1) && !isNaN(invest22) && !isNaN(preco2) && preco1 > 0 && preco2 > 0) {
+  if (
+    !isNaN(invest1) &&
+    !isNaN(preco1) &&
+    !isNaN(invest22) &&
+    !isNaN(preco2) &&
+    preco1 > 0 &&
+    preco2 > 0
+  ) {
     const qtd1 = invest1 / preco1;
     const qtd2 = invest22 / preco2;
     const totalQtd = qtd1 + qtd2;
@@ -855,10 +993,11 @@ function calcularMediaPonderada() {
 
     document.getElementById("resultadoReforco").innerHTML = html;
   } else {
-    document.getElementById("resultadoReforco").innerHTML = "❌ Preencha todos os campos corretamente.";
+    document.getElementById("resultadoReforco").innerHTML =
+      "❌ Preencha todos os campos corretamente.";
   }
 }
-//Objetivo: Identificar, entre várias ações (com base em dados reais), qual é a mais provável de atingir 
+//Objetivo: Identificar, entre várias ações (com base em dados reais), qual é a mais provável de atingir
 // um lucro X com um investimento Y, considerando o preço da ação, o dividendo anual e eventualmente uma previsão de valorização.
 
 // Simulador de ações com base em investimento, crescimento esperado e lucro desejado
@@ -872,9 +1011,13 @@ function fecharSimulador() {
 }
 
 async function simular() {
-  const investimento = parseFloat(document.getElementById('inputInvestimento').value);
-  const crescimentoEstimado = parseFloat(document.getElementById('inputCrescimento').value) || 0;
-  const lucroDesejado = parseFloat(document.getElementById('inputLucro').value) || 0;
+  const investimento = parseFloat(
+    document.getElementById("inputInvestimento").value
+  );
+  const crescimentoEstimado =
+    parseFloat(document.getElementById("inputCrescimento").value) || 0;
+  const lucroDesejado =
+    parseFloat(document.getElementById("inputLucro").value) || 0;
 
   const db = firebase.firestore();
   const acoesRef = db.collection("acoesDividendos");
@@ -882,7 +1025,7 @@ async function simular() {
 
   let resultados = [];
 
-  snapshot.forEach(doc => {
+  snapshot.forEach((doc) => {
     const acao = doc.data();
 
     let preco = parseFloat(acao.valorStock);
@@ -906,21 +1049,26 @@ async function simular() {
       lucroValorizacao,
       lucroDividendos,
       lucroTotal,
-      diferenca: Math.abs(lucroTotal - lucroDesejado)
+      diferenca: Math.abs(lucroTotal - lucroDesejado),
     });
   });
 
-  const resultado = document.getElementById('resultadoSimulacao');
+  const resultado = document.getElementById("resultadoSimulacao");
 
   if (resultados.length === 0) {
-    resultado.innerHTML = "<p>⚠️ Nenhuma ação válida para este investimento.</p>";
+    resultado.innerHTML =
+      "<p>⚠️ Nenhuma ação válida para este investimento.</p>";
     return;
   }
 
   // Ordenar pelas mais próximas do lucro desejado (menor diferença absoluta)
-  const topMaisProximas = resultados.sort((a, b) => a.diferenca - b.diferenca).slice(0, 10);
+  const topMaisProximas = resultados
+    .sort((a, b) => a.diferenca - b.diferenca)
+    .slice(0, 10);
 
-  let html = `<h3>🔍 Top 10 mais próximas do lucro desejado (${lucroDesejado.toFixed(2)}€)</h3>`;
+  let html = `<h3>🔍 Top 10 mais próximas do lucro desejado (${lucroDesejado.toFixed(
+    2
+  )}€)</h3>`;
 
   topMaisProximas.forEach((acao, i) => {
     html += `
@@ -931,20 +1079,25 @@ async function simular() {
       <p>Quantidade a comprar: ${acao.quantidade}</p>
       <p>Lucro com valorização: €${acao.lucroValorizacao.toFixed(2)}</p>
       <p>Lucro com dividendos: €${acao.lucroDividendos.toFixed(2)}</p>
-      <p><strong>Lucro total estimado: €${acao.lucroTotal.toFixed(2)}</strong> (diferença: €${acao.diferenca.toFixed(2)})</p>
+      <p><strong>Lucro total estimado: €${acao.lucroTotal.toFixed(
+        2
+      )}</strong> (diferença: €${acao.diferenca.toFixed(2)})</p>
     `;
   });
 
   resultado.innerHTML = html;
 }
 
-
 function abrirPopupSimuladorGrafico() {
-  document.getElementById("popupSimuladorGrafico").classList.remove("popup hidden");
+  document
+    .getElementById("popupSimuladorGrafico")
+    .classList.remove("popup hidden");
 }
 
 function fecharPopupSimuladorGrafico() {
-  document.getElementById("popupSimuladorGrafico").classList.add("popup hidden");
+  document
+    .getElementById("popupSimuladorGrafico")
+    .classList.add("popup hidden");
 }
 
 //TP2
@@ -961,26 +1114,41 @@ function fecharSimuladorTP2() {
 }
 
 function calcularTP2() {
-  const tp1 = parseFloat(document.getElementById("tp1Input").value.replace(",", "."));
-  const investimento = parseFloat(document.getElementById("investimentoInput").value.replace(",", "."));
-  const lucroDesejado = parseFloat(document.getElementById("lucroDesejadoInput").value.replace(",", "."));
-  
+  const tp1 = parseFloat(
+    document.getElementById("tp1Input").value.replace(",", ".")
+  );
+  const investimento = parseFloat(
+    document.getElementById("investimentoInput").value.replace(",", ".")
+  );
+  const lucroDesejado = parseFloat(
+    document.getElementById("lucroDesejadoInput").value.replace(",", ".")
+  );
 
   const resultadoDiv = document.getElementById("resultadoTP2");
 
-  if (isNaN(tp1) || isNaN(investimento) || isNaN(lucroDesejado) || tp1 <= 0 || investimento <= 0) {
+  if (
+    isNaN(tp1) ||
+    isNaN(investimento) ||
+    isNaN(lucroDesejado) ||
+    tp1 <= 0 ||
+    investimento <= 0
+  ) {
     resultadoDiv.innerHTML = "❌ Preencha todos os campos corretamente.";
     return;
   }
 
   const numAcoes = investimento / tp1;
-  const tp2 = tp1 + (lucroDesejado / numAcoes);
-  const percent = ((tp2/tp1)-1)*100;
-    document.getElementById("percent_2").textContent = percent.toFixed(2) + "%";
+  const tp2 = tp1 + lucroDesejado / numAcoes;
+  const percent = (tp2 / tp1 - 1) * 100;
+  document.getElementById("percent_2").textContent = percent.toFixed(2) + "%";
 
   resultadoDiv.innerHTML = `
-    <p>📈 Para atingir um lucro de <strong>${lucroDesejado.toFixed(2)}€</strong>, a ação tem de atingir:</p>
-    <p>🎯 <strong>TP2 = ${tp2.toFixed(2)}€ a uma taxa de crescimento ${percent.toFixed(2)}%</strong></p>
+    <p>📈 Para atingir um lucro de <strong>${lucroDesejado.toFixed(
+      2
+    )}€</strong>, a ação tem de atingir:</p>
+    <p>🎯 <strong>TP2 = ${tp2.toFixed(
+      2
+    )}€ a uma taxa de crescimento ${percent.toFixed(2)}%</strong></p>
   `;
 }
 
@@ -999,7 +1167,7 @@ function somarLucros() {
 
   // Soma os lucros
   let totalLucro = 0;
-  simulacoes.forEach(sim => {
+  simulacoes.forEach((sim) => {
     totalLucro += Number(sim.lucro || 0);
   });
 

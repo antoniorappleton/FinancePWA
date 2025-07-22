@@ -232,7 +232,8 @@
             step="0.01"
             oninput="atualizarTP2_4()"
           />
-          TP2: <span id="tp2_4">-</span></label>
+          TP2: <span id="tp2_4">-</span></label
+        >
         <label
           >Lucro Desejado: <input type="number" id="lucro_4" step="0.01"
         /></label>
@@ -312,22 +313,21 @@
 
             <button onclick="simularEGUardar()">Simular com gráfico</button>
             <button onclick="somarLucros()">Somar Lucros</button>
-            
 
-              <table id="tabelaSimulacoes">
-                <thead>
-                  <tr>
-                    <th>Ação</th>
-                    <th>TP1</th>
-                    <th>TP2</th>
-                    <th>Investido</th>
-                    <th>Lucro</th>
-                    <th>% Crescimento</th>
-                  </tr>
-                </thead>
-                <tbody></tbody>
-              </table>     
-           
+            <table id="tabelaSimulacoes">
+              <thead>
+                <tr>
+                  <th>Ação</th>
+                  <th>TP1</th>
+                  <th>TP2</th>
+                  <th>Investido</th>
+                  <th>Lucro</th>
+                  <th>% Crescimento</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+
             <canvas id="graficoLucro" height="200"></canvas>
 
             <div class="buttons">
@@ -620,10 +620,44 @@
         <div class="buttons">
           <button onclick="filtrarAcoes()">🔎 Aplicar Filtros</button>
           <button onclick="fecharPopupFiltro()">❌ Fechar</button>
+          <button onclick="prepararSimulacaoBloco()">Simular Ações Selecionadas</button>
         </div>
+
+        <!--prepararSimulacaoBloco-->
         <div id="resultadoFiltroMes" class="resultado-popup"></div>
       </div>
     </div>
+
+    <!-- SIMULAÇÃO EM BLOCO COMO POPUP -->
+    <div id="popupSimulacaoBloco" class="popup hidden">
+      <div class="popup-content">
+        <h3>📊 Simulação em Bloco</h3>
+        <p>Insere o montante total a investir:</p>
+        <input type="number" id="investimentoTotal" placeholder="Ex: 5000" />
+
+        <div id="tabelaAcoesSelecionadas" class="tabela-wrapper">
+          <table class="tabela-bloco">
+            <thead>
+              <tr>
+                <th>Ação</th>
+                <th>Ticker</th>
+                <th>Preço Atual (€)</th>
+                <th>Dividendo (€)</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <div class="buttons">
+          <button onclick="calcularDistribuicao()">📈 Calcular Lucro Máximo</button>
+          <button onclick="fecharPopupSimulacaoBloco()">❌ Fechar</button>
+        </div>
+
+        <div id="resultadoDistribuicao" class="resultado-popup"></div>
+      </div>
+    </div>
+
     <script src="script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </body>
