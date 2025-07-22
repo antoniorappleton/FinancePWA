@@ -475,6 +475,8 @@ function enviarEmail() {
 
 //Menu 6 - Registar/Editar e Filtrar Empresas com Dividendos
 
+let acoesSelecionadasParaBloco = [];
+
 //Botão secção dos filtros
 function toggleFiltrosMes() {
   const filtrosDiv = document.getElementById("filtrosMesContainer");
@@ -541,24 +543,28 @@ function filtrarAcoes() {
           matchNome &&
           matchTicker
         ) {
+          const jaSelecionada = acoesSelecionadasParaBloco.some(
+            (a) => a.ticker === dados.ticker
+          );
+
           html += `
   <li>
-    <label style="display:flex; align-items:center; gap:10px">
-      <input type="checkbox" class="checkbox-selecao" data-nome="${
-        dados.nome
-      }" data-ticker="${dados.ticker}" data-valor="${
-            dados.valorStock || 0
-          }" data-dividendo="${dados.dividendo || 0}">
-      <div>
-        <strong>${dados.nome}</strong> (${dados.ticker})<br>
-        Setor: ${dados.setor} | Mercado: ${dados.mercado} | Dividendo: €${
+    <label>
+      <input
+        type="checkbox"
+        class="checkbox-selecao"
+        value='${JSON.stringify(dados)}'
+        onchange="atualizarSelecaoAcao(this)"
+        ${jaSelecionada ? "checked" : ""}
+      />
+      <strong>${dados.nome}</strong> (${dados.ticker})
+    </label><br>
+    Setor: ${dados.setor} | Mercado: ${dados.mercado} | Dividendo: €${
             dados.dividendo
-          } <br>
-        Mês: ${dados.mes} | Periodicidade: ${
+          } |
+    Mês: ${dados.mes} | Periodicidade: ${
             dados.periodicidade
-          } | Valor da Ação: €${dados.valorStock || "N/D"}
-      </div>
-    </label>
+          } | Valor da Ação: €${dados.valorStock || "N/D"}<br>
     <div class="botoes-acoes">
       <button title="Editar" onclick="editarAcao('${doc.id}', ${JSON.stringify(
             dados
@@ -569,8 +575,7 @@ function filtrarAcoes() {
           }, ${dados.dividendo || 0})">📈</button>
     </div>
   </li>
-`;
-          count++;
+`;          count++;
         }
       });
 
@@ -587,29 +592,60 @@ function filtrarAcoes() {
     });
 }
 
+//Atualizar Seleccionadas
+function atualizarSelecaoAcao(checkbox) {
+  const dados = JSON.parse(checkbox.value);
+  const index = acoesSelecionadasParaBloco.findIndex(
+    (a) => a.ticker === dados.ticker
+  );
+
+  if (checkbox.checked && index === -1) {
+    acoesSelecionadasParaBloco.push(dados);
+  } else if (!checkbox.checked && index !== -1) {
+    acoesSelecionadasParaBloco.splice(index, 1);
+  }
+}
+
 //Simular Ações Selecionadas
 function prepararSimulacaoBloco() {
-  const checkboxes = document.querySelectorAll(".checkbox-selecao:checked");
-
-  if (checkboxes.length === 0) {
-    alert("Seleciona pelo menos uma ação para simular em bloco.");
+  if (acoesSelecionadasParaBloco.length === 0) {
+    alert("⚠️ Nenhuma ação selecionada");
     return;
   }
 
-  const acoesSelecionadas = Array.from(checkboxes).map((cb) => ({
-    nome: cb.dataset.nome,
-    ticker: cb.dataset.ticker,
-    valorStock: parseFloat(cb.dataset.valor),
-    dividendo: parseFloat(cb.dataset.dividendo),
-  }));
+  const tabelaContainer = document.getElementById("tabelaAcoesSelecionadas");
+  tabelaContainer.innerHTML = "";
 
-  localStorage.setItem("acoesSelecionadas", JSON.stringify(acoesSelecionadas));
+  let html = `
+    <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Ticker</th>
+          <th>Valor (€)</th>
+          <th>Dividendo (€)</th>
+        </tr>
+      </thead>
+      <tbody>
+  `;
 
-  // Mostra popup e preenche
+  acoesSelecionadasParaBloco.forEach((dados) => {
+    html += `
+      <tr>
+        <td>${dados.nome}</td>
+        <td>${dados.ticker}</td>
+        <td>${dados.valorStock}</td>
+        <td>${dados.dividendo}</td>
+      </tr>
+    `;
+  });
+
+  html += "</tbody></table>";
+  tabelaContainer.innerHTML = html;
+
   document.getElementById("popupSimulacaoBloco").classList.remove("hidden");
-  preencherTabelaSimulacaoBloco(acoesSelecionadas);
-
 }
+
 
 //Mostrar as ações selecionada
 function preencherTabelaSimulacaoBloco(acoes) {
@@ -630,6 +666,7 @@ function preencherTabelaSimulacaoBloco(acoes) {
 //Fechar popup Bloco
 function fecharPopupSimulacaoBloco() {
   document.getElementById("popupSimulacaoBloco").classList.add("hidden");
+  acoesSelecionadasParaBloco = []; // limpar ações selecionadas
 }
 
 let acoesParaSimulacao = []; // <-- isto deve estar fora das funções, no topo do ficheiro .js
