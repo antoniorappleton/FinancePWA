@@ -30,11 +30,130 @@ function goToScreen2() {
 }
 
 function goToScreen1() {
+  carregarTop10Crescimento();
   document.getElementById("screen2").classList.add("hidden");
   document.getElementById("screen1").classList.remove("hidden");
 }
 
 // Secção 1 - Lucro e lucro total com dividendos
+setInterval(() => {
+  carregarTop10Crescimento();
+}, 30000); // 30 segundos (30000 milissegundos)
+
+document.addEventListener("DOMContentLoaded", () => {
+  carregarTop10Crescimento();
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  carregarTop7("1s"); // Carrega ao abrir
+
+  // Atualiza a cada 30 segundos
+  setInterval(() => {
+    carregarTop10Crescimento();
+  }, 30000);
+});
+
+
+//top 10 empresas da Firebase Crescimento
+function carregarTop10Crescimento(periodo = "1s") {
+  const lista = document.getElementById("listaTop10");
+  lista.innerHTML = "🔄 A carregar...";
+
+  db.collection("acoesDividendos")
+    .get()
+    .then((querySnapshot) => {
+      const acoes = [];
+
+      querySnapshot.forEach((doc) => {
+        const dados = doc.data();
+        let crescimento = 0;
+
+        if (periodo === "1s") crescimento = parseFloat(dados.taxaCrescimento_1s || 0);
+        else if (periodo === "1m") crescimento = parseFloat(dados.taxaCrescimento_1m || 0);
+        else if (periodo === "1ano") crescimento = parseFloat(dados.taxaCrescimento_1ano || 0);
+
+        if (crescimento > 0) {
+          acoes.push({
+            nome: dados.nome,
+            ticker: dados.ticker,
+            crescimento: crescimento.toFixed(2),
+          });
+        }
+      });
+
+      const top10 = acoes
+        .sort((a, b) => b.crescimento - a.crescimento)
+        .slice(0, 10);
+
+      if (top10.length === 0) {
+        lista.innerHTML = "<li>😕 Nenhuma ação com crescimento positivo.</li>";
+        return;
+      }
+
+      lista.innerHTML = top10
+        .map((acao) => `<li><strong>${acao.nome}</strong> (${acao.ticker}) — +${acao.crescimento}%</li>`)
+        .join("");
+    })
+    .catch((error) => {
+      console.error("Erro ao carregar Top 10:", error);
+      lista.innerHTML = "<li style='color:red;'>Erro ao carregar dados.</li>";
+    });
+}
+
+
+
+//Botões filtro top semana/mes/ano
+function carregarTop7(periodo) {
+  const lista = document.getElementById("listaTopAcoes");
+  lista.innerHTML = "🔄 A carregar...";
+
+  db.collection("acoesDividendos")
+    .get()
+    .then((querySnapshot) => {
+      const acoes = [];
+
+      querySnapshot.forEach((doc) => {
+        const dados = doc.data();
+        let crescimento = null;
+
+        if (periodo === "1s") crescimento = dados.taxaCrescimento_1s;
+        else if (periodo === "1m") crescimento = dados.taxaCrescimento_1m;
+        else if (periodo === "1ano") crescimento = dados.taxaCrescimento_1ano;
+
+        if (typeof crescimento === "number" && crescimento > 0) {
+          acoes.push({
+            nome: dados.nome,
+            ticker: dados.ticker,
+            crescimento: crescimento.toFixed(2),
+          });
+        }
+      });
+
+      const top7 = acoes
+        .sort((a, b) => b.crescimento - a.crescimento)
+        .slice(0, 7);
+
+      if (top7.length === 0) {
+        lista.innerHTML = "<li>😕 Nenhuma ação com crescimento positivo.</li>";
+        return;
+      }
+
+      lista.innerHTML = top7
+        .map(
+          (acao) =>
+            `<li><strong>${acao.nome}</strong> (${acao.ticker}) — 📈 +${acao.crescimento}%</li>`
+        )
+        .join("");
+    })
+    .catch((error) => {
+      console.error("Erro ao carregar top ações:", error);
+      lista.innerHTML =
+        "<li style='color:red;'>Erro ao carregar ações.</li>";
+    });
+}
+
+
+
 function calcularLucro1() {
   let tp1 = parseFloat(document.getElementById("tp1_1").value);
   let tp2 = parseFloat(document.getElementById("tp2_1").value);
@@ -575,7 +694,8 @@ function filtrarAcoes() {
           }, ${dados.dividendo || 0})">📈</button>
     </div>
   </li>
-`;          count++;
+`;
+          count++;
         }
       });
 
@@ -646,7 +766,6 @@ function prepararSimulacaoBloco() {
   document.getElementById("popupSimulacaoBloco").classList.remove("hidden");
 }
 
-
 //Mostrar as ações selecionada
 function preencherTabelaSimulacaoBloco(acoes) {
   const tbody = document.querySelector("#tabelaAcoesSelecionadas tbody");
@@ -670,7 +789,6 @@ function fecharPopupSimulacaoBloco() {
 }
 
 let acoesParaSimulacao = []; // <-- isto deve estar fora das funções, no topo do ficheiro .js
-
 
 //Lucro máximo
 function calcularDistribuicao() {

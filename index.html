@@ -25,7 +25,13 @@
     <!-- SCREEN 1 -->
     <div id="screen1" class="screen">
       <h1>INVESTMENT PORTEFOLIO</h1>
-      <h2>made by antonioappleton</h2>
+      <h3>made by antonioappleton</h3>
+      <h2>    </h2>
+      <h5>Top 10 Empresas com mais crescimento da semana</h5>
+      <div id="top10Crescimento" class="top10-box">
+        <ul id="listaTop10"></ul>
+      </div>
+
       <button onclick="goToScreen2()">Começar</button>
     </div>
 
@@ -620,7 +626,9 @@
         <div class="buttons">
           <button onclick="filtrarAcoes()">🔎 Aplicar Filtros</button>
           <button onclick="fecharPopupFiltro()">❌ Fechar</button>
-          <button onclick="prepararSimulacaoBloco()">Simular Ações Selecionadas</button>
+          <button onclick="prepararSimulacaoBloco()">
+            Simular Ações Selecionadas
+          </button>
         </div>
 
         <!--prepararSimulacaoBloco-->
@@ -650,7 +658,9 @@
         </div>
 
         <div class="buttons">
-          <button onclick="calcularDistribuicao()">📈 Calcular Lucro Máximo</button>
+          <button onclick="calcularDistribuicao()">
+            📈 Calcular Lucro Máximo
+          </button>
           <button onclick="fecharPopupSimulacaoBloco()">❌ Fechar</button>
         </div>
 
