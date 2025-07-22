@@ -90,7 +90,7 @@
 }
 
 
-.buttons-grid button {
+  .buttons-grid button {
     flex: 1 1 100%;
     max-width: 100%;
     padding: 15px;
@@ -133,7 +133,7 @@
     padding: 20px;
   }
   /* Estilo para ecrãs pequenos (telemóveis) */
-  @media (max-width: 600px) {
+  /*@media (max-width: 600px) {
     .screen {
       padding: 15px;
       max-width: 100%;
@@ -148,7 +148,7 @@
       font-size: 0.95rem;
       padding: 10px 12px;
     }
-  }
+  }*/
 
   .hidden {
     display: none;
