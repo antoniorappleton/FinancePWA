@@ -458,6 +458,7 @@
           <input type="search" id="tickerAcaoReg" placeholder="Ticker" />
           <select id="Setor" placeholder="Setor">
             <option value="">Selecione um Setor</option>
+            <option value="ETF">ETF</option>
             <option value="Alimentacao">Alimentação</option>
             <option value="Automovel">Automóvel</option>
             <option value="BensConsumidor">Bens de Consumo</option>
@@ -468,9 +469,7 @@
             <option value="Financas">Finanças</option>
             <option value="Imobiliario">Imobiliário</option>
             <option value="Industria">Indústria</option>
-            <option value="InfraestruturasEnergia">
-              Infraestruturas / Energia
-            </option>
+            <option value="InfraestruturasEnergia">Infraestruturas / Energia</option>
             <option value="Materiais">Materiais</option>
             <option value="Restauracao">Restauração</option>
             <option value="Saude">Saúde</option>
@@ -498,6 +497,7 @@
           />
           <select id="mesDividendoReg">
             <option value="">Seleciona o mês</option>
+            <option value="n/A">n/A</option>
             <option value="Janeiro">Janeiro</option>
             <option value="Fevereiro">Fevereiro</option>
             <option value="Março">Março</option>
@@ -513,6 +513,7 @@
           </select>
           <select id="periodicidade" placeholder="Periodicidade">
             <option value="">Seleciona a Frequência</option>
+            <option value="n/A">n/A</option>
             <option value="Anual">Anual</option>
             <option value="Semestral">Semestral</option>
             <option value="Trimestral">Trimestral</option>
@@ -571,6 +572,7 @@
         />
         <select id="filtroSetor">
           <option value="">Selecione um Setor</option>
+          <option value="ETF">ETF</option>
           <option value="Alimentacao">Alimentação</option>
           <option value="Automovel">Automóvel</option>
           <option value="BensConsumidor">Bens de Consumo</option>
@@ -581,9 +583,7 @@
           <option value="Financas">Finanças</option>
           <option value="Imobiliario">Imobiliário</option>
           <option value="Industria">Indústria</option>
-          <option value="InfraestruturasEnergia">
-            Infraestruturas / Energia
-          </option>
+          <option value="InfraestruturasEnergia">Infraestruturas / Energia</option>
           <option value="Materiais">Materiais</option>
           <option value="Restauracao">Restauração</option>
           <option value="Saude">Saúde</option>
@@ -593,6 +593,7 @@
 
         <select id="filtroPeriodicidade">
           <option value="">Selecione a Periodicidade</option>
+          <option value="n/A">n/A</option>
           <option value="Mensal">Mensal</option>
           <option value="Trimestral">Trimestral</option>
           <option value="Semestral">Semestral</option>
@@ -609,6 +610,7 @@
 
         <select id="filtroMes">
           <option value="">Selecione um Mês</option>
+          <option value="n/A">n/A</option>
           <option value="Janeiro">Janeiro</option>
           <option value="Fevereiro">Fevereiro</option>
           <option value="Março">Março</option>
@@ -626,9 +628,7 @@
         <div class="buttons">
           <button onclick="filtrarAcoes()">🔎 Aplicar Filtros</button>
           <button onclick="fecharPopupFiltro()">❌ Fechar</button>
-          <button onclick="prepararSimulacaoBloco()">
-            Simular Ações Selecionadas
-          </button>
+          <button onclick="prepararSimulacaoBloco()">Simular Ações Selecionadas</button>
         </div>
 
         <!--prepararSimulacaoBloco-->
@@ -641,8 +641,16 @@
       <div class="popup-content">
         <h3>📊 Simulação em Bloco</h3>
         <p>Insere o montante total a investir:</p>
-        <input type="number" id="investimentoTotal" placeholder="Ex: 5000" />
+        
+          <label for="periodoCrescimento">Período de Crescimento:</label>
+          <select id="periodoCrescimento">
+            <option value="taxaCrescimento_1s">1 Semana</option>
+            <option value="taxaCrescimento_1m">1 Mês</option>
+            <option value="taxaCrescimento_1a">1 Ano</option>
+          </select>
 
+        <input type="number" id="investimentoTotal" placeholder="Ex: 5000" />
+        
         <div id="tabelaAcoesSelecionadas" class="tabela-wrapper">
           <table class="tabela-bloco">
             <thead>
@@ -658,9 +666,7 @@
         </div>
 
         <div class="buttons">
-          <button onclick="calcularDistribuicao()">
-            📈 Calcular Lucro Máximo
-          </button>
+          <button onclick="calcularDistribuicao()">📈 Calcular Lucro Máximo</button>
           <button onclick="fecharPopupSimulacaoBloco()">❌ Fechar</button>
         </div>
 

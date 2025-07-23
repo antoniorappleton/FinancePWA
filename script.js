@@ -667,34 +667,15 @@ function filtrarAcoes() {
           );
 
           html += `
-  <li>
-    <label>
-      <input
-        type="checkbox"
-        class="checkbox-selecao"
-        value='${JSON.stringify(dados)}'
-        onchange="atualizarSelecaoAcao(this)"
-        ${jaSelecionada ? "checked" : ""}
-      />
-      <strong>${dados.nome}</strong> (${dados.ticker})
-    </label><br>
-    Setor: ${dados.setor} | Mercado: ${dados.mercado} | Dividendo: €${
-            dados.dividendo
-          } |
-    Mês: ${dados.mes} | Periodicidade: ${
-            dados.periodicidade
-          } | Valor da Ação: €${dados.valorStock || "N/D"}<br>
-    <div class="botoes-acoes">
-      <button title="Editar" onclick="editarAcao('${doc.id}', ${JSON.stringify(
-            dados
-          ).replace(/"/g, "&quot;")})">✏️</button>
-      <button title="Eliminar" onclick="eliminarAcao('${doc.id}')">🗑️</button>
-      <button title="Simular" onclick="prepararSimulacao('${dados.nome}', ${
-            dados.valorStock || 0
-          }, ${dados.dividendo || 0})">📈</button>
-    </div>
-  </li>
-`;
+              <li>
+                <input type="checkbox" class="checkbox-selecao"
+                      onchange='atualizarSelecao(this)'
+                      value='${JSON.stringify(dados)}' />
+                <strong>${dados.nome}</strong> (${dados.ticker})<br>
+                Setor: ${dados.setor} | Mercado: ${dados.mercado} | Dividendo: €${dados.dividendo} |
+                Mês: ${dados.mes} | Periodicidade: ${dados.periodicidade} | Valor da Ação: €${dados.valorStock || "N/D"}<br>
+              </li>
+              `;
           count++;
         }
       });
@@ -713,18 +694,27 @@ function filtrarAcoes() {
 }
 
 //Atualizar Seleccionadas
-function atualizarSelecaoAcao(checkbox) {
+function atualizarSelecao(checkbox) {
   const dados = JSON.parse(checkbox.value);
+
+  // Verifica se já está selecionada
   const index = acoesSelecionadasParaBloco.findIndex(
-    (a) => a.ticker === dados.ticker
+    (acao) => acao.ticker === dados.ticker
   );
 
-  if (checkbox.checked && index === -1) {
-    acoesSelecionadasParaBloco.push(dados);
-  } else if (!checkbox.checked && index !== -1) {
-    acoesSelecionadasParaBloco.splice(index, 1);
+  if (checkbox.checked) {
+    if (index === -1) {
+      acoesSelecionadasParaBloco.push(dados);
+    }
+  } else {
+    if (index > -1) {
+      acoesSelecionadasParaBloco.splice(index, 1);
+    }
   }
+
+  console.log("Selecionadas:", acoesSelecionadasParaBloco);
 }
+
 
 //Simular Ações Selecionadas
 function prepararSimulacaoBloco() {
@@ -782,120 +772,130 @@ function preencherTabelaSimulacaoBloco(acoes) {
     tbody.appendChild(linha);
   });
 }
+
 //Fechar popup Bloco
 function fecharPopupSimulacaoBloco() {
+  // 1. Fechar o popup
   document.getElementById("popupSimulacaoBloco").classList.add("hidden");
-  acoesSelecionadasParaBloco = []; // limpar ações selecionadas
+
+  // 2. Limpar a lista de ações selecionadas
+  acoesSelecionadasParaBloco = [];
+
+  // 3. Limpar o conteúdo da tabela de ações selecionadas
+  document.getElementById("tabelaAcoesSelecionadas").innerHTML = "";
+
+  // 4. Limpar o resultado da distribuição
+  document.getElementById("resultadoDistribuicao").innerHTML = "";
+
+  // 5. (Opcional) desmarcar checkboxes
+  const checkboxes = document.querySelectorAll(".checkbox-selecao");
+  checkboxes.forEach(cb => cb.checked = false);
 }
 
 let acoesParaSimulacao = []; // <-- isto deve estar fora das funções, no topo do ficheiro .js
 
 //Lucro máximo
 function calcularDistribuicao() {
-  const investimentoTotal = parseFloat(
-    document.getElementById("investimentoTotal").value
-  );
+  const investimentoTotal = parseFloat(document.getElementById("investimentoTotal").value);
   const resultadoDiv = document.getElementById("resultadoDistribuicao");
-  resultadoDiv.innerHTML = "";
 
-  if (isNaN(investimentoTotal) || investimentoTotal <= 0) {
-    resultadoDiv.innerHTML = `<p style="color:red;">💡 Introduz um valor válido a investir.</p>`;
+  if (!investimentoTotal || investimentoTotal <= 0) {
+    resultadoDiv.innerHTML = "<p style='color:red;'>⚠️ Introduz um valor de investimento válido.</p>";
     return;
   }
 
-  // Supondo que tens guardado as ações selecionadas aqui:
-  const acoesSelecionadas = window.acoesParaSimulacao || [];
+  if (!acoesSelecionadasParaBloco || acoesSelecionadasParaBloco.length === 0) {
+  resultadoDiv.innerHTML = "<p style='color:red;'>⚠️ Nenhuma ação selecionada.</p>";
+  return;
+}
 
-  if (acoesSelecionadas.length === 0) {
-    resultadoDiv.innerHTML = `<p style="color:red;">⚠️ Nenhuma ação selecionada.</p>`;
-    return;
-  }
 
-  // Calcular "peso" com base no rendimento (dividendo / preço)
-  const totalRentabilidade = acoesSelecionadas.reduce((acc, acao) => {
-    const rendimento = acao.dividendo / acao.valorStock;
-    return acc + rendimento;
-  }, 0);
+  
+  const tipoCrescimento = document.getElementById("periodoCrescimento").value || "taxaCrescimento_1s";
 
-  let html = `<h4>📊 Distribuição:</h4><ul>`;
-  let totalEstimadoLucro = 0;
 
-  acoesSelecionadas.forEach((acao) => {
-    const rendimento = acao.dividendo / acao.valorStock;
-    const proporcao = rendimento / totalRentabilidade;
-    const valorInvestido = investimentoTotal * proporcao;
-    const acoesCompradas = valorInvestido / acao.valorStock;
-    const lucro = acoesCompradas * acao.dividendo;
+  const acoesComLucro = acoesSelecionadasParaBloco.map((acao) => {
+    const preco = parseFloat(acao.valorStock || 0);
+    const dividendo = parseFloat(acao.dividendo || 0);
+    const taxa = parseFloat(acao[tipoCrescimento] || 0);
+    const dividendoAnual = dividirPeriodicidade(dividendo, acao.periodicidade);
 
-    totalEstimadoLucro += lucro;
+    const lucroUnidade = dividendoAnual + (preco * taxa / 100);
 
-    html += `<li>
-      <strong>${acao.nome}</strong> (${acao.ticker})<br>
-      Investido: €${valorInvestido.toFixed(
-        2
-      )} — Ações: ${acoesCompradas.toFixed(1)}<br>
-      Lucro estimado: <strong>€${lucro.toFixed(2)}</strong>
-    </li><br>`;
+    return {
+      ...acao,
+      preco,
+      dividendoAnual,
+      taxa,
+      lucroUnidade
+    };
+  }).sort((a, b) => b.lucroUnidade - a.lucroUnidade);
+
+  let restante = investimentoTotal;
+  let totalLucro = 0;
+  let distribuicao = [];
+
+  acoesComLucro.forEach((acao) => {
+    const preco = acao.preco;
+    if (preco <= 0) return;
+
+    const qtd = Math.floor(restante / preco);
+    const investido = qtd * preco;
+    const lucro = qtd * acao.lucroUnidade;
+
+    restante -= investido;
+    totalLucro += lucro;
+
+    distribuicao.push({
+      nome: acao.nome,
+      ticker: acao.ticker,
+      quantidade: qtd,
+      investido: investido.toFixed(2),
+      lucro: lucro.toFixed(2),
+      crescimento: `${acao.taxa.toFixed(2)}%`,
+      dividendo: acao.dividendoAnual.toFixed(2)
+    });
   });
 
-  html += `</ul><p><strong>💰 Lucro Total Estimado: €${totalEstimadoLucro.toFixed(
-    2
-  )}</strong></p>`;
+  
+let html = `
+  <table>
+    <thead>
+      <tr>
+        <th>Ação</th><th>Ticker</th><th>Qtd</th><th>Investido (€)</th><th>Lucro (€)</th><th>Tx Crescimento</th><th>Dividendo Anual</th>
+      </tr>
+    </thead>
+    <tbody>
+`;
+
+
+  distribuicao.forEach((linha) => {
+    html += `<tr>
+      <td>${linha.nome}</td>
+      <td>${linha.ticker}</td>
+      <td>${linha.quantidade}</td>
+      <td>${linha.investido}</td>
+      <td>${linha.lucro}</td>
+      <td>${linha.crescimento}</td>
+      <td>${linha.dividendo}</td>
+    </tr>`;
+  });
+
+  html += `</tbody></table><p><strong>Lucro Total Estimado: €${totalLucro.toFixed(2)}</strong></p>`;
   resultadoDiv.innerHTML = html;
 }
 
-//Atualizar a Firebase
-function atualizarAcaoFirebase() {
-  if (!idAcaoEmEdicao) {
-    alert("Nenhuma ação selecionada para edição.");
-    return;
+function dividirPeriodicidade(dividendo, periodicidade) {
+  switch ((periodicidade || "").toLowerCase()) {
+    case "mensal": return dividendo * 12;
+    case "trimestral": return dividendo * 4;
+    case "semestral": return dividendo * 2;
+    case "anual": return dividendo;
+    default: return dividendo; // fallback
   }
-
-  const nome = document.getElementById("nomeAcaoReg").value.trim();
-  const ticker = document.getElementById("tickerAcaoReg").value.trim();
-  const setor = document.getElementById("Setor").value;
-  const mercado = document.getElementById("Mercado").value;
-  const periodicidade = document.getElementById("Periodicidade").value;
-  const dividendo = parseFloat(
-    document.getElementById("valorDividendoReg").value
-  );
-  const mes = document.getElementById("mesDividendoReg").value;
-
-  if (
-    !nome ||
-    !ticker ||
-    !setor ||
-    !mercado ||
-    isNaN(dividendo) ||
-    !mes ||
-    !periodicidade
-  ) {
-    alert("Preenche todos os campos corretamente.");
-    return;
-  }
-
-  db.collection("acoesDividendos")
-    .doc(idAcaoEmEdicao)
-    .update({
-      nome,
-      ticker,
-      setor,
-      mercado,
-      dividendo,
-      periodicidade,
-      mes,
-      timestamp: new Date(),
-    })
-    .then(() => {
-      alert("✅ Ação atualizada com sucesso!");
-      limparCamposSec6();
-      idAcaoEmEdicao = null;
-    })
-    .catch((error) => {
-      console.error("Erro ao atualizar:", error);
-      alert("❌ Erro ao atualizar. Tenta novamente.");
-    });
 }
+
+
 
 function abrirPopupFiltro() {
   filtrarAcoes(); // mostra todas as empresas
