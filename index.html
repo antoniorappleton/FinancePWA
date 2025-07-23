@@ -632,9 +632,8 @@
         <div class="buttons">
           <button onclick="filtrarAcoes()">🔎 Aplicar Filtros</button>
           <button onclick="fecharPopupFiltro()">❌ Fechar</button>
-          <button onclick="prepararSimulacaoBloco()">
-            Simular Ações Selecionadas
-          </button>
+          <button onclick="prepararSimulacaoBloco()">Simular Ações Selecionadas</button>
+
         </div>
 
         <!--prepararSimulacaoBloco-->
@@ -653,56 +652,26 @@
           <option value="taxaCrescimento_1m">1 Mês</option>
           <option value="taxaCrescimento_1a">1 Ano</option>
         </select>
-            <div style="margin-bottom: 1em">
-              <label for="investimentoTotal"
-                ><strong>💰 Investimento Total (€):</strong></label
-              >
-              <input type="number" id="investimentoTotal" step="0.01" min="0" />
 
-              <div
-                style="
-                  margin-top: 0.5em;
-                  display: flex;
-                  gap: 1em;
-                  align-items: center;
-                "
-              >
-                <label>
-                  <input type="checkbox" id="usarTotal" checked />
-                  Usar todo o investimento
-                </label>
-                <label>
-                  <input type="checkbox" id="acoesCompletas" />
-                  Apenas ações completas
-                </label>
-              </div>
-            </div>
-
-        <div id="resultadoDistribuicao"></div>
-
-        <div id="tabelaAcoesSelecionadas" class="tabela-wrapper">
-          <table class="tabela-bloco">
-            <thead>
-              <tr>
-                <th>Ação</th>
-                <th>Ticker</th>
-                <th>Preço Atual (€)</th>
-                <th>Dividendo (€)</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
+        <div style="margin-bottom: 1em">
+          <label for="investimentoTotal"><strong>💰 Investimento Total (€):</strong></label>
+          <input type="number" id="investimentoTotal" step="0.01" min="0" />
+          <div style="margin-top: 0.5em; display: flex; gap: 1em; align-items: center;">
+            <label><input type="checkbox" id="usarTotal" checked /> Usar todo o investimento</label>
+            <label><input type="checkbox" id="acoesCompletas" /> Apenas ações completas</label>
+          </div>
         </div>
+
+        <!-- TABELAS -->
+        <div id="tabelaAcoesSelecionadas" class="tabela-wrapper"></div>
+        <div id="resultadoDistribuicao" class="tabela-wrapper"></div>
 
         <div class="buttons">
-          <!--<button onclick="calcularDistribuicao()">
-            📈 Calcular Lucro Máximo
-          </button>-->
           <button onclick="fecharPopupSimulacaoBloco()">❌ Fechar</button>
         </div>
-        <div id="resultadoDistribuicao" class="resultado-popup"></div>
       </div>
     </div>
+
 
     <script src="script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

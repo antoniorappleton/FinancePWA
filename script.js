@@ -596,6 +596,13 @@ function enviarEmail() {
 
 let acoesSelecionadasParaBloco = [];
 
+function selecionarAcao(acao) {
+  acoesSelecionadasParaBloco.push(acao);
+}
+function simularAcoesSelecionadas() {
+  calcularDistribuicao(); // já usa a variável global
+}
+
 //Botão secção dos filtros
 function toggleFiltrosMes() {
   const filtrosDiv = document.getElementById("filtrosMesContainer");
@@ -718,27 +725,19 @@ function atualizarSelecao(checkbox) {
 
 //Simular Ações Selecionadas
 function prepararSimulacaoBloco() {
-  if (acoesSelecionadasParaBloco.length === 0) {
+  if (!acoesSelecionadasParaBloco || acoesSelecionadasParaBloco.length === 0) {
     alert("⚠️ Nenhuma ação selecionada");
     return;
   }
 
+  // Montar a tabela de ações
   const tabelaContainer = document.getElementById("tabelaAcoesSelecionadas");
-  tabelaContainer.innerHTML = "";
-
   let html = `
     <table>
       <thead>
-        <tr>
-          <th>Nome</th>
-          <th>Ticker</th>
-          <th>Valor (€)</th>
-          <th>Dividendo (€)</th>
-        </tr>
-      </thead>
-      <tbody>
+        <tr><th>Nome</th><th>Ticker</th><th>Valor (€)</th><th>Dividendo (€)</th></tr>
+      </thead><tbody>
   `;
-
   acoesSelecionadasParaBloco.forEach((dados) => {
     html += `
       <tr>
@@ -749,12 +748,34 @@ function prepararSimulacaoBloco() {
       </tr>
     `;
   });
-
   html += "</tbody></table>";
   tabelaContainer.innerHTML = html;
 
+  // Abrir popup
   document.getElementById("popupSimulacaoBloco").classList.remove("hidden");
+
+  // Forçar o cálculo inicial (caso já haja valor)
+  calcularDistribuicao();
 }
+
+//Evento de input e seleção para atualizar distribuição
+document.getElementById("investimentoTotal").addEventListener("input", calcularDistribuicao);
+document.getElementById("periodoCrescimento").addEventListener("change", calcularDistribuicao);
+
+document.getElementById("usarTotal").addEventListener("change", () => {
+  if (usarTotal.checked) {
+    acoesCompletas.checked = false;
+  }
+  calcularDistribuicao();
+});
+
+document.getElementById("acoesCompletas").addEventListener("change", () => {
+  if (acoesCompletas.checked) {
+    usarTotal.checked = false;
+  }
+  calcularDistribuicao();
+});
+
 
 //Mostrar as ações selecionada
 function preencherTabelaSimulacaoBloco(acoes) {
@@ -775,22 +796,25 @@ function preencherTabelaSimulacaoBloco(acoes) {
 
 //Fechar popup Bloco
 function fecharPopupSimulacaoBloco() {
-  // 1. Fechar o popup
   document.getElementById("popupSimulacaoBloco").classList.add("hidden");
 
-  // 2. Limpar a lista de ações selecionadas
-  acoesSelecionadasParaBloco = [];
-
-  // 3. Limpar o conteúdo da tabela de ações selecionadas
+  // Limpar campos
+  document.getElementById("investimentoTotal").value = "";
+  document.getElementById("resultadoDistribuicao").innerHTML = "";
   document.getElementById("tabelaAcoesSelecionadas").innerHTML = "";
 
-  // 4. Limpar o resultado da distribuição
-  document.getElementById("resultadoDistribuicao").innerHTML = "";
+  // Desmarcar checkboxes
+  document.getElementById("usarTotal").checked = true;
+  document.getElementById("acoesCompletas").checked = false;
 
-  // 5. (Opcional) desmarcar checkboxes
+  // Limpar ações selecionadas
+  acoesSelecionadasParaBloco = [];
+
+  // Desmarcar checkboxes visuais fora do popup
   const checkboxes = document.querySelectorAll(".checkbox-selecao");
   checkboxes.forEach(cb => cb.checked = false);
 }
+
 
 let acoesParaSimulacao = []; // <-- isto deve estar fora das funções, no topo do ficheiro .js
 
