@@ -53,7 +53,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }, 30000);
 });
 
-
 //top 10 empresas da Firebase Crescimento
 function carregarTop10Crescimento(periodo = "1s") {
   const lista = document.getElementById("listaTop10");
@@ -99,7 +98,6 @@ function carregarTop10Crescimento(periodo = "1s") {
       lista.innerHTML = "<li style='color:red;'>Erro ao carregar dados.</li>";
     });
 }
-
 
 
 //Botões filtro top semana/mes/ano
@@ -151,7 +149,6 @@ function carregarTop7(periodo) {
         "<li style='color:red;'>Erro ao carregar ações.</li>";
     });
 }
-
 
 
 function calcularLucro1() {
@@ -722,7 +719,6 @@ function atualizarSelecao(checkbox) {
   console.log("Selecionadas:", acoesSelecionadasParaBloco);
 }
 
-
 //Simular Ações Selecionadas
 function prepararSimulacaoBloco() {
   if (!acoesSelecionadasParaBloco || acoesSelecionadasParaBloco.length === 0) {
@@ -758,25 +754,6 @@ function prepararSimulacaoBloco() {
   calcularDistribuicao();
 }
 
-//Evento de input e seleção para atualizar distribuição
-document.getElementById("investimentoTotal").addEventListener("input", calcularDistribuicao);
-document.getElementById("periodoCrescimento").addEventListener("change", calcularDistribuicao);
-
-document.getElementById("usarTotal").addEventListener("change", () => {
-  if (usarTotal.checked) {
-    acoesCompletas.checked = false;
-  }
-  calcularDistribuicao();
-});
-
-document.getElementById("acoesCompletas").addEventListener("change", () => {
-  if (acoesCompletas.checked) {
-    usarTotal.checked = false;
-  }
-  calcularDistribuicao();
-});
-
-
 //Mostrar as ações selecionada
 function preencherTabelaSimulacaoBloco(acoes) {
   const tbody = document.querySelector("#tabelaAcoesSelecionadas tbody");
@@ -796,25 +773,22 @@ function preencherTabelaSimulacaoBloco(acoes) {
 
 //Fechar popup Bloco
 function fecharPopupSimulacaoBloco() {
+  // 1. Fechar o popup
   document.getElementById("popupSimulacaoBloco").classList.add("hidden");
 
-  // Limpar campos
-  document.getElementById("investimentoTotal").value = "";
-  document.getElementById("resultadoDistribuicao").innerHTML = "";
-  document.getElementById("tabelaAcoesSelecionadas").innerHTML = "";
-
-  // Desmarcar checkboxes
-  document.getElementById("usarTotal").checked = true;
-  document.getElementById("acoesCompletas").checked = false;
-
-  // Limpar ações selecionadas
+  // 2. Limpar a lista de ações selecionadas
   acoesSelecionadasParaBloco = [];
 
-  // Desmarcar checkboxes visuais fora do popup
+  // 3. Limpar o conteúdo da tabela de ações selecionadas
+  document.getElementById("tabelaAcoesSelecionadas").innerHTML = "";
+
+  // 4. Limpar o resultado da distribuição
+  document.getElementById("resultadoDistribuicao").innerHTML = "";
+
+  // 5. (Opcional) desmarcar checkboxes
   const checkboxes = document.querySelectorAll(".checkbox-selecao");
   checkboxes.forEach(cb => cb.checked = false);
 }
-
 
 let acoesParaSimulacao = []; // <-- isto deve estar fora das funções, no topo do ficheiro .js
 
@@ -946,7 +920,6 @@ function dividirPeriodicidade(dividendo, periodicidade) {
     default: return dividendo; // fallback
   }
 }
-
 
 
 function abrirPopupFiltro() {
