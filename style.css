@@ -959,3 +959,49 @@
   .tabela-bloco tbody tr:hover {
     background-color: #eef5ff;
   }
+
+  /*investimento completo ou parcelar*/
+  input[type="checkbox"] {
+    transform: scale(1.2);
+    margin-right: 0.4em;
+    cursor: pointer;
+  }
+
+  label {
+    font-family: Arial, sans-serif;
+    font-size: 0.95em;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1em;
+  }
+
+  th, td {
+    border: 1px solid #ccc;
+    padding: 0.5em;
+    text-align: center;
+  }
+
+  th {
+    background-color: #f0f0f0;
+  }
+
+  #resultadoDistribuicao {
+  position: relative;
+  overflow: visible;
+  z-index: 0;
+}
+
+#resultadoDistribuicao table {
+  margin-bottom: 1em;
+  z-index: 1;
+}
+
+#resultadoDistribuicao p {
+  margin-top: 0.5em;
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #333;
+}

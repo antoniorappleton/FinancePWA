@@ -26,7 +26,7 @@
     <div id="screen1" class="screen">
       <h1>INVESTMENT PORTEFOLIO</h1>
       <h3>made by antonioappleton</h3>
-      <h2>    </h2>
+      <h2></h2>
       <h5>Top 10 Empresas com mais crescimento da semana</h5>
       <div id="top10Crescimento" class="top10-box">
         <ul id="listaTop10"></ul>
@@ -469,7 +469,9 @@
             <option value="Finanças">Finanças</option>
             <option value="Imobiliário">Imobiliário</option>
             <option value="Indústria">Indústria</option>
-            <option value="Infraestruturas / Energia">Infraestruturas / Energia</option>
+            <option value="Infraestruturas / Energia">
+              Infraestruturas / Energia
+            </option>
             <option value="Materiais">Materiais</option>
             <option value="Restauração">Restauração</option>
             <option value="Saúde">Saúde</option>
@@ -572,23 +574,25 @@
         />
         <select id="filtroSetor">
           <option value="">Selecione um Setor</option>
-            <option value="ETF">ETF</option>
-            <option value="Alimentção">Alimentação</option>
-            <option value="Automovel">Automóvel</option>
-            <option value="Bens de Consumo">Bens de Consumo</option>
-            <option value="Consumo Cíclico">Consumo Cíclico</option>
-            <option value="Consumo Defensivo">Consumo Defensivo</option>
-            <option value="Defesa">Defesa</option>
-            <option value="Energia">Energia</option>
-            <option value="Finanças">Finanças</option>
-            <option value="Imobiliário">Imobiliário</option>
-            <option value="Indústria">Indústria</option>
-            <option value="Infraestruturas / Energia">Infraestruturas / Energia</option>
-            <option value="Materiais">Materiais</option>
-            <option value="Restauração">Restauração</option>
-            <option value="Saúde">Saúde</option>
-            <option value="Tecnologia">Tecnologia</option>
-            <option value="Telecomunicações">Telecomunicações</option>
+          <option value="ETF">ETF</option>
+          <option value="Alimentção">Alimentação</option>
+          <option value="Automovel">Automóvel</option>
+          <option value="Bens de Consumo">Bens de Consumo</option>
+          <option value="Consumo Cíclico">Consumo Cíclico</option>
+          <option value="Consumo Defensivo">Consumo Defensivo</option>
+          <option value="Defesa">Defesa</option>
+          <option value="Energia">Energia</option>
+          <option value="Finanças">Finanças</option>
+          <option value="Imobiliário">Imobiliário</option>
+          <option value="Indústria">Indústria</option>
+          <option value="Infraestruturas / Energia">
+            Infraestruturas / Energia
+          </option>
+          <option value="Materiais">Materiais</option>
+          <option value="Restauração">Restauração</option>
+          <option value="Saúde">Saúde</option>
+          <option value="Tecnologia">Tecnologia</option>
+          <option value="Telecomunicações">Telecomunicações</option>
         </select>
 
         <select id="filtroPeriodicidade">
@@ -628,7 +632,9 @@
         <div class="buttons">
           <button onclick="filtrarAcoes()">🔎 Aplicar Filtros</button>
           <button onclick="fecharPopupFiltro()">❌ Fechar</button>
-          <button onclick="prepararSimulacaoBloco()">Simular Ações Selecionadas</button>
+          <button onclick="prepararSimulacaoBloco()">
+            Simular Ações Selecionadas
+          </button>
         </div>
 
         <!--prepararSimulacaoBloco-->
@@ -640,17 +646,40 @@
     <div id="popupSimulacaoBloco" class="popup hidden">
       <div class="popup-content">
         <h3>📊 Simulação em Bloco</h3>
-        <p>Insere o montante total a investir:</p>
-        
-          <label for="periodoCrescimento">Período de Crescimento:</label>
-          <select id="periodoCrescimento">
-            <option value="taxaCrescimento_1s">1 Semana</option>
-            <option value="taxaCrescimento_1m">1 Mês</option>
-            <option value="taxaCrescimento_1a">1 Ano</option>
-          </select>
 
-        <input type="number" id="investimentoTotal" placeholder="Ex: 5000" />
-        
+        <label for="periodoCrescimento">Período de Crescimento:</label>
+        <select id="periodoCrescimento">
+          <option value="taxaCrescimento_1s">1 Semana</option>
+          <option value="taxaCrescimento_1m">1 Mês</option>
+          <option value="taxaCrescimento_1a">1 Ano</option>
+        </select>
+            <div style="margin-bottom: 1em">
+              <label for="investimentoTotal"
+                ><strong>💰 Investimento Total (€):</strong></label
+              >
+              <input type="number" id="investimentoTotal" step="0.01" min="0" />
+
+              <div
+                style="
+                  margin-top: 0.5em;
+                  display: flex;
+                  gap: 1em;
+                  align-items: center;
+                "
+              >
+                <label>
+                  <input type="checkbox" id="usarTotal" checked />
+                  Usar todo o investimento
+                </label>
+                <label>
+                  <input type="checkbox" id="acoesCompletas" />
+                  Apenas ações completas
+                </label>
+              </div>
+            </div>
+
+        <div id="resultadoDistribuicao"></div>
+
         <div id="tabelaAcoesSelecionadas" class="tabela-wrapper">
           <table class="tabela-bloco">
             <thead>
@@ -666,10 +695,11 @@
         </div>
 
         <div class="buttons">
-          <button onclick="calcularDistribuicao()">📈 Calcular Lucro Máximo</button>
+          <!--<button onclick="calcularDistribuicao()">
+            📈 Calcular Lucro Máximo
+          </button>-->
           <button onclick="fecharPopupSimulacaoBloco()">❌ Fechar</button>
         </div>
-
         <div id="resultadoDistribuicao" class="resultado-popup"></div>
       </div>
     </div>

@@ -794,10 +794,29 @@ function fecharPopupSimulacaoBloco() {
 
 let acoesParaSimulacao = []; // <-- isto deve estar fora das funções, no topo do ficheiro .js
 
+//checkboxes para selecionar investimento completo ou parcelar
+document.getElementById("usarTotal").addEventListener("change", () => {
+    if (usarTotal.checked) {
+      acoesCompletas.checked = false;
+    }
+    calcularDistribuicao();
+  });
+
+  document.getElementById("acoesCompletas").addEventListener("change", () => {
+    if (acoesCompletas.checked) {
+      usarTotal.checked = false;
+    }
+    calcularDistribuicao();
+  });
+
+  document.getElementById("investimentoTotal").addEventListener("input", calcularDistribuicao);
+
 //Lucro máximo
 function calcularDistribuicao() {
   const investimentoTotal = parseFloat(document.getElementById("investimentoTotal").value);
   const resultadoDiv = document.getElementById("resultadoDistribuicao");
+  const usarTotal = document.getElementById("usarTotal").checked;
+  const apenasCompletas = document.getElementById("acoesCompletas").checked;
 
   if (!investimentoTotal || investimentoTotal <= 0) {
     resultadoDiv.innerHTML = "<p style='color:red;'>⚠️ Introduz um valor de investimento válido.</p>";
@@ -805,69 +824,78 @@ function calcularDistribuicao() {
   }
 
   if (!acoesSelecionadasParaBloco || acoesSelecionadasParaBloco.length === 0) {
-  resultadoDiv.innerHTML = "<p style='color:red;'>⚠️ Nenhuma ação selecionada.</p>";
-  return;
-}
+    resultadoDiv.innerHTML = "<p style='color:red;'>⚠️ Nenhuma ação selecionada.</p>";
+    return;
+  }
 
-
-  
   const tipoCrescimento = document.getElementById("periodoCrescimento").value || "taxaCrescimento_1s";
 
-
+  // 1. Enriquecer ações com dados calculados
   const acoesComLucro = acoesSelecionadasParaBloco.map((acao) => {
     const preco = parseFloat(acao.valorStock || 0);
     const dividendo = parseFloat(acao.dividendo || 0);
     const taxa = parseFloat(acao[tipoCrescimento] || 0);
     const dividendoAnual = dividirPeriodicidade(dividendo, acao.periodicidade);
-
     const lucroUnidade = dividendoAnual + (preco * taxa / 100);
+    const retornoPorEuro = lucroUnidade / preco;
 
     return {
       ...acao,
       preco,
       dividendoAnual,
       taxa,
-      lucroUnidade
+      lucroUnidade,
+      retornoPorEuro
     };
-  }).sort((a, b) => b.lucroUnidade - a.lucroUnidade);
+  });
 
-  let restante = investimentoTotal;
+  // 2. Calcular soma total de retorno por euro
+  const totalRetornoPorEuro = acoesComLucro.reduce((sum, a) => sum + a.retornoPorEuro, 0);
+  if (totalRetornoPorEuro === 0) {
+    resultadoDiv.innerHTML = "<p style='color:red;'>⚠️ As ações selecionadas não têm retorno estimado.</p>";
+    return;
+  }
+
   let totalLucro = 0;
   let distribuicao = [];
 
+  // 3. Distribuir o investimento proporcionalmente
   acoesComLucro.forEach((acao) => {
-    const preco = acao.preco;
-    if (preco <= 0) return;
+    const proporcao = acao.retornoPorEuro / totalRetornoPorEuro;
+    let valorInvestido = investimentoTotal * proporcao;
+    let qtd = valorInvestido / acao.preco;
 
-    const qtd = Math.floor(restante / preco);
-    const investido = qtd * preco;
+    if (apenasCompletas) {
+      qtd = Math.floor(qtd);
+      valorInvestido = qtd * acao.preco;
+    }
+
     const lucro = qtd * acao.lucroUnidade;
-
-    restante -= investido;
     totalLucro += lucro;
 
-    distribuicao.push({
-      nome: acao.nome,
-      ticker: acao.ticker,
-      quantidade: qtd,
-      investido: investido.toFixed(2),
-      lucro: lucro.toFixed(2),
-      crescimento: `${acao.taxa.toFixed(2)}%`,
-      dividendo: acao.dividendoAnual.toFixed(2)
-    });
+    if (qtd > 0) {
+      distribuicao.push({
+        nome: acao.nome,
+        ticker: acao.ticker,
+        quantidade: apenasCompletas ? qtd : qtd.toFixed(4),
+        investido: valorInvestido.toFixed(2),
+        lucro: lucro.toFixed(2),
+        crescimento: `${acao.taxa.toFixed(2)}%`,
+        dividendo: acao.dividendoAnual.toFixed(2)
+      });
+    }
   });
 
-  
-let html = `
-  <table>
-    <thead>
-      <tr>
-        <th>Ação</th><th>Ticker</th><th>Qtd</th><th>Investido (€)</th><th>Lucro (€)</th><th>Tx Crescimento</th><th>Dividendo Anual</th>
-      </tr>
-    </thead>
-    <tbody>
-`;
-
+  // 4. Apresentar resultados
+  let html = `
+    <table>
+      <thead>
+        <tr>
+          <th>Ação</th><th>Ticker</th><th>Qtd</th><th>Investido (€)</th><th>Lucro (€)</th><th>Tx Crescimento</th><th>Dividendo Anual</th>
+        </tr>
+      </thead>
+      <tbody>
+  `;
 
   distribuicao.forEach((linha) => {
     html += `<tr>
