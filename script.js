@@ -1465,7 +1465,6 @@ async function verificarProgressoObjetivo(tickerAtual) {
     alert("❌ Erro ao consultar Firestore.");
   }
 }
-
 //função para mostrar situação atual:
 function analisarObjetivos(tickerAtual, precoAtual) {
   db.collection("ativos")
@@ -1526,7 +1525,6 @@ function obterPrecoAtualDoAtivo(ticker) {
     .then((data) => data.precoAtual || null)
     .catch(() => null);
 }
-
 //lista de progressos
 async function listarProgressoDosAtivos() {
   const container = document.getElementById("listaProgressoAtivos");
@@ -1553,56 +1551,6 @@ async function listarProgressoDosAtivos() {
     container.innerHTML = "❌ Erro ao carregar progresso.";
   }
 }
-
-async function verificarProgressoDeItem(data) {
-  try {
-    const cotacaoSnap = await db.collection("acoesDividendos").doc(data.ticker).get();
-
-    if (!cotacaoSnap.exists) {
-      return `<strong>${data.nome} (${data.ticker})</strong><br>❌ Cotação não encontrada.`;
-    }
-
-    const valorAtual = cotacaoSnap.data().valorStock;
-    const totalInvestido = data.precoCompra * data.quantidade;
-    const valorTotalAtual = valorAtual * data.quantidade;
-
-    let progresso = 0;
-    let mensagem = "";
-
-    if (data.tipoObjetivo === "lucro") {
-      const lucroAtual = valorTotalAtual - totalInvestido;
-      progresso = (lucroAtual / data.objetivoFinanceiro) * 100;
-      const tpNecessario = (totalInvestido + data.objetivoFinanceiro) / data.quantidade;
-
-      mensagem = `
-        🎯 Lucro alvo: €${data.objetivoFinanceiro.toFixed(2)}<br>
-        📈 Progresso: ${progresso.toFixed(1)}%<br>
-        💰 Preço atual: €${valorAtual.toFixed(2)}<br>
-        🎯 TP2 necessário: €${tpNecessario.toFixed(2)}
-      `;
-    } else if (data.tipoObjetivo === "valorFinal") {
-      progresso = (valorTotalAtual / data.objetivoFinanceiro) * 100;
-      mensagem = `
-        🎯 Valor alvo: €${data.objetivoFinanceiro.toFixed(2)}<br>
-        📈 Progresso: ${progresso.toFixed(1)}%<br>
-        💼 Valor atual: €${valorTotalAtual.toFixed(2)}
-      `;
-    } else if (data.tipoObjetivo === "quantidade") {
-      progresso = (data.quantidade / data.objetivoFinanceiro) * 100;
-      mensagem = `
-        🎯 Quantidade alvo: ${data.objetivoFinanceiro}<br>
-        📈 Progresso: ${progresso.toFixed(1)}%<br>
-        ✅ Quantidade atual: ${data.quantidade}
-      `;
-    }
-
-    return `<strong>${data.nome} (${data.ticker})</strong><br>${mensagem}`;
-  } catch (err) {
-    return `<strong>${data.nome} (${data.ticker})</strong><br>❌ Erro ao consultar cotação.`;
-  }
-}
-
-
 
 
 async function verificarProgressoDeItem(data) {
@@ -1675,8 +1623,6 @@ async function verificarProgressoDeItem(data) {
     return `<strong>${data.nome} (${data.ticker})</strong><br>❌ Erro ao consultar cotação.`;
   }
 }
-
-
 
 function abrirPopupProgresso() {
   document.getElementById("popupProgresso").classList.remove("hidden");
