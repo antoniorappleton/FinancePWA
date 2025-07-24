@@ -291,7 +291,7 @@ function voltarMenuSecoes() {
 
 function abrirSecao(num) {
   document.getElementById("screen2").classList.add("hidden");
-  for (let i = 1; i <= 4; i++) {
+  for (let i = 1; i <= 7; i++) {
     document.getElementById(`sec${i}Screen`).classList.add("hidden");
   }
   document.getElementById(`sec${num}Screen`).classList.remove("hidden");
@@ -1293,43 +1293,9 @@ function fecharSimuladorTP2() {
   document.getElementById("lucroDesejadoInput").value = "";
 }
 
-function calcularTP2() {
-  const tp1 = parseFloat(
-    document.getElementById("tp1Input").value.replace(",", ".")
-  );
-  const investimento = parseFloat(
-    document.getElementById("investimentoInput").value.replace(",", ".")
-  );
-  const lucroDesejado = parseFloat(
-    document.getElementById("lucroDesejadoInput").value.replace(",", ".")
-  );
-
-  const resultadoDiv = document.getElementById("resultadoTP2");
-
-  if (
-    isNaN(tp1) ||
-    isNaN(investimento) ||
-    isNaN(lucroDesejado) ||
-    tp1 <= 0 ||
-    investimento <= 0
-  ) {
-    resultadoDiv.innerHTML = "❌ Preencha todos os campos corretamente.";
-    return;
-  }
-
-  const numAcoes = investimento / tp1;
-  const tp2 = tp1 + lucroDesejado / numAcoes;
-  const percent = (tp2 / tp1 - 1) * 100;
-  document.getElementById("percent_2").textContent = percent.toFixed(2) + "%";
-
-  resultadoDiv.innerHTML = `
-    <p>📈 Para atingir um lucro de <strong>${lucroDesejado.toFixed(
-      2
-    )}€</strong>, a ação tem de atingir:</p>
-    <p>🎯 <strong>TP2 = ${tp2.toFixed(
-      2
-    )}€ a uma taxa de crescimento ${percent.toFixed(2)}%</strong></p>
-  `;
+function calcularTp2(precoCompra, lucroAlvo, quantidade) {
+  if (!precoCompra || !lucroAlvo || !quantidade) return 0;
+  return precoCompra + lucroAlvo / quantidade;
 }
 
 function abrirPopupSimulacao() {
@@ -1368,4 +1334,398 @@ function somarLucros() {
   `;
 
   corpoTabela.appendChild(linhaTotal);
+}
+function selecionarTudoCheckboxes(checkboxSelecionarTudo) {
+  const checkboxes = document.querySelectorAll("#listaAcoesCheckbox .checkboxAcao");
+  checkboxes.forEach(cb => {
+    cb.checked = checkboxSelecionarTudo.checked;
+  });
+}
+
+
+
+//Registo de compra de acçoes
+collection(db, "ativos")
+function guardarCompraAcaoOuEtf() {
+  const nome = document.getElementById("nomeAtivo").value.trim();
+  const ticker = document.getElementById("tickerAtivo").value.trim().toUpperCase();
+  const tipoAtivo = document.getElementById("tipoAtivo").value;
+  const precoCompra = parseFloat(document.getElementById("precoCompra").value);
+  const quantidade = parseFloat(document.getElementById("quantidade").value);
+  const setor = document.getElementById("setorCompra").value.trim();
+  const mercado = document.getElementById("mercadoCompra").value.trim();
+  const tipoObjetivo = document.getElementById("tipoObjetivo").value;
+  const objetivoFinanceiro = parseFloat(document.getElementById("objetivoFinanceiro").value);
+
+  if (!nome || !ticker || isNaN(precoCompra) || isNaN(quantidade) || isNaN(objetivoFinanceiro)) {
+    alert("⚠️ Preenche todos os campos obrigatórios.");
+    return;
+  }
+
+  const dados = {
+    nome,
+    ticker,
+    tipoAtivo,
+    precoCompra,
+    quantidade,
+    setor,
+    mercado,
+    tipoObjetivo,
+    objetivoFinanceiro
+  };
+
+  db.collection("ativos")
+    .add(dados)
+    .then(() => {
+      alert("✅ Compra registada com sucesso!");
+      // Limpar campos
+      document.querySelectorAll("#sec7Screen input").forEach((el) => (el.value = ""));
+    })
+    .catch((error) => {
+      console.error("Erro ao guardar:", error);
+      alert("❌ Erro ao guardar dados.");
+    });
+}
+
+//Analisar progresso do objetivo (por ticker)
+async function verificarProgressoObjetivo(tickerAtual) {
+  try {
+    // 1. Buscar a compra em 'ativos'
+    const ativosSnapshot = await db
+      .collection("ativos")
+      .where("ticker", "==", tickerAtual.toUpperCase())
+      .get();
+
+    if (ativosSnapshot.empty) {
+      alert("⚠️ Nenhum ativo encontrado com esse ticker.");
+      return;
+    }
+
+    let totalInvestido = 0;
+    let totalQuantidade = 0;
+    let tipoObjetivo = "";
+    let objetivoFinanceiro = 0;
+    let nome = "";
+
+    ativosSnapshot.forEach((doc) => {
+      const data = doc.data();
+      totalInvestido += data.precoCompra * data.quantidade;
+      totalQuantidade += data.quantidade;
+      tipoObjetivo = data.tipoObjetivo;
+      objetivoFinanceiro = data.objetivoFinanceiro;
+      nome = data.nome;
+    });
+
+    // 2. Buscar o preço atual na coleção 'acoesDividendos'
+    const cotacaoSnap = await db.collection("acoesDividendos").doc(tickerAtual).get();
+    if (!cotacaoSnap.exists) {
+      alert("⚠️ Cotação não encontrada para esse ticker.");
+      return;
+    }
+
+    const valorAtual = cotacaoSnap.data().valorStock;
+    const valorTotalAtual = valorAtual * totalQuantidade;
+
+    let progresso = 0;
+    let mensagem = "";
+
+    if (tipoObjetivo === "lucro") {
+      const lucroAtual = valorTotalAtual - totalInvestido;
+      progresso = (lucroAtual / objetivoFinanceiro) * 100;
+      const lucroEmFalta = objetivoFinanceiro - lucroAtual;
+      const tpNecessario = (totalInvestido + objetivoFinanceiro) / totalQuantidade;
+      mensagem = `
+        🎯 Objetivo: Lucro de €${objetivoFinanceiro.toFixed(2)}<br>
+        📊 Progresso: ${progresso.toFixed(1)}%<br>
+        💰 Preço atual: €${valorAtual.toFixed(2)}<br>
+        🎯 Preço alvo necessário (TP2): €${tpNecessario.toFixed(2)}
+      `;
+    } else if (tipoObjetivo === "valorFinal") {
+      progresso = (valorTotalAtual / objetivoFinanceiro) * 100;
+      mensagem = `
+        🎯 Objetivo: Valor final de €${objetivoFinanceiro.toFixed(2)}<br>
+        📊 Progresso: ${progresso.toFixed(1)}%<br>
+        💰 Valor atual da posição: €${valorTotalAtual.toFixed(2)}
+      `;
+    } else if (tipoObjetivo === "quantidade") {
+      progresso = (totalQuantidade / objetivoFinanceiro) * 100;
+      mensagem = `
+        🎯 Objetivo: ${objetivoFinanceiro} unidades<br>
+        📊 Progresso: ${progresso.toFixed(1)}%<br>
+        💼 Já tens: ${totalQuantidade} unidades
+      `;
+    }
+
+    document.getElementById("analiseResultados").innerHTML = `
+      <h3>${nome} (${tickerAtual})</h3>
+      <p>${mensagem}</p>
+    `;
+  } catch (error) {
+    console.error("Erro ao analisar objetivo:", error);
+    alert("❌ Erro ao consultar Firestore.");
+  }
+}
+
+//função para mostrar situação atual:
+function analisarObjetivos(tickerAtual, precoAtual) {
+  db.collection("ativos")
+    .where("ticker", "==", tickerAtual.toUpperCase())
+    .get()
+    .then((querySnapshot) => {
+      if (querySnapshot.empty) {
+        alert("⚠️ Nenhuma compra encontrada para esse ticker.");
+        return;
+      }
+
+      let totalInvestido = 0;
+      let totalQuantidade = 0;
+      let objetivoFinanceiro = 0;
+      let nomeAtivo = "";
+
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        totalInvestido += data.valorInvestido || 0; // corrigido: era 'totalInvestido'
+        totalQuantidade += data.quantidade || 0;
+        objetivoFinanceiro = data.objetivoFinanceiro || 0;
+        nomeAtivo = data.nome;
+      });
+
+      const valorAtual = totalQuantidade * precoAtual;
+      const lucroAtual = valorAtual - totalInvestido;
+      const faltaParaObjetivo = objetivoFinanceiro - valorAtual;
+
+      let html = `
+        <h3>📈 Situação Atual: ${nomeAtivo} (${tickerAtual.toUpperCase()})</h3>
+        <ul>
+          <li><strong>Total Investido:</strong> €${totalInvestido.toFixed(2)}</li>
+          <li><strong>Quantidade Total:</strong> ${totalQuantidade}</li>
+          <li><strong>Preço Atual:</strong> €${precoAtual.toFixed(2)}</li>
+          <li><strong>Valor Atual:</strong> €${valorAtual.toFixed(2)}</li>
+          <li><strong>Lucro/Perda:</strong> €${lucroAtual.toFixed(2)}</li>
+          <li><strong>Objetivo Financeiro:</strong> €${objetivoFinanceiro.toFixed(2)}</li>
+      `;
+
+      if (faltaParaObjetivo > 0) {
+        const quantidadeNecessaria = faltaParaObjetivo / precoAtual;
+        html += `<li style="color:orange;"><strong>⚠️ Para atingir o objetivo, investe mais €${faltaParaObjetivo.toFixed(2)} (${quantidadeNecessaria.toFixed(2)} unidades)</strong></li>`;
+      } else {
+        html += `<li style="color:green;"><strong>🎯 Objetivo já atingido!</strong></li>`;
+      }
+
+      html += `</ul>`;
+      document.getElementById("analiseResultados").innerHTML = html;
+    })
+    .catch((error) => {
+      console.error("❌ Erro na análise:", error);
+      alert("Erro ao consultar dados do Firestore.");
+    });
+}
+function obterPrecoAtualDoAtivo(ticker) {
+  return fetch(`https://api.exemplo.com/preco?ticker=${ticker}`)
+    .then((res) => res.json())
+    .then((data) => data.precoAtual || null)
+    .catch(() => null);
+}
+
+//lista de progressos
+async function listarProgressoDosAtivos() {
+  const container = document.getElementById("listaProgressoAtivos");
+  container.innerHTML = "🔄 A carregar...";
+
+  try {
+    const snapshot = await db.collection("ativos").get();
+    if (snapshot.empty) {
+      container.innerHTML = "❗ Não há ativos registados.";
+      return;
+    }
+
+    const promessas = [];
+
+    snapshot.forEach((doc) => {
+      const data = doc.data();
+      promessas.push(verificarProgressoDeItem(data));
+    });
+
+    const resultados = await Promise.all(promessas);
+    container.innerHTML = resultados.join("<hr>");
+  } catch (error) {
+    console.error("Erro ao listar progresso:", error);
+    container.innerHTML = "❌ Erro ao carregar progresso.";
+  }
+}
+
+async function verificarProgressoDeItem(data) {
+  try {
+    const cotacaoSnap = await db.collection("acoesDividendos").doc(data.ticker).get();
+
+    if (!cotacaoSnap.exists) {
+      return `<strong>${data.nome} (${data.ticker})</strong><br>❌ Cotação não encontrada.`;
+    }
+
+    const valorAtual = cotacaoSnap.data().valorStock;
+    const totalInvestido = data.precoCompra * data.quantidade;
+    const valorTotalAtual = valorAtual * data.quantidade;
+
+    let progresso = 0;
+    let mensagem = "";
+
+    if (data.tipoObjetivo === "lucro") {
+      const lucroAtual = valorTotalAtual - totalInvestido;
+      progresso = (lucroAtual / data.objetivoFinanceiro) * 100;
+      const tpNecessario = (totalInvestido + data.objetivoFinanceiro) / data.quantidade;
+
+      mensagem = `
+        🎯 Lucro alvo: €${data.objetivoFinanceiro.toFixed(2)}<br>
+        📈 Progresso: ${progresso.toFixed(1)}%<br>
+        💰 Preço atual: €${valorAtual.toFixed(2)}<br>
+        🎯 TP2 necessário: €${tpNecessario.toFixed(2)}
+      `;
+    } else if (data.tipoObjetivo === "valorFinal") {
+      progresso = (valorTotalAtual / data.objetivoFinanceiro) * 100;
+      mensagem = `
+        🎯 Valor alvo: €${data.objetivoFinanceiro.toFixed(2)}<br>
+        📈 Progresso: ${progresso.toFixed(1)}%<br>
+        💼 Valor atual: €${valorTotalAtual.toFixed(2)}
+      `;
+    } else if (data.tipoObjetivo === "quantidade") {
+      progresso = (data.quantidade / data.objetivoFinanceiro) * 100;
+      mensagem = `
+        🎯 Quantidade alvo: ${data.objetivoFinanceiro}<br>
+        📈 Progresso: ${progresso.toFixed(1)}%<br>
+        ✅ Quantidade atual: ${data.quantidade}
+      `;
+    }
+
+    return `<strong>${data.nome} (${data.ticker})</strong><br>${mensagem}`;
+  } catch (err) {
+    return `<strong>${data.nome} (${data.ticker})</strong><br>❌ Erro ao consultar cotação.`;
+  }
+}
+
+
+
+
+async function verificarProgressoDeItem(data) {
+  try {
+    const cotacaoSnap = await db.collection("acoesDividendos").doc(data.ticker).get();
+
+    if (!cotacaoSnap.exists) {
+      return `<strong>${data.nome} (${data.ticker})</strong><br>❌ Cotação não encontrada.`;
+    }
+
+    const cotacao = cotacaoSnap.data();
+    const valorAtual = cotacao.valorStock;
+    const totalInvestido = data.precoCompra * data.quantidade;
+    const valorTotalAtual = valorAtual * data.quantidade;
+
+    let progresso = 0;
+    let mensagem = "";
+
+    // ➕ Novos cálculos de crescimento
+    let crescimentoNecessario = 0;
+    let tpNecessario = 0;
+    const estimativas = [];
+
+    if (data.tipoObjetivo === "lucro") {
+      const lucroAtual = valorTotalAtual - totalInvestido;
+      progresso = (lucroAtual / data.objetivoFinanceiro) * 100;
+      tpNecessario = (totalInvestido + data.objetivoFinanceiro) / data.quantidade;
+      crescimentoNecessario = ((tpNecessario - valorAtual) / valorAtual) * 100;
+      
+      // Obter taxas de crescimento do documento
+      const crescimentoSemanal = cotacao.taxaCrescimento_1s;
+      const crescimentoMensal = cotacao.taxaCrescimento_1m;
+      const crescimentoAnual = cotacao.taxaCrescimento_1ano;
+
+      if (crescimentoSemanal > 0) {
+        const semanas = Math.ceil(crescimentoNecessario / crescimentoSemanal);
+        estimativas.push(`📅 TP2 em ~${semanas} semanas`);
+      } else {
+        estimativas.push("❌ Sem taxa semanal");
+      }
+
+      if (crescimentoMensal > 0) {
+        const meses = Math.ceil(crescimentoNecessario / crescimentoMensal);
+        estimativas.push(`📅 TP2 em ~${meses} meses`);
+      } else {
+        estimativas.push("❌ Sem taxa mensal");
+      }
+
+      if (crescimentoAnual > 0) {
+        const anos = Math.ceil(crescimentoNecessario / crescimentoAnual);
+        estimativas.push(`📅 TP2 em ~${anos} anos`);
+      } else {
+        estimativas.push("❌ Sem taxa anual");
+      }
+
+      mensagem = `
+        🎯 Lucro alvo: €${data.objetivoFinanceiro.toFixed(2)}<br>
+        📈 Progresso: ${progresso.toFixed(1)}%<br>
+        💰 Preço atual: €${valorAtual.toFixed(2)}<br>
+        🎯 TP2 necessário: €${tpNecessario.toFixed(2)}<br>
+        📊 Crescimento necessário: ${crescimentoNecessario.toFixed(2)}%<br>
+        ${estimativas.join("<br>")}
+      `;
+    }
+
+    // ⚠️ Podes depois replicar a lógica das estimativas para os outros tipos de objetivo se quiseres.
+
+    return `<strong>${data.nome} (${data.ticker})</strong><br>${mensagem}`;
+  } catch (err) {
+    return `<strong>${data.nome} (${data.ticker})</strong><br>❌ Erro ao consultar cotação.`;
+  }
+}
+
+
+
+function abrirPopupProgresso() {
+  document.getElementById("popupProgresso").classList.remove("hidden");
+  listarProgressoDosAtivos();
+}
+function fecharPopupProgresso() {
+  document.getElementById("popupProgresso").classList.add("hidden");
+}
+
+//JS para gerar linhas dinamicamente
+function mostrarProgressoAtivos(dadosAtivos) {
+  const container = document.getElementById("listaProgressoAtivos");
+  container.innerHTML = "";
+
+  dadosAtivos.forEach((ativo) => {
+    const {
+      nomeAtivo,
+      tickerAtivo,
+      precoCompra,
+      quantidade,
+      tipoObjetivo,
+      objetivoFinanceiro,
+      valorStockAtual, // cotação atual
+    } = ativo;
+
+    // Calcula TP2 com base no objetivo
+    const tp2 = tipoObjetivo === "lucro"
+      ? calcularTp2(precoCompra, objetivoFinanceiro, quantidade)
+      : objetivoFinanceiro;
+
+    const progresso = valorStockAtual && tp2
+      ? ((valorStockAtual - precoCompra) / (tp2 - precoCompra)) * 100
+      : 0;
+
+    // Cria o bloco HTML com os dados
+    const html = `
+      <div class="ativo-box">
+        <h4>${nomeAtivo} (${tickerAtivo})</h4>
+        <ul>
+          <li>Preço de compra: €${precoCompra}</li>
+          <li>Quantidade: ${quantidade}</li>
+          <li>Objetivo: ${tipoObjetivo === "lucro" ? `Lucro de €${objetivoFinanceiro}` : `€${objetivoFinanceiro}`}</li>
+          <li>TP2 (Preço objetivo): <strong>€${tp2.toFixed(2)}</strong></li>
+          <li>Cotação atual: ${valorStockAtual ? `€${valorStockAtual}` : "❌ Não encontrada"}</li>
+          <li>Progresso: ${valorStockAtual ? `${progresso.toFixed(1)}%` : "N/A"}</li>
+        </ul>
+      </div>
+    `;
+
+    container.innerHTML += html;
+  });
 }

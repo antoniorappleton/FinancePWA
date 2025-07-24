@@ -74,6 +74,7 @@
         <button onclick="abrirSecao(4)">Quanto precisas Investir?</button>
         <button onclick="abrirSecao(5)">Simulador de Lucros</button>
         <button onclick="abrirSecao(6)">Consulta e Registo de Acções</button>
+        <button onclick="abrirSecao(7)">Objetivos por Ativo</button>
       </div>
       <div class="buttons">
         <button onclick="goToScreen1()">Voltar</button>
@@ -546,6 +547,60 @@
       </div>
     </div>
 
+        <!--SECÇÃO 7 REGISTO DE COMPRAS -->
+        <div id="sec7Screen" class="screen hidden">
+          <h2>🎯 Definir Objetivo por Ativo</h2>
+
+          <input id="nomeAtivo" placeholder="Nome do ativo" />
+          <input id="tickerAtivo" placeholder="Ticker" />
+
+          <select id="tipoAtivo">
+            <option value="ação">Ação</option>
+            <option value="ETF">ETF</option>
+          </select>
+
+          <input
+            id="precoCompra"
+            type="number"
+            step="0.01"
+            placeholder="Preço de compra (€)"
+          />
+          <input
+            id="quantidade"
+            type="number"
+            step="0.01"
+            placeholder="Quantidade comprada"
+          />
+          <input id="setorCompra" placeholder="Setor" />
+          <input id="mercadoCompra" placeholder="Mercado" />
+
+          <label for="tipoObjetivo">Tipo de Objetivo:</label>
+          <select id="tipoObjetivo">
+            <option value="valorFinal">Valor Final Alvo (€)</option>
+            <option value="lucro">Lucro Alvo (€)</option>
+            <option value="quantidade">Quantidade Alvo (unidades)</option>
+          </select>
+
+          <input
+            id="objetivoFinanceiro"
+            type="number"
+            step="0.01"
+            placeholder="Valor do objetivo"
+          />
+          <button onclick="guardarCompraAcaoOuEtf()">💾 Guardar Compra e Objetivo</button>
+          <button onclick="abrirPopupProgresso()">📈 Ver Progresso dos Ativos</button>
+          <button onclick="voltarMenu()">Voltar ao Menu</button>
+        </div>
+        <!-- POPUP -->
+          <!-- Popup -->
+              <div id="popupProgresso" class="modal hidden">
+                <div class="modal-content">
+                  <span class="close" onclick="fecharPopupProgresso()">&times;</span>
+                  <h3>📊 Progresso dos Ativos</h3>
+                  <div id="listaProgressoAtivos">A carregar...</div>
+                </div>
+              </div>
+
     <!-- POPUP FILTRO AÇÕES -->
     <div id="popupFiltro" class="popup hidden">
       <div class="popup-content">
@@ -642,7 +697,15 @@
             Simular Ações Selecionadas
           </button>
         </div>
-
+        <!-- Checkbox Selecionar Tudo -->
+        <label>
+          <input
+            type="checkbox"
+            id="checkboxSelecionarTudo"
+            onchange="selecionarTudoCheckboxes(this)"
+          />
+          Selecionar Todos
+        </label>
         <!--prepararSimulacaoBloco-->
         <div id="resultadoFiltroMes" class="resultado-popup"></div>
       </div>
@@ -659,35 +722,34 @@
           <option value="taxaCrescimento_1m">1 Mês</option>
           <option value="taxaCrescimento_1a">1 Ano</option>
         </select>
-            <div style="margin-bottom: 1em">
-              <label for="investimentoTotal"
-                ><strong>💰 Investimento Total (€):</strong></label
-              >
-              <input type="number" id="investimentoTotal" step="0.01" min="0" />
+        <div style="margin-bottom: 1em">
+          <label for="investimentoTotal"
+            ><strong>💰 Investimento Total (€):</strong></label
+          >
+          <input type="number" id="investimentoTotal" step="0.01" min="0" />
 
-              <div
-                style="
-                  margin-top: 0.5em;
-                  display: flex;
-                  gap: 1em;
-                  align-items: center;
-                "
-              >
-                <label>
-                  <input type="checkbox" id="usarTotal" checked />
-                  Usar todo o investimento
-                </label>
-                <label>
-                  <input type="checkbox" id="acoesCompletas" />
-                  Apenas ações completas
-                </label>
-              </div>
-            </div>
+          <div
+            style="
+              margin-top: 0.5em;
+              display: flex;
+              gap: 1em;
+              align-items: center;
+            "
+          >
+            <label>
+              <input type="checkbox" id="usarTotal" checked />
+              Usar todo o investimento
+            </label>
+            <label>
+              <input type="checkbox" id="acoesCompletas" />
+              Apenas ações completas
+            </label>
+          </div>
+        </div>
 
         <div id="resultadoDistribuicao" class="tabela-wrapper"></div>
 
         <div id="tabelaAcoesSelecionadas" class="tabela-wrapper">
-        
           <table class="tabela-bloco">
             <thead>
               <tr>
@@ -707,7 +769,6 @@
           </button>-->
           <button onclick="fecharPopupSimulacaoBloco()">❌ Fechar</button>
         </div>
-        
       </div>
     </div>
 
