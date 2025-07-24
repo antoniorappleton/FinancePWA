@@ -597,119 +597,136 @@
                 <div class="modal-content">
                   <span class="close" onclick="fecharPopupProgresso()">&times;</span>
                   <h3>📊 Progresso dos Ativos</h3>
-                  <div id="listaProgressoAtivos">A carregar...</div>
+                  <div id="listaProgressoAtivos" class="tabela-wrapper">
+                    <table class="tabela-progresso">
+                      <thead>
+                        <tr>
+                          <th>Nome</th>
+                          <th>Ticker</th>
+                          <th>Preço Compra (€)</th>
+                          <th>Qtd</th>
+                          <th>Objetivo</th>
+                          <th>TP2 (€)</th>
+                          <th>Atual (€)</th>
+                          <th>Progresso</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <!-- Dados dinâmicos serão inseridos aqui via JS -->
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
+              <!-- POPUP FILTRO AÇÕES -->
+              <div id="popupFiltro" class="popup hidden">
+                <div class="popup-content">
+                  <h4>🔍 Filtros</h4>
+                  <input
+                    type="search"
+                    id="filtroNome"
+                    placeholder="🔠 Filtrar por Nome da Ação"
+                    oninput="filtrarAcoes()"
+                    style="
+                      margin-bottom: 10px;
+                      width: 100%;
+                      padding: 8px;
+                      border-radius: 5px;
+                    "
+                  />
 
-    <!-- POPUP FILTRO AÇÕES -->
-    <div id="popupFiltro" class="popup hidden">
-      <div class="popup-content">
-        <h4>🔍 Filtros</h4>
-        <input
-          type="search"
-          id="filtroNome"
-          placeholder="🔠 Filtrar por Nome da Ação"
-          oninput="filtrarAcoes()"
-          style="
-            margin-bottom: 10px;
-            width: 100%;
-            padding: 8px;
-            border-radius: 5px;
-          "
-        />
+                  <input
+                    type="search"
+                    id="filtroTicker"
+                    placeholder="🔠 Filtrar por Ticker"
+                    oninput="filtrarAcoes()"
+                    style="
+                      margin-bottom: 15px;
+                      width: 100%;
+                      padding: 8px;
+                      border-radius: 5px;
+                    "
+                  />
+                  <select id="filtroSetor">
+                    <option value="">Selecione um Setor</option>
+                    <option value="ETF iTech">ETF iTech</option>
+                    <option value="ETF Finance">ETF Finance</option>
+                    <option value="ETF Energia">ETF Energia</option>
+                    <option value="ETF Materiais">ETF Materiais</option>
+                    <option value="Alimentção">Alimentação</option>
+                    <option value="Automovel">Automóvel</option>
+                    <option value="Bens de Consumo">Bens de Consumo</option>
+                    <option value="Consumo Cíclico">Consumo Cíclico</option>
+                    <option value="Consumo Defensivo">Consumo Defensivo</option>
+                    <option value="Defesa">Defesa</option>
+                    <option value="Energia">Energia</option>
+                    <option value="Finanças">Finanças</option>
+                    <option value="Imobiliário">Imobiliário</option>
+                    <option value="Indústria">Indústria</option>
+                    <option value="Infraestruturas / Energia">
+                      Infraestruturas / Energia
+                    </option>
+                    <option value="Materiais">Materiais</option>
+                    <option value="Restauração">Restauração</option>
+                    <option value="Saúde">Saúde</option>
+                    <option value="Tecnologia">Tecnologia</option>
+                    <option value="Telecomunicações">Telecomunicações</option>
+                  </select>
 
-        <input
-          type="search"
-          id="filtroTicker"
-          placeholder="🔠 Filtrar por Ticker"
-          oninput="filtrarAcoes()"
-          style="
-            margin-bottom: 15px;
-            width: 100%;
-            padding: 8px;
-            border-radius: 5px;
-          "
-        />
-        <select id="filtroSetor">
-          <option value="">Selecione um Setor</option>
-          <option value="ETF iTech">ETF iTech</option>
-          <option value="ETF Finance">ETF Finance</option>
-          <option value="ETF Energia">ETF Energia</option>
-          <option value="ETF Materiais">ETF Materiais</option>
-          <option value="Alimentção">Alimentação</option>
-          <option value="Automovel">Automóvel</option>
-          <option value="Bens de Consumo">Bens de Consumo</option>
-          <option value="Consumo Cíclico">Consumo Cíclico</option>
-          <option value="Consumo Defensivo">Consumo Defensivo</option>
-          <option value="Defesa">Defesa</option>
-          <option value="Energia">Energia</option>
-          <option value="Finanças">Finanças</option>
-          <option value="Imobiliário">Imobiliário</option>
-          <option value="Indústria">Indústria</option>
-          <option value="Infraestruturas / Energia">
-            Infraestruturas / Energia
-          </option>
-          <option value="Materiais">Materiais</option>
-          <option value="Restauração">Restauração</option>
-          <option value="Saúde">Saúde</option>
-          <option value="Tecnologia">Tecnologia</option>
-          <option value="Telecomunicações">Telecomunicações</option>
-        </select>
+                  <select id="filtroPeriodicidade">
+                    <option value="">Selecione a Periodicidade</option>
+                    <option value="n/A">n/A</option>
+                    <option value="Mensal">Mensal</option>
+                    <option value="Trimestral">Trimestral</option>
+                    <option value="Semestral">Semestral</option>
+                    <option value="Anual">Anual</option>
+                  </select>
 
-        <select id="filtroPeriodicidade">
-          <option value="">Selecione a Periodicidade</option>
-          <option value="n/A">n/A</option>
-          <option value="Mensal">Mensal</option>
-          <option value="Trimestral">Trimestral</option>
-          <option value="Semestral">Semestral</option>
-          <option value="Anual">Anual</option>
-        </select>
+                  <select id="filtroMercado">
+                    <option value="">Seleciona o Mercado</option>
+                    <option value="Portugal">Portugal</option>
+                    <option value="Europeu">Europeu</option>
+                    <option value="Americano">Americano</option>
+                    <option value="Americano SP500">Americano SP500</option>
+                  </select>
 
-        <select id="filtroMercado">
-          <option value="">Seleciona o Mercado</option>
-          <option value="Portugal">Portugal</option>
-          <option value="Europeu">Europeu</option>
-          <option value="Americano">Americano</option>
-          <option value="Americano SP500">Americano SP500</option>
-        </select>
+                  <select id="filtroMes">
+                    <option value="">Selecione um Mês</option>
+                    <option value="n/A">n/A</option>
+                    <option value="Janeiro">Janeiro</option>
+                    <option value="Fevereiro">Fevereiro</option>
+                    <option value="Março">Março</option>
+                    <option value="Abril">Abril</option>
+                    <option value="Maio">Maio</option>
+                    <option value="Junho">Junho</option>
+                    <option value="Julho">Julho</option>
+                    <option value="Agosto">Agosto</option>
+                    <option value="Setembro">Setembro</option>
+                    <option value="Outubro">Outubro</option>
+                    <option value="Novembro">Novembro</option>
+                    <option value="Dezembro">Dezembro</option>
+                  </select>
 
-        <select id="filtroMes">
-          <option value="">Selecione um Mês</option>
-          <option value="n/A">n/A</option>
-          <option value="Janeiro">Janeiro</option>
-          <option value="Fevereiro">Fevereiro</option>
-          <option value="Março">Março</option>
-          <option value="Abril">Abril</option>
-          <option value="Maio">Maio</option>
-          <option value="Junho">Junho</option>
-          <option value="Julho">Julho</option>
-          <option value="Agosto">Agosto</option>
-          <option value="Setembro">Setembro</option>
-          <option value="Outubro">Outubro</option>
-          <option value="Novembro">Novembro</option>
-          <option value="Dezembro">Dezembro</option>
-        </select>
-
-        <div class="buttons">
-          <button onclick="filtrarAcoes()">🔎 Aplicar Filtros</button>
-          <button onclick="fecharPopupFiltro()">❌ Fechar</button>
-          <button onclick="prepararSimulacaoBloco()">
-            Simular Ações Selecionadas
-          </button>
-        </div>
-        <!-- Checkbox Selecionar Tudo -->
-        <label>
-          <input
-            type="checkbox"
-            id="checkboxSelecionarTudo"
-            onchange="selecionarTudoCheckboxes(this)"
-          />
-          Selecionar Todos
-        </label>
-        <!--prepararSimulacaoBloco-->
-        <div id="resultadoFiltroMes" class="resultado-popup"></div>
-      </div>
-    </div>
+                  <div class="buttons">
+                    <button onclick="filtrarAcoes()">🔎 Aplicar Filtros</button>
+                    <button onclick="fecharPopupFiltro()">❌ Fechar</button>
+                    <button onclick="prepararSimulacaoBloco()">
+                      Simular Ações Selecionadas
+                    </button>
+                  </div>
+                  <!-- Checkbox Selecionar Tudo -->
+                  <label>
+                    <input
+                      type="checkbox"
+                      id="checkboxSelecionarTudo"
+                      onchange="selecionarTudoCheckboxes(this)"
+                    />
+                    Selecionar Todos
+                  </label>
+                  <!--prepararSimulacaoBloco-->
+                  <div id="resultadoFiltroMes" class="resultado-popup"></div>
+                </div>
+              </div>
 
     <!-- SIMULAÇÃO EM BLOCO COMO POPUP -->
     <div id="popupSimulacaoBloco" class="popup hidden">
