@@ -1570,83 +1570,77 @@ function selecionarTudoCheckboxes(checkboxSelecionarTudo) {
       container.innerHTML = "❌ Erro ao carregar progresso.";
     }
   }
-async function verificarProgressoDeItem(data) {
-    try {
-      const cotacaoSnap = await db.collection("acoesDividendos").doc(data.ticker).get();
+  //Função mais importante dos Ativos e valorização
+  async function verificarProgressoDeItem(data) {
+  try {
+    const cotacaoSnap = await db.collection("acoesDividendos").doc(data.ticker).get();
 
-      if (!cotacaoSnap.exists) {
-        return `<strong>${data.nome} (${data.ticker})</strong><br>❌ Cotação não encontrada.`;
-      }
-
-      const cotacao = cotacaoSnap.data();
-      const valorAtual = cotacao.valorStock;
-      const totalInvestido = data.precoCompra * data.quantidade;
-      const valorTotalAtual = valorAtual * data.quantidade;
-
-      let progresso = 0;
-      let mensagem = "";
-
-      // ➕ Novos cálculos de crescimento
-      let crescimentoNecessario = 0;
-      let tpNecessario = 0;
-      const estimativas = [];
-
-      if (data.tipoObjetivo === "lucro") {
-        const lucroAtual = valorTotalAtual - totalInvestido;
-        progresso = (lucroAtual / data.objetivoFinanceiro) * 100;
-        tpNecessario = (totalInvestido + data.objetivoFinanceiro) / data.quantidade;
-        crescimentoNecessario = ((tpNecessario - valorAtual) / valorAtual) * 100;
-        
-        // Obter taxas de crescimento do documento
-        const crescimentoSemanal = cotacao.taxaCrescimento_1s;
-        const crescimentoMensal = cotacao.taxaCrescimento_1m;
-        const crescimentoAnual = cotacao.taxaCrescimento_1ano;
-
-        if (crescimentoSemanal > 0) {
-          const semanas = Math.ceil(crescimentoNecessario / crescimentoSemanal);
-          estimativas.push(`📅 TP2 em ~${semanas} semanas`);
-        } else {
-          estimativas.push("❌ Sem taxa semanal");
-        }
-
-        if (crescimentoMensal > 0) {
-          const meses = Math.ceil(crescimentoNecessario / crescimentoMensal);
-          estimativas.push(`📅 TP2 em ~${meses} meses`);
-        } else {
-          estimativas.push("❌ Sem taxa mensal");
-        }
-
-        if (crescimentoAnual > 0) {
-          const anos = Math.ceil(crescimentoNecessario / crescimentoAnual);
-          estimativas.push(`📅 TP2 em ~${anos} anos`);
-        } else {
-          estimativas.push("❌ Sem taxa anual");
-        }
-
-        mensagem = `
-          🎯 Lucro alvo: €${data.objetivoFinanceiro.toFixed(2)}<br>
-          📈 Progresso: ${progresso.toFixed(1)}%<br>
-          💰 Preço atual: €${valorAtual.toFixed(2)}<br>
-          🎯 TP2 necessário: €${tpNecessario.toFixed(2)}<br>
-          📊 Crescimento necessário: ${crescimentoNecessario.toFixed(2)}%<br>
-          ${estimativas.join("<br>")}
-        `;
-      }
-
-      // ⚠️ Podes depois replicar a lógica das estimativas para os outros tipos de objetivo se quiseres.
-
-      return `<strong>${data.nome} (${data.ticker})</strong><br>${mensagem}`;
-    } catch (err) {
-      return `<strong>${data.nome} (${data.ticker})</strong><br>❌ Erro ao consultar cotação.`;
+    if (!cotacaoSnap.exists) {
+      return `<strong>${data.nome} (${data.ticker})</strong><br>❌ Cotação não encontrada.`;
     }
+
+    const cotacao = cotacaoSnap.data();
+    const valorAtual = cotacao.valorStock;
+
+    const totalInvestido = data.precoCompra * data.quantidade;
+    const valorTotalAtual = valorAtual * data.quantidade;
+    const lucroRealizado = valorTotalAtual - totalInvestido;
+
+    let progresso = 0;
+    let mensagem = "";
+
+    let crescimentoNecessario = 0;
+    let tpNecessario = 0;
+    const estimativas = [];
+
+    if (data.tipoObjetivo === "lucro") {
+      progresso = (lucroRealizado / data.objetivoFinanceiro) * 100;
+      tpNecessario = (totalInvestido + data.objetivoFinanceiro) / data.quantidade;
+      crescimentoNecessario = ((tpNecessario - valorAtual) / valorAtual) * 100;
+
+      const crescimentoSemanal = cotacao.taxaCrescimento_1s;
+      const crescimentoMensal = cotacao.taxaCrescimento_1m;
+      const crescimentoAnual = cotacao.taxaCrescimento_1ano;
+
+      if (crescimentoSemanal > 0) {
+        const semanas = Math.ceil(crescimentoNecessario / crescimentoSemanal);
+        estimativas.push(`📅 TP2 em ~${semanas} semanas`);
+      } else {
+        estimativas.push("❌ Sem taxa semanal");
+      }
+
+      if (crescimentoMensal > 0) {
+        const meses = Math.ceil(crescimentoNecessario / crescimentoMensal);
+        estimativas.push(`📅 TP2 em ~${meses} meses`);
+      } else {
+        estimativas.push("❌ Sem taxa mensal");
+      }
+
+      if (crescimentoAnual > 0) {
+        const anos = Math.ceil(crescimentoNecessario / crescimentoAnual);
+        estimativas.push(`📅 TP2 em ~${anos} anos`);
+      } else {
+        estimativas.push("❌ Sem taxa anual");
+      }
+
+      mensagem = `
+        💼 <strong>Investido:</strong> €${totalInvestido.toFixed(2)}<br>
+        💸 <strong>Lucro Realizado:</strong> €${lucroRealizado.toFixed(2)}<br><br>
+        🎯 <strong>Lucro alvo:</strong> €${data.objetivoFinanceiro.toFixed(2)}<br>
+        📈 <strong>Progresso:</strong> ${progresso.toFixed(1)}%<br>
+        💰 <strong>Preço atual:</strong> €${valorAtual.toFixed(2)}<br>
+        🎯 <strong>TP2 necessário:</strong> €${tpNecessario.toFixed(2)}<br>
+        📊 <strong>Crescimento necessário:</strong> ${crescimentoNecessario.toFixed(2)}%<br>
+        ${estimativas.join("<br>")}
+      `;
+    }
+
+    return `<strong>${data.nome} (${data.ticker})</strong><br>${mensagem}`;
+  } catch (err) {
+    return `<strong>${data.nome} (${data.ticker})</strong><br>❌ Erro ao consultar cotação.`;
+  }
 }
-  function abrirPopupProgresso() {
-    document.getElementById("popupProgresso").classList.remove("hidden");
-    listarProgressoDosAtivos();
-  }
-  function fecharPopupProgresso() {
-    document.getElementById("popupProgresso").classList.add("hidden");
-  }
+
 
   //JS para gerar linhas dinamicamente
   function mostrarProgressoAtivos(dadosAtivos) {
@@ -1691,3 +1685,12 @@ async function verificarProgressoDeItem(data) {
       container.innerHTML += html;
     });
   }
+   function abrirPopupProgresso() {
+    document.getElementById("popupProgresso").classList.remove("hidden");
+    listarProgressoDosAtivos();
+  }
+  function fecharPopupProgresso() {
+    document.getElementById("popupProgresso").classList.add("hidden");
+  }
+
+  
