@@ -591,15 +591,17 @@
           <button onclick="abrirPopupProgresso()">📈 Ver Progresso dos Ativos</button>
           <button onclick="voltarMenu()">Voltar ao Menu</button>
         </div>
-        <!-- POPUP -->
-          <!-- Popup -->
+        
+              <!-- Popup -->
               <div id="popupProgresso" class="modal hidden">
                 <div class="modal-content">
                   <span class="close" onclick="fecharPopupProgresso()">&times;</span>
                   <h3>📊 Progresso dos Ativos</h3>
                   <small>
                     💼 Investido: €<span id="totalInvestido">0.00</span> |
-                    💸 Lucro: €<span id="totalLucro">0.00</span>
+                    💸 Lucro: €<span id="totalLucro">0.00</span> |
+                    🎯 Objetivo: €<span id="totalObjetivo">0.00</span> |
+                    ⏳ Progresso: %<span id="percentagemObjetivo">0.00</span>
                   </small>
                   <div id="listaProgressoAtivos" class="tabela-wrapper">
                     <table class="tabela-progresso">
@@ -745,8 +747,7 @@
         </select>
         <div style="margin-bottom: 1em">
           <label for="investimentoTotal"
-            ><strong>💰 Investimento Total (€):</strong></label
-          >
+            ><strong>💰 Investimento Total (€):</strong></label>
           <input type="number" id="investimentoTotal" step="0.01" min="0" />
 
           <div
