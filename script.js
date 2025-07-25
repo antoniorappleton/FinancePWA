@@ -75,7 +75,7 @@ function carregarTop10Crescimento(periodo = "1s") {
           acoes.push({
             nome: dados.nome,
             ticker: dados.ticker,
-            crescimento: crescimento.toFixed(2),
+            crescimento: crescimento.toFixed(3),
           });
         }
       });
@@ -122,7 +122,7 @@ function carregarTop7(periodo) {
           acoes.push({
             nome: dados.nome,
             ticker: dados.ticker,
-            crescimento: crescimento.toFixed(2),
+            crescimento: crescimento.toFixed(3),
           });
         }
       });
@@ -320,8 +320,8 @@ function guardarSimulacao(nomeAcao, tp1, tp2, valorInvestido, dividendo = 0) {
     tp1,
     tp2,
     valorInvestido,
-    lucro: parseFloat(lucroTotal.toFixed(2)),
-    crescimentoPercentual: parseFloat(crescimento.toFixed(2)),
+    lucro: parseFloat(lucroTotal.toFixed(3)),
+    crescimentoPercentual: parseFloat(crescimento.toFixed(3)),
   };
 
   simulacoes.push(novaSimulacao);
@@ -341,7 +341,7 @@ function atualizarTabela() {
       <td>${sim.tp1}</td>
       <td>${sim.tp2}</td>
       <td>${sim.valorInvestido}</td>
-      <td>${sim.lucro.toFixed(2)}</td>
+      <td>${sim.lucro.toFixed(3)}</td>
       <td>${sim.crescimentoPercentual}%</td>
       <td>
         <button onclick="removerSimulacao(${index})">❌</button>
@@ -384,15 +384,13 @@ function mostrarTotalLucro(valor) {
     totalRow.id = "linha-total-lucro";
     totalRow.innerHTML = `
       <td colspan="4"><strong>Total Lucro Selecionado:</strong></td>
-      <td colspan="4" id="valorTotalLucro"><strong>${valor.toFixed(
-        2
-      )} €</strong></td>
+      <td colspan="4" id="valorTotalLucro"><strong>${valor.toFixed(3)} €</strong></td>
     `;
     document.querySelector("#tabelaSimulacoes tbody").appendChild(totalRow);
   } else {
     totalRow.querySelector(
       "#valorTotalLucro"
-    ).innerHTML = `<strong>${valor.toFixed(2)} €</strong>`;
+    ).innerHTML = `<strong>${valor.toFixed(3)} €</strong>`;
   }
 }
 
@@ -764,8 +762,8 @@ function preencherTabelaSimulacaoBloco(acoes) {
     linha.innerHTML = `
       <td>${acao.nome}</td>
       <td>${acao.ticker}</td>
-      <td>€${acao.valorStock.toFixed(2)}</td>
-      <td>€${acao.dividendo.toFixed(2)}</td>
+      <td>€${acao.valorStock.toFixed(3)}</td>
+      <td>€${acao.dividendo.toFixed(3)}</td>
     `;
     tbody.appendChild(linha);
   });
@@ -876,10 +874,10 @@ function calcularDistribuicao() {
         nome: acao.nome,
         ticker: acao.ticker,
         quantidade: apenasCompletas ? qtd : qtd.toFixed(4),
-        investido: valorInvestido.toFixed(2),
-        lucro: lucro.toFixed(2),
-        crescimento: `${acao.taxa.toFixed(2)}%`,
-        dividendo: acao.dividendoAnual.toFixed(2)
+        investido: valorInvestido.toFixed(3),
+        lucro: lucro.toFixed(3),
+        crescimento: `${acao.taxa.toFixed(3)}%`,
+        dividendo: acao.dividendoAnual.toFixed(3)
       });
     }
   });
@@ -907,7 +905,7 @@ function calcularDistribuicao() {
     </tr>`;
   });
 
-  html += `</tbody></table><p><strong>Lucro Total Estimado: €${totalLucro.toFixed(2)}</strong></p>`;
+  html += `</tbody></table><p><strong>Lucro Total Estimado: €${totalLucro.toFixed(3)}</strong></p>`;
   resultadoDiv.innerHTML = html;
 }
 
@@ -1166,9 +1164,9 @@ function calcularMediaPonderada() {
     const precoMedio = totalInvestido / totalQtd;
 
     const html = `
-      <p>📊 <strong>Preço Médio:</strong> ${precoMedio.toFixed(2)} €</p>
-      <p>📦 <strong>Total de Ações:</strong> ${totalQtd.toFixed(2)}</p>
-      <p>💰 <strong>Total Investido:</strong> ${totalInvestido.toFixed(2)} €</p>
+      <p>📊 <strong>Preço Médio:</strong> ${precoMedio.toFixed(3)} €</p>
+      <p>📦 <strong>Total de Ações:</strong> ${totalQtd.toFixed(3)}</p>
+      <p>💰 <strong>Total Investido:</strong> ${totalInvestido.toFixed(3)} €</p>
     `;
 
     document.getElementById("resultadoReforco").innerHTML = html;
@@ -1246,22 +1244,18 @@ async function simular() {
     .sort((a, b) => a.diferenca - b.diferenca)
     .slice(0, 10);
 
-  let html = `<h3>🔍 Top 10 mais próximas do lucro desejado (${lucroDesejado.toFixed(
-    2
-  )}€)</h3>`;
+  let html = `<h3>🔍 Top 10 mais próximas do lucro desejado (${lucroDesejado.toFixed(3)}€)</h3>`;
 
   topMaisProximas.forEach((acao, i) => {
     html += `
       <hr />
       <p><strong>Top ${i + 1}: ${acao.nome}</strong></p>
-      <p>Preço atual: €${acao.preco.toFixed(2)}</p>
-      <p>Dividendos: €${acao.dividendo.toFixed(2)} por ação</p>
+      <p>Preço atual: €${acao.preco.toFixed(3)}</p>
+      <p>Dividendos: €${acao.dividendo.toFixed(3)} por ação</p>
       <p>Quantidade a comprar: ${acao.quantidade}</p>
-      <p>Lucro com valorização: €${acao.lucroValorizacao.toFixed(2)}</p>
-      <p>Lucro com dividendos: €${acao.lucroDividendos.toFixed(2)}</p>
-      <p><strong>Lucro total estimado: €${acao.lucroTotal.toFixed(
-        2
-      )}</strong> (diferença: €${acao.diferenca.toFixed(2)})</p>
+      <p>Lucro com valorização: €${acao.lucroValorizacao.toFixed(3)}</p>
+      <p>Lucro com dividendos: €${acao.lucroDividendos.toFixed(3)}</p>
+      <p><strong>Lucro total estimado: €${acao.lucroTotal.toFixed(3)}</strong> (diferença: €${acao.diferenca.toFixed(3)})</p>
     `;
   });
 
@@ -1308,8 +1302,8 @@ function calcularTP2() {
   const crescimento = ((tp2 - tp1) / tp1) * 100;
 
   document.getElementById("resultadoTP2").innerHTML = `
-    💰 <strong>TP2:</strong> €${tp2.toFixed(2)}<br>
-    📈 <strong>Taxa de crescimento:</strong> ${crescimento.toFixed(2)}%
+    💰 <strong>TP2:</strong> €${tp2.toFixed(3)}<br>
+    📈 <strong>Taxa de crescimento:</strong> ${crescimento.toFixed(3)}%
   `;
 }
 
@@ -1454,17 +1448,17 @@ function selecionarTudoCheckboxes(checkboxSelecionarTudo) {
         const lucroEmFalta = objetivoFinanceiro - lucroAtual;
         const tpNecessario = (totalInvestido + objetivoFinanceiro) / totalQuantidade;
         mensagem = `
-          🎯 Objetivo: Lucro de €${objetivoFinanceiro.toFixed(2)}<br>
+          🎯 Objetivo: Lucro de €${objetivoFinanceiro.toFixed(3)}<br>
           📊 Progresso: ${progresso.toFixed(1)}%<br>
-          💰 Preço atual: €${valorAtual.toFixed(2)}<br>
-          🎯 Preço alvo necessário (TP2): €${tpNecessario.toFixed(2)}
+          💰 Preço atual: €${valorAtual.toFixed(3)}<br>
+          🎯 Preço alvo necessário (TP2): €${tpNecessario.toFixed(3)}
         `;
       } else if (tipoObjetivo === "valorFinal") {
         progresso = (valorTotalAtual / objetivoFinanceiro) * 100;
         mensagem = `
-          🎯 Objetivo: Valor final de €${objetivoFinanceiro.toFixed(2)}<br>
+          🎯 Objetivo: Valor final de €${objetivoFinanceiro.toFixed(3)}<br>
           📊 Progresso: ${progresso.toFixed(1)}%<br>
-          💰 Valor atual da posição: €${valorTotalAtual.toFixed(2)}
+          💰 Valor atual da posição: €${valorTotalAtual.toFixed(3)}
         `;
       } else if (tipoObjetivo === "quantidade") {
         progresso = (totalQuantidade / objetivoFinanceiro) * 100;
@@ -1515,17 +1509,17 @@ function selecionarTudoCheckboxes(checkboxSelecionarTudo) {
         let html = `
           <h3>📈 Situação Atual: ${nomeAtivo} (${tickerAtual.toUpperCase()})</h3>
           <ul>
-            <li><strong>Total Investido:</strong> €${totalInvestido.toFixed(2)}</li>
+            <li><strong>Total Investido:</strong> €${totalInvestido.toFixed(3)}</li>
             <li><strong>Quantidade Total:</strong> ${totalQuantidade}</li>
-            <li><strong>Preço Atual:</strong> €${precoAtual.toFixed(2)}</li>
-            <li><strong>Valor Atual:</strong> €${valorAtual.toFixed(2)}</li>
-            <li><strong>Lucro/Perda:</strong> €${lucroAtual.toFixed(2)}</li>
-            <li><strong>Objetivo Financeiro:</strong> €${objetivoFinanceiro.toFixed(2)}</li>
+            <li><strong>Preço Atual:</strong> €${precoAtual.toFixed(3)}</li>
+            <li><strong>Valor Atual:</strong> €${valorAtual.toFixed(3)}</li>
+            <li><strong>Lucro/Perda:</strong> €${lucroAtual.toFixed(3)}</li>
+            <li><strong>Objetivo Financeiro:</strong> €${objetivoFinanceiro.toFixed(3)}</li>
         `;
 
         if (faltaParaObjetivo > 0) {
           const quantidadeNecessaria = faltaParaObjetivo / precoAtual;
-          html += `<li style="color:orange;"><strong>⚠️ Para atingir o objetivo, investe mais €${faltaParaObjetivo.toFixed(2)} (${quantidadeNecessaria.toFixed(2)} unidades)</strong></li>`;
+          html += `<li style="color:orange;"><strong>⚠️ Para atingir o objetivo, investe mais €${faltaParaObjetivo.toFixed(3)} (${quantidadeNecessaria.toFixed(3)} unidades)</strong></li>`;
         } else {
           html += `<li style="color:green;"><strong>🎯 Objetivo já atingido!</strong></li>`;
         }
@@ -1624,13 +1618,13 @@ function selecionarTudoCheckboxes(checkboxSelecionarTudo) {
       }
 
       mensagem = `
-        💼 <strong>Investido:</strong> €${totalInvestido.toFixed(2)}<br>
-        💸 <strong>Lucro Realizado:</strong> €${lucroRealizado.toFixed(2)}<br><br>
-        🎯 <strong>Lucro alvo:</strong> €${data.objetivoFinanceiro.toFixed(2)}<br>
+        💼 <strong>Investido:</strong> €${totalInvestido.toFixed(3)}<br>
+        💸 <strong>Lucro Realizado:</strong> €${lucroRealizado.toFixed(3)}<br><br>
+        🎯 <strong>Lucro alvo:</strong> €${data.objetivoFinanceiro.toFixed(3)}<br>
         📈 <strong>Progresso:</strong> ${progresso.toFixed(1)}%<br>
-        💰 <strong>Preço atual:</strong> €${valorAtual.toFixed(2)}<br>
-        🎯 <strong>TP2 necessário:</strong> €${tpNecessario.toFixed(2)}<br>
-        📊 <strong>Crescimento necessário:</strong> ${crescimentoNecessario.toFixed(2)}%<br>
+        💰 <strong>Preço atual:</strong> €${valorAtual.toFixed(3)}<br>
+        🎯 <strong>TP2 necessário:</strong> €${tpNecessario.toFixed(3)}<br>
+        📊 <strong>Crescimento necessário:</strong> ${crescimentoNecessario.toFixed(3)}%<br>
         ${estimativas.join("<br>")}
       `;
     }
@@ -1675,7 +1669,7 @@ function selecionarTudoCheckboxes(checkboxSelecionarTudo) {
             <li>Preço de compra: €${precoCompra}</li>
             <li>Quantidade: ${quantidade}</li>
             <li>Objetivo: ${tipoObjetivo === "lucro" ? `Lucro de €${objetivoFinanceiro}` : `€${objetivoFinanceiro}`}</li>
-            <li>TP2 (Preço objetivo): <strong>€${tp2.toFixed(2)}</strong></li>
+            <li>TP2 (Preço objetivo): <strong>€${tp2.toFixed(3)}</strong></li>
             <li>Cotação atual: ${valorStockAtual ? `€${valorStockAtual}` : "❌ Não encontrada"}</li>
             <li>Progresso: ${valorStockAtual ? `${progresso.toFixed(1)}%` : "N/A"}</li>
           </ul>
