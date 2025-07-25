@@ -75,7 +75,7 @@ function carregarTop10Crescimento(periodo = "1s") {
           acoes.push({
             nome: dados.nome,
             ticker: dados.ticker,
-            crescimento: crescimento.toFixed(3),
+            crescimento: crescimento.toFixed(2),
           });
         }
       });
@@ -1733,4 +1733,51 @@ async function verificarProgressoDeItem(data) {
     document.getElementById("popupProgresso").classList.add("hidden");
   }
 
-  
+  //API Alpha Vantage
+  async function obterTickersDaFirebase() {
+  const snapshot = await db.collection("ativos").get();
+  const tickers = snapshot.docs.map(doc => doc.data().ticker);
+  return [...new Set(tickers)]; // remover duplicados, se houver
+}
+async function obterCotacoesAlphaVantage(tickers) {
+  const apiKey = "A_TUA_API_KEY"; // coloca aqui a tua chave
+  const resultados = [];
+
+  for (const ticker of tickers) {
+    try {
+      const response = await fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${ticker}&apikey=${apiKey}`);
+      const data = await response.json();
+
+      const preco = parseFloat(data["Global Quote"]["05. price"]);
+      if (!isNaN(preco)) {
+        resultados.push({ ticker, valorStock: preco });
+      } else {
+        console.warn(`❗ Ticker ${ticker}: preço inválido`);
+      }
+
+      // Alpha Vantage permite 5 chamadas por minuto — aguarda 15s por segurança
+      await new Promise(resolve => setTimeout(resolve, 15000));
+    } catch (error) {
+      console.error(`Erro ao obter cotação de ${ticker}:`, error);
+    }
+  }
+
+  return resultados;
+}
+async function atualizarFirestoreComCotacoes(cotacoes) {
+  const batch = db.batch();
+
+  cotacoes.forEach(({ ticker, valorStock }) => {
+    const ref = db.collection("acoesDividendos").doc(ticker);
+    batch.update(ref, { valorStock });
+  });
+
+  await batch.commit();
+  console.log("✅ Firestore atualizado com novas cotações.");
+}
+async function atualizarCotasComAlphaVantage() {
+  const tickers = await obterTickersDaFirebase();
+  const cotacoes = await obterCotacoesAlphaVantage(tickers);
+  await atualizarFirestoreComCotacoes(cotacoes);
+}
+
