@@ -7,9 +7,11 @@ admin.initializeApp();
 const db = admin.firestore();
 
 /**
- * Busca o preço atual de uma ação usando a API Alpha Vantage.
+ * Busca dados financeiros de uma ação usando a API Alpha Vantage.
+ * Retorna apenas os campos: dividendo, taxaCrescimento_1semana.
+ * taxaCrescimento_1mes e taxaCrescimento_1ano.
  * @param {string} ticker - Símbolo da ação.
- * @return {Promise<{price: number}>} - Preço atual da ação.
+ * @return {Promise<Object>} - Dados financeiros da ação.
  */
 async function fetchStockData(ticker) {
   const ALPHA_VANTAGE_API_KEY = "1UU5ATMMC6IWDLHE";
@@ -21,10 +23,8 @@ async function fetchStockData(ticker) {
   const dividend = parseFloat(resOverview.data.DividendPerShare) || 0;
 
   // 2. Time series para calcular crescimento
-  const urlTimeSeries =`https://www.alphavantage.co/query?
-  function=TIME_SERIES_DAILY_ADJUSTED&symbol
-  =${ticker}&apikey
-  =${ALPHA_VANTAGE_API_KEY}&outputsize=compact`;
+  const urlTimeSeries = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=
+  ${ticker}&apikey=${ALPHA_VANTAGE_API_KEY}&outputsize=compact`;
   const resTime = await axios.get(urlTimeSeries);
   const timeSeries = resTime.data["Time Series (Daily)"];
 
@@ -40,16 +40,16 @@ async function fetchStockData(ticker) {
   const price250d =
   parseFloat(timeSeries[dates[250]]["5. adjusted close"] || priceToday);
 
-  const crescimento1s =(((priceToday - price7d) / price7d) * 100).toFixed(3);
-  const crescimento1m =(((priceToday - price30d) / price30d) * 100).toFixed(3);
+  const crescimento1s =((priceToday - price7d) / price7d) * 100;
+  const crescimento1m =((priceToday - price30d) / price30d) * 100;
   const crescimento1a =
-  (((priceToday - price250d) / price250d) * 100).toFixed(3);
+  ((priceToday - price250d) / price250d) * 100;
 
   return {
     dividendo: dividend,
-    taxaCrescimento_1semana: parseFloat(crescimento1s),
-    taxaCrescimento_1mes: parseFloat(crescimento1m),
-    taxaCrescimento_1ano: parseFloat(crescimento1a),
+    taxaCrescimento_1semana: parseFloat(crescimento1s.toFixed(3)),
+    taxaCrescimento_1mes: parseFloat(crescimento1m.toFixed(3)),
+    taxaCrescimento_1ano: parseFloat(crescimento1a.toFixed(3)),
   };
 }
 
@@ -69,14 +69,21 @@ exports.atualizaAcoes = onSchedule("every 1 hours", async (event) => {
 
     try {
       console.log(`📈 [${i + 1}/${docs.length}] A atualizar ${ticker}...`);
-      const {price} = await fetchStockData(ticker);
-      await doc.ref.update({valorStock: price});
-      console.log(`✅ ${ticker}: €${price}`);
+      const novosDados = await fetchStockData(ticker);
+
+      await doc.ref.update({
+        dividendo: novosDados.dividendo,
+        taxaCrescimento_1semana: novosDados.taxaCrescimento_1semana,
+        taxaCrescimento_1mes: novosDados.taxaCrescimento_1mes,
+        taxaCrescimento_1ano: novosDados.taxaCrescimento_1ano,
+      });
+
+      console.log(`✅ ${ticker} atualizado com dados da API.`);
     } catch (error) {
       console.error(`❌ Erro ao atualizar ${ticker}:`, error.message);
     }
 
-    // Esperar 15 segundos entre chamadas
+    // Esperar 60 segundos entre chamadas para respeitar limites da API
     await new Promise((resolve) => setTimeout(resolve, 60000));
   }
 
