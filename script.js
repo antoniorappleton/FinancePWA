@@ -669,14 +669,20 @@ function filtrarAcoes() {
           );
 
           html += `
-              <li>
-                <input type="checkbox" class="checkbox-selecao"
-                      onchange='atualizarSelecao(this)'
-                      value='${JSON.stringify(dados)}' />
-                <strong>${dados.nome}</strong> (${dados.ticker})<br>
-                Setor: ${dados.setor} | Mercado: ${dados.mercado} | Dividendo: €${dados.dividendo} |
-                Mês: ${dados.mes} | Periodicidade: ${dados.periodicidade} | Valor da Ação: €${dados.valorStock || "N/D"}<br>
-              </li>
+                <li>
+                  <input type="checkbox" class="checkbox-selecao"
+                        onchange='atualizarSelecao(this)'
+                        value='${JSON.stringify(dados)}' />
+                  <strong>${dados.nome}</strong> (${dados.ticker})<br>
+                  Setor: ${dados.setor} | Mercado: ${dados.mercado} | Dividendo: €${dados.dividendo} |
+                  Mês: ${dados.mes} | Periodicidade: ${dados.periodicidade} | Valor da Ação: €${dados.valorStock || "N/D"}<br>
+
+                  <div style="display: flex; justify-content: space-between; gap: 5px; margin-top: 5px; flex-wrap: nowrap;">
+                    <button onclick="editarAcao('${doc.id}', ${JSON.stringify(dados).replace(/"/g, "&quot;")})">✏️</button>
+                    <button onclick="eliminarAcao('${doc.id}')">🗑️</button>
+                    <button onclick="prepararSimulacao('${dados.nome}', ${dados.valorStock || 0}, ${dados.dividendo || 0})">📊 Simular</button>
+                  </div>
+                </li>
               `;
           count++;
         }
@@ -1781,3 +1787,12 @@ async function atualizarCotasComAlphaVantage() {
   await atualizarFirestoreComCotacoes(cotacoes);
 }
 
+async function atualizarTickerViaCloudFunction(ticker) {
+  try {
+    const response = await fetch(`https://us-central1-appfinance-812b2.cloudfunctions.net/atualizaTickerHTTP?ticker=${ticker}`);
+    const data = await response.json();
+    console.log(`✅ ${data.ticker} atualizado para ${data.valorStock}`);
+  } catch (error) {
+    console.error(`Erro ao atualizar ${ticker}:`, error);
+  }
+}

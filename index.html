@@ -530,6 +530,7 @@
           <button onclick="guardarOuAtualizarAcaoFirebase()">
             💾 Guardar / Atualizar
           </button>
+          
         </div>
       </div>
 
@@ -571,8 +572,38 @@
             step="0.01"
             placeholder="Quantidade comprada"
           />
-          <input id="setorCompra" placeholder="Setor" />
-          <input id="mercadoCompra" placeholder="Mercado" />
+          
+          <select id="setorCompra" placeholder="Setor">
+            <option value="">Selecione um Setor</option>
+            <option value="ETF iTech">ETF iTech</option>
+            <option value="ETF Finance">ETF Finance</option>
+            <option value="ETF Energia">ETF Energia</option>
+            <option value="ETF Materiais">ETF Materiais</option>
+            <option value="Alimentção">Alimentação</option>
+            <option value="Automovel">Automóvel</option>
+            <option value="Bens de Consumo">Bens de Consumo</option>
+            <option value="Consumo Cíclico">Consumo Cíclico</option>
+            <option value="Consumo Defensivo">Consumo Defensivo</option>
+            <option value="Defesa">Defesa</option>
+            <option value="Energia">Energia</option>
+            <option value="Finanças">Finanças</option>
+            <option value="Imobiliário">Imobiliário</option>
+            <option value="Indústria">Indústria</option>
+            <option value="Infraestruturas / Energia">Infraestruturas / Energia</option>
+            <option value="Materiais">Materiais</option>
+            <option value="Restauração">Restauração</option>
+            <option value="Saúde">Saúde</option>
+            <option value="Tecnologia">Tecnologia</option>
+            <option value="Telecomunicações">Telecomunicações</option>
+          </select>
+          
+          <select id="mercadoCompra" placeholder="Mercado">
+            <option value="">Seleciona o Mercado</option>
+            <option value="Portugal">Portugal</option>
+            <option value="Europeu">Europeu</option>
+            <option value="Americano">Americano</option>
+            <option value="Americano SP500">Americano SP500</option>
+          </select>
 
           <label for="tipoObjetivo">Tipo de Objetivo:</label>
           <select id="tipoObjetivo">
@@ -716,9 +747,7 @@
                   <div class="buttons">
                     <button onclick="filtrarAcoes()">🔎 Aplicar Filtros</button>
                     <button onclick="fecharPopupFiltro()">❌ Fechar</button>
-                    <button onclick="prepararSimulacaoBloco()">
-                      Simular Ações Selecionadas
-                    </button>
+                    <button onclick="prepararSimulacaoBloco()">Simular Ações Selecionadas</button>
                   </div>
                   <!-- Checkbox Selecionar Tudo -->
                   <label>
